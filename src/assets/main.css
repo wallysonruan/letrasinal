@@ -1,0 +1,12 @@
+@import "./base.css";
+
+.custom-card {
+  background-color: var(--card-background-color);
+  border-radius: 5px;
+}
+
+@media (hover: hover) {
+}
+
+@media (min-width: 1024px) {
+}
