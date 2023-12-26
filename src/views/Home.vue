@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import SortableList from "@/components/SortableList.vue";
+import DraggableItem from "@/components/DraggableItem.vue";
 
-const items: string[] = ['apple', 'banana', 'orange'];
 </script>
 <template>
   <div>
-    <SortableList :items="items">
-        <template #default="{ item }">
-        </template>
+    <SortableList>
     </SortableList>
   </div>
 </template>

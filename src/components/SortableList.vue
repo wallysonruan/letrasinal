@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 
-type SortableListProps = {
-  items: Array<string>;
-};
-
-const props = defineProps<SortableListProps>();
-
 function main() {
   const sortableList = document.querySelector(
     ".sortable-list",
@@ -52,8 +46,6 @@ onMounted(() => {
 </script>
 <template>
   <ul class="sortable-list">
-    <li class="item" draggable="true" v-for="(item, index) in items" :key="index">
-      <slot :item="item"></slot>
-    </li>
+    <slot></slot>
   </ul>
 </template>
