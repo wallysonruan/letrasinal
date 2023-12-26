@@ -1,22 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted } from "vue";
 
 function main() {
   const sortableList = document.querySelector(
     ".sortable-list",
   ) as HTMLUListElement;
-
-  const items = sortableList.querySelectorAll(".item");
-
-  items.forEach((item) => {
-    item.addEventListener("dragstart", () => {
-      // Adding dragging class to item after a delay
-      setTimeout(() => item.classList.add("dragging"), 0);
-    });
-    
-    // Removing dragging class from item on dragend event
-    item.addEventListener("dragend", () => item.classList.remove("dragging"));
-  });
 
   const initSortableList = (e: DragEvent) => {
     e.preventDefault();
