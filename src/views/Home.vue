@@ -11,10 +11,18 @@ function onInput(e: InputEvent) {}
   <div>
     <v-text-field v-model="input" @input="onInput" />
 
-    <SortableList>
-      <DraggableItem v-for="(item, index) in input.split(' ')" :key="index">
-        <fsw-sign :sign="item"></fsw-sign>
-      </DraggableItem>
-    </SortableList>
+    <div class="list">
+      <SortableList>
+        <DraggableItem v-for="(item, index) in input.split(' ')" :key="index">
+          <fsw-sign :sign="item"></fsw-sign>
+        </DraggableItem>
+      </SortableList>
+    </div>
   </div>
 </template>
+<style scoped lang="scss">
+.list {
+  height: 20rem;
+  overflow: hidden;
+}
+</style>

@@ -37,3 +37,15 @@ onMounted(() => {
     <slot></slot>
   </ul>
 </template>
+<style scoped lang="scss">
+.sortable-list {
+  height: inherit;
+  width: inherit;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+</style>
