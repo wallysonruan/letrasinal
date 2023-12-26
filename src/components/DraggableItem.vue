@@ -22,3 +22,17 @@ onMounted(() => {
     </div>
   </li>
 </template>
+<style scoped lang="scss">
+.item {
+  width: 6rem;
+  &:not(:first-child) {
+    margin-top: 1rem;
+  }
+
+  .details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+</style>

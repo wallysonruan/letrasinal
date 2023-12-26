@@ -23,6 +23,7 @@ function onInput(e: InputEvent) {}
 <style scoped lang="scss">
 .list {
   height: 20rem;
+  width: max-content;
   overflow: hidden;
 }
 </style>
