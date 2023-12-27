@@ -12,6 +12,17 @@ onMounted(() => {
 
     // Removing dragging class from item on dragend event
     item.addEventListener("dragend", () => item.classList.remove("dragging"));
+
+    // Touch events
+    item.addEventListener("touchstart", () => {
+      // Adding dragging class to item after a delay
+      setTimeout(() => item.classList.add("dragging"), 0);
+    });
+
+    item.addEventListener("touchend", () => {
+      // Removing dragging class from item on touchend event
+      item.classList.remove("dragging");
+    });
   });
 });
 </script>

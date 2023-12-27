@@ -6,7 +6,8 @@ function main() {
     ".sortable-list",
   ) as HTMLUListElement;
 
-  const initSortableList = (e: DragEvent) => {
+  // Modify initSortableList to work with both mouse and touch events
+  const initSortableList = (e: MouseEvent | TouchEvent) => {
     e.preventDefault();
     const draggingItem = document.querySelector(".dragging");
 
@@ -15,13 +16,21 @@ function main() {
       sortableList.querySelectorAll(".item:not(.dragging)"),
     ) as HTMLElement[];
 
+    // Get clientX and clientY depending on the event type
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
     // Finding the sibling after which the dragging item should be placed
     let nextSibling = siblings.find((sibling) => {
-      let inSameRow = e.clientX < sibling.offsetLeft + sibling.offsetWidth;
+      let inSameRow = clientX < sibling.offsetLeft + sibling.offsetWidth;
       return (
-        inSameRow && e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2
+        inSameRow && clientY <= sibling.offsetTop + sibling.offsetHeight / 2
       );
     });
+
+    // Add touch event listeners
+    sortableList.addEventListener("touchmove", initSortableList);
+    sortableList.addEventListener("touchstart", (e) => e.preventDefault());
 
     // Inserting the dragging item before the found sibling
     sortableList.insertBefore(draggingItem!, nextSibling!);
