@@ -17,7 +17,10 @@ function main() {
 
     // Finding the sibling after which the dragging item should be placed
     let nextSibling = siblings.find((sibling) => {
-      return e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2;
+      let inSameRow = e.clientX < sibling.offsetLeft + sibling.offsetWidth;
+      return (
+        inSameRow && e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2
+      );
     });
 
     // Inserting the dragging item before the found sibling
