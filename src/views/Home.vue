@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import SortableList from "@/components/SortableList.vue";
 import DraggableItem from "@/components/DraggableItem.vue";
+import SignWriting from "@/components/SignWriting.vue";
+
 import { ref } from "vue";
 
 const input = ref("");
@@ -13,8 +15,8 @@ function onInput(e: InputEvent) {}
 
     <div class="list">
       <SortableList>
-        <DraggableItem v-for="(item, index) in input.split(' ')" :key="index">
-          <fsw-sign :sign="item"></fsw-sign>
+        <DraggableItem v-for="word in input.split(' ')">
+          <SignWriting :fsw="word" />
         </DraggableItem>
       </SortableList>
     </div>
@@ -24,6 +26,5 @@ function onInput(e: InputEvent) {}
 .list {
   height: 20rem;
   width: max-content;
-  overflow: hidden;
 }
 </style>
