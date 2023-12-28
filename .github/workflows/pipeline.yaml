@@ -27,6 +27,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Login to GitHub
+        - run: |
+            echo ${{ secrets.GITHUB_TOKEN }} > ~/.github_token
+            git config --global credential.helper store --file ~/.github_token
       - name: Checkout code on prod branch
         uses: actions/checkout@v4
         with:
