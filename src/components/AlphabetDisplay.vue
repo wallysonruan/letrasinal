@@ -38,7 +38,11 @@ const props = defineProps<{
 </script>
 <template>
   <div>
-    <SignWriting v-if="isValidFswString(word.split(' ')[0])" v-for="word in props.word.split(' ')" :fsw="word"/>
-    <LatinAlphabet v-else :word="word"/>
+    <SignWriting
+      v-if="isValidFswString(word.split(' ')[0])"
+      v-for="word in props.word.split(' ')"
+      :fsw="word"
+    />
+    <LatinAlphabet v-else :word="word" />
   </div>
 </template>

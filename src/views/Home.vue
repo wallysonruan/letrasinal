@@ -8,7 +8,9 @@ import { computed } from "vue";
 
 const input = ref("");
 const inputed = ref([""]);
-const separatedText = computed(() => inputed.value.filter((text) => text.trim() != ""));
+const separatedText = computed(() =>
+  inputed.value.filter((text) => text.trim() != ""),
+);
 function clearInput() {
   input.value = "";
 }
@@ -17,14 +19,10 @@ function setInputed(text: string) {
   inputed.value.push(text);
 }
 
-function handleKeyDown(event: KeyboardEvent) {
-  if (event.key === "Enter") {
-    setInputed(input.value);
-    clearInput();
+function handleEvent(event: Event) {
+  if ((event as KeyboardEvent).key != "Enter" && event.type != "click") {
+    return;
   }
-}
-
-function handleAppendInner() {
   setInputed(input.value);
   clearInput();
 }
@@ -33,8 +31,8 @@ function handleAppendInner() {
   <div>
     <v-text-field
       v-model="input"
-      @keydown.enter="handleKeyDown"
-      @click:append-inner="handleAppendInner"
+      @keydown.enter="handleEvent"
+      @click:append-inner="handleEvent"
       append-inner-icon="mdi-plus"
     />
     <div class="list">
