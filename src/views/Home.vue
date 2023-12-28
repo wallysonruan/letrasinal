@@ -35,7 +35,7 @@ function splitText(text: string): string[] {
 </script>
 <template>
   <div>
-    <v-text-field v-model="input" />
+    <v-textarea clearable v-model="input" />
     <div class="list">
       <SortableList>
         <DraggableItem v-for="word in separatedText">
