@@ -40,5 +40,8 @@ onMounted(() => {
   &:not(:first-child) {
     margin-top: 1rem;
   }
+  &:hover {
+    cursor: grab;
+  }
 }
 </style>
