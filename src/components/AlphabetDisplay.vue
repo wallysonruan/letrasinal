@@ -41,11 +41,12 @@ const isSentence = props.word.split(" ").length > 1;
 </script>
 <template>
   <div :sentence="isSentence">
-    <SignWriting
-      v-if="isSignWriting"
-      v-for="word in props.word.split(' ')"
-      :fsw="word"
-    />
+    <div v-if="isSignWriting">
+      <SignWriting
+        v-for="(word, index) in props.word.split(' ')" :key="index"
+        :fsw="word"
+      />
+    </div>
     <LatinAlphabet v-else :word="word" />
   </div>
 </template>

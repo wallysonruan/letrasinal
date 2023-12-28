@@ -37,7 +37,7 @@ function handleEvent(event: Event) {
     />
     <div class="list">
       <SortableList>
-        <DraggableItem v-for="word in separatedText">
+        <DraggableItem v-for="(word, index) in separatedText" :key="index">
           <AlphabetDisplay :word="word" />
         </DraggableItem>
       </SortableList>
