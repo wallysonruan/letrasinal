@@ -6,32 +6,21 @@ const props = defineProps<{
   maxHeight?: string;
 }>();
 
-const maxHeight = props.maxHeight ? props.maxHeight : "20";
+const isPunctuation = isType(props.fsw, "punctuation");
 </script>
-
 <template>
-  <div
-    class="signwriting-container"
-    :style="'max-height:' + maxHeight + 'rem;'"
-  >
-    <div class="sign">
-      <fsw-sign :sign="props.fsw" v-if="!isType(props.fsw, 'punctuation')" />
-      <fsw-symbol :symbol="props.fsw" v-if="isType(props.fsw, 'punctuation')" />
-    </div>
+  <div class="sign">
+    <fsw-symbol v-if="isPunctuation" :symbol="props.fsw" />
+    <fsw-sign :sign="props.fsw" v-else />
   </div>
 </template>
 <style scoped lang="scss">
-.signwriting-container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  .sign {
-    text-align: center;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    &:not(:last-child) {
-      margin-bottom: 0.3rem;
-    }
+.sign {
+  text-align: center;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  &:not(:last-child) {
+    margin-bottom: 0.3rem;
   }
 }
 </style>
