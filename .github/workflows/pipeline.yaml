@@ -39,15 +39,20 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bundle
+      - name: Login to GitHub
+          env:
+            email: $GITHUB_ACTOR@gmail.com
+            username: $GITHUB_ACTOR
+            access_token: ${{ secrets.PAT_TO_PUSH_ONTO_PROD }}
+          run: |
+            git config --global credential.helper store
+            echo "https://${access_token}:x-oauth-basic@github.com" > ~/.git-credentials
+            git config --global user.email $email
+            git config --global user.name $username
       - name: Commit new bundle
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
-          git commit -m "Update bundle"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.PAT_TO_PUSH_ONTO_PROD }}
-          branch: prod
-          force: true
+          git commit -m "Deploy id ${GITHUB_RUN_ID}"
+          git push origin ${GITHUB_REF##*/}:prod --force
