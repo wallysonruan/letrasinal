@@ -19,8 +19,6 @@ const isPunctuation = isType(props.fsw, "punctuation");
   text-align: center;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-  &:not(:last-child) {
-    margin-bottom: 0.3rem;
-  }
+  margin-bottom: 0.7rem;
 }
 </style>
