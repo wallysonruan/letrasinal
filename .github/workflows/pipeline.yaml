@@ -55,4 +55,4 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add .
           git commit -m "Deploy id ${GITHUB_RUN_ID}"
-          git push origin ${GITHUB_REF##*/}:prod --force
+          git push origin prod:prod --force
