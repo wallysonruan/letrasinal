@@ -48,6 +48,7 @@ function splitText(text: string): string[] {
 <style scoped lang="scss">
 .list {
   height: 30rem;
-  width: max-content;
+  resize: vertical;
+  overflow: auto;
 }
 </style>
