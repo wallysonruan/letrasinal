@@ -24,7 +24,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  // base: '/sw-text-editor/',
+  base: '/sw-something/',
   build: {
     sourcemap: true,
     rollupOptions: {
