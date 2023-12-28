@@ -35,14 +35,26 @@ function isValidFswString(fsw: string): boolean {
 const props = defineProps<{
   word: string;
 }>();
+
+const isSignWriting = isValidFswString(props.word.split(" ")[0]);
+const isSentence = props.word.split(" ").length > 1;
 </script>
 <template>
-  <div>
+  <div :sentence="isSentence">
     <SignWriting
-      v-if="isValidFswString(word.split(' ')[0])"
+      v-if="isSignWriting"
       v-for="word in props.word.split(' ')"
       :fsw="word"
     />
     <LatinAlphabet v-else :word="word" />
   </div>
 </template>
+<style scoped lang="scss">
+div[sentence="true"] {
+  resize: both;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+</style>
