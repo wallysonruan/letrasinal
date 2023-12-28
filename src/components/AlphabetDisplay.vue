@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { re } from "@sutton-signwriting/core/fsw";
+import LatinAlphabet from "./LatinAlphabet.vue";
 import SignWriting from "./SignWriting.vue";
 
 /**
@@ -38,6 +39,6 @@ const props = defineProps<{
 <template>
   <div>
     <SignWriting v-if="isValidFswString(props.word)" :fsw="props.word" />
-    <p v-else>{{ props.word }}</p>
+    <LatinAlphabet :word="props.word" v-else />
   </div>
 </template>
