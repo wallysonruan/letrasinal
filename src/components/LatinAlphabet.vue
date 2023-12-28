@@ -10,6 +10,6 @@ const props = defineProps<{
 </template>
 <style scoped lang="scss">
 p {
-  word-break: break-all;
+  word-break: break-word;
 }
 </style>
