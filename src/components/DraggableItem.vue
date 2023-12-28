@@ -35,7 +35,8 @@ onMounted(() => {
 </template>
 <style scoped lang="scss">
 .item {
-  width: 6rem;
+  min-width: 6rem;
+  max-width: 15rem;
   &:not(:first-child) {
     margin-top: 1rem;
   }
