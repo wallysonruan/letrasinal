@@ -54,10 +54,13 @@ onMounted(() => {
   height: inherit;
   width: inherit;
   list-style: none;
-  padding: 0;
-  margin: 0;
+  padding: 0 1rem;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  // Brings all the columns to the left, with no auto-spacing between them
+  align-content: baseline;
+  // Adds space between the columns
+  column-gap: 2rem;
 }
 </style>

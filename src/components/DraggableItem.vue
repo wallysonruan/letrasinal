@@ -40,11 +40,5 @@ onMounted(() => {
   &:not(:first-child) {
     margin-top: 1rem;
   }
-
-  .details {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 }
 </style>
