@@ -1,0 +1,49 @@
+name: pipeline
+run-name: ${{ github.actor }}
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js v14
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: npm i
+      - name: Build
+        run: npm run build
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle
+          path: dist
+          if-no-files-found: error
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code on prod branch
+        uses: actions/checkout@v4
+        with:
+          ref: prod
+      - name: Delete old bundle
+        run: |
+          rm -rf assets
+          rm index.html
+      - name: Download bundle artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bundle
+      - name: Commit new bundle
+        run: |
+          git config --global user.name ${{ github.actor }}
+          git config --global user.email ${{ github.actor }}@gmail.com
+          git add .
+          git commit -m "Update bundle"
+          git push
