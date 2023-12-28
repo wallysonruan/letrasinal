@@ -11,6 +11,7 @@ const inputed = ref([""]);
 const separatedText = computed(() =>
   inputed.value.filter((text) => text.trim() != ""),
 );
+
 function clearInput() {
   input.value = "";
 }
@@ -29,12 +30,7 @@ function handleEvent(event: Event) {
 </script>
 <template>
   <div>
-    <v-text-field
-      v-model="input"
-      @keydown.enter="handleEvent"
-      @click:append-inner="handleEvent"
-      append-inner-icon="mdi-plus"
-    />
+    <v-text-field v-model="input" @keydown.enter="handleEvent" />
     <div class="list">
       <SortableList>
         <DraggableItem v-for="(word, index) in separatedText" :key="index">
