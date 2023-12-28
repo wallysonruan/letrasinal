@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { re } from "@sutton-signwriting/core/fsw";
 import LatinAlphabet from "./LatinAlphabet.vue";
-import SignWriting from "./SignWriting.vue";
+import SignWriting from "./SignWriting/SignWriting.vue";
 
 /**
  * REGEX:
@@ -43,7 +43,8 @@ const isSentence = props.word.split(" ").length > 1;
   <div :sentence="isSentence">
     <div v-if="isSignWriting">
       <SignWriting
-        v-for="(word, index) in props.word.split(' ')" :key="index"
+        v-for="(word, index) in props.word.split(' ')"
+        :key="index"
         :fsw="word"
       />
     </div>
