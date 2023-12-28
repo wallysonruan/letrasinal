@@ -7,35 +7,36 @@ import AlphabetDisplay from "@/components/AlphabetDisplay.vue";
 import { computed } from "vue";
 
 const input = ref("");
-const separatedText = computed(() => splitText(input.value));
+const inputed = ref([""]);
+const separatedText = computed(() => inputed.value.filter((text) => text.trim() != ""));
+function clearInput() {
+  input.value = "";
+}
 
-/*
- * This function will split the text into an array of words.
- * It will also ignore the spaces inside quotes.
- *
- * Example:
- *
- * Input: "Hello World" "How are you?" Good Well
- * Output: ["Hello World", "How are you?", "Good", "Well"]
- */
-function splitText(text: string): string[] {
-  // Regex explanation:
-  // - "([^"]*)" - Matches anything inside quotes
-  // - \S+ - Matches anything that is not a space
-  // - | - Matches either the first or the second
-  // - g - Global flag, will match all ocurrences
-  const regex = /"([^"]*)"|\S+/g;
-  let match;
-  const result = [];
-  while ((match = regex.exec(text)) !== null) {
-    result.push(match[1] ? match[1] : match[0]);
+function setInputed(text: string) {
+  inputed.value.push(text);
+}
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === "Enter") {
+    setInputed(input.value);
+    clearInput();
   }
-  return result;
+}
+
+function handleAppendInner() {
+  setInputed(input.value);
+  clearInput();
 }
 </script>
 <template>
   <div>
-    <v-textarea clearable v-model="input" />
+    <v-text-field
+      v-model="input"
+      @keydown.enter="handleKeyDown"
+      @click:append-inner="handleAppendInner"
+      append-inner-icon="mdi-plus"
+    />
     <div class="list">
       <SortableList>
         <DraggableItem v-for="word in separatedText">
