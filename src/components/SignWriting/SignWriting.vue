@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { isType } from "@sutton-signwriting/core/fsw";
+import { isFswType, isValidFswString } from "@/utils/SignWritingUtilities";
 
 const props = defineProps<{
   fsw: string;
   maxHeight?: string;
 }>();
 
-const isPunctuation = isType(props.fsw, "punctuation");
+const isValidFsw = isValidFswString(props.fsw);
+const isPunctuation = isFswType(props.fsw, "punctuation");
 </script>
 <template>
-  <div class="sign">
+  <div class="sign" v-if="isValidFsw">
     <fsw-symbol v-if="isPunctuation" :symbol="props.fsw" />
     <fsw-sign :sign="props.fsw" v-else />
   </div>
