@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AlphabetDisplay from "@/components/AlphabetDisplay.vue";
+import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import { getSignsByWord } from "@/utils/client/client";
 import { ref } from "vue";
 import type { SubmitEventPromise } from "vuetify";

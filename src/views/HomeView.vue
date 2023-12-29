@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import SortableList from "@/components/SortableList.vue";
-import DraggableItem from "@/components/DraggableItem.vue";
+import SortableList from "@/components/SortableList/SortableList.vue";
+import DraggableItem from "@/components/DraggableItem/DraggableItem.vue";
 
 import { ref } from "vue";
-import AlphabetDisplay from "@/components/AlphabetDisplay.vue";
+import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import { computed } from "vue";
 
 const input = ref("");
