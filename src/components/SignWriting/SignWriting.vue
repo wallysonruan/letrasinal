@@ -3,7 +3,6 @@ import { isFswType, isValidFswString } from "@/utils/SignWritingUtilities";
 
 const props = defineProps<{
   fsw: string;
-  maxHeight?: string;
 }>();
 
 const isValidFsw = isValidFswString(props.fsw);
