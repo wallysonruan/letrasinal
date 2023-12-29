@@ -44,4 +44,9 @@ onMounted(() => {
     cursor: grab;
   }
 }
+.item.dragging {
+  cursor: grabbing;
+  border: 1px solid blue;
+  border-radius: 0.2rem;
+}
 </style>
