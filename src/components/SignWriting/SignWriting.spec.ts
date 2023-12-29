@@ -37,5 +37,16 @@ describe("SignWriting", () => {
       expect(wrapper.find("fsw-sign").exists()).toBe(false);
       expect(wrapper.find("fsw-symbol").exists()).toBe(true);
     });
+
+    it("Should not return a fsw-symbol or a fsw-sign if string is not a valid fsw", () => {
+      const wrapper = mount(SignWriting, {
+        props: {
+          fsw: "aaaaa",
+        },
+      });
+
+      expect(wrapper.find("fsw-sign").exists()).toBe(false);
+      expect(wrapper.find("fsw-symbol").exists()).toBe(false);
+    });
   });
 });
