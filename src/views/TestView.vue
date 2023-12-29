@@ -28,6 +28,10 @@ type SignPuddlePayload = {
   results: SignPuddleResult[];
 };
 
+const props = defineProps({
+  show: Boolean,
+});
+
 async function getSigns() {
   await getSignsByWord(sign.value).then((res: unknown) => {
     const payload = res as SignPuddlePayload;
@@ -118,7 +122,12 @@ const items = ref<SignPuddleResult[]>([]);
 </template>
 <style scoped lang="scss">
 .parent-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   min-width: 4rem;
+  width: 80%;
   max-width: 35rem;
 }
 .form-container {
