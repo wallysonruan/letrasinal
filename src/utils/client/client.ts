@@ -1,4 +1,4 @@
-const SIGN_PUDDLE_SERVER = "https://signpuddle.net/";
+const SIGN_PUDDLE_SERVER = "https://signpuddle.net";
 
 export async function request(
   url: string,
@@ -18,6 +18,6 @@ export async function get(url: string) {
 }
 
 export async function getSignsByWord(word: string) {
-  const url = `${SIGN_PUDDLE_SERVER}puddle/sgn46/search/${word}`;
+  const url = `${SIGN_PUDDLE_SERVER}/puddle/sgn46/search/${word}?match=start&sort=-created_at`;
   return await get(url).then((res) => res);
 }

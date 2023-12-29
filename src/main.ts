@@ -18,6 +18,7 @@ import { VBtn } from "vuetify/components";
 import { VLayout } from "vuetify/components";
 import { VAlert } from "vuetify/components";
 import { VDatePicker } from "vuetify/labs/components";
+import { VInfiniteScroll } from "vuetify/labs/components";
 
 const vuetify = createVuetify({
   components: {
@@ -30,6 +31,7 @@ const vuetify = createVuetify({
     VLayout,
     VAlert,
     VDatePicker,
+    VInfiniteScroll,
   },
 });
 
