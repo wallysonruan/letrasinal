@@ -5,7 +5,7 @@ import DraggableItem from "@/components/DraggableItem/DraggableItem.vue";
 import { ref } from "vue";
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import { computed } from "vue";
-import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearch.vue"
+import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearch.vue";
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 
@@ -34,19 +34,21 @@ function handleEvent(event: Event) {
 const signPuddleSearch = signPuddleSearchStore();
 </script>
 <template>
-  <div>
+  <div class="home-container">
     <v-text-field
       v-model="input"
       @keydown.enter="handleEvent"
       label="Palavra, frase ou FSW"
+      variant="solo"
     >
       <template #append>
-        <button
+        <v-btn
           @click="signPuddleSearch.toggleSignPuddleSearch"
           class="signpuddle-btn"
+          icon
         >
-          SignPuddle
-        </button>
+          <img src="@/assets/sign-puddle-icon.png" alt="SignPuddle" />
+        </v-btn>
       </template>
     </v-text-field>
     <div class="list">
@@ -63,6 +65,9 @@ const signPuddleSearch = signPuddleSearchStore();
   </div>
 </template>
 <style scoped lang="scss">
+.home-container {
+  padding: 1.5rem;
+}
 .list {
   height: 30rem;
   resize: vertical;
@@ -70,6 +75,12 @@ const signPuddleSearch = signPuddleSearchStore();
 }
 
 .signpuddle-btn {
-  margin-right: 2.5rem;
+  position: relative;
+  // margin-right: 2.5rem;
+  border: black;
+
+  img {
+    width: 2rem;
+  }
 }
 </style>
