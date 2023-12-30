@@ -95,7 +95,7 @@ const signPuddleSearch = signPuddleSearchStore();
 const selected = ref<string[]>([]);
 </script>
 <template>
-  <div class="overlay" v-if="props.show">
+  <v-dialog v-model="props.show">
     <v-sheet class="mx-auto parent-container">
       <div>
         <v-text-field
@@ -138,47 +138,32 @@ const selected = ref<string[]>([]);
         </template>
       </ul>
       <!-- </v-infinite-scroll> -->
-      <div class="buttons">
+      <div class="buttons-container">
         <v-btn
           class="mt-2"
-          color="rgba(0,0,0,0.5)"
           width="40%"
+          color="rgba(192, 63, 63, 1)"
           @click="signPuddleSearch.toggleSignPuddleSearch"
         >
           Fechar
         </v-btn>
         <v-btn
           class="mt-2"
-          color="rgba(0,0,0,0.5)"
+          color="rgb(39, 103, 39, 1)"
           width="40%"
           @click="handleOk"
           :disabled="selected.length < 1"
         >
-          Ok
+          Adicionar
         </v-btn>
       </div>
     </v-sheet>
-  </div>
+  </v-dialog>
 </template>
 <style scoped lang="scss">
-.overlay {
-  background-color: rgb(0, 0, 0, 0.3);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-content: center;
-}
 .parent-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   min-width: 4rem;
-  width: 80%;
+  width: 90%;
   max-width: 35rem;
   padding: 1.5rem;
   border-radius: 0.5rem;
@@ -204,7 +189,7 @@ const selected = ref<string[]>([]);
     place-content: center;
   }
 }
-.buttons {
+.buttons-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
