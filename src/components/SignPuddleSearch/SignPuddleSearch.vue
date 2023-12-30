@@ -87,7 +87,7 @@ function handleOk() {
   signPuddleSearch.toggleSignPuddleSearch();
 }
 
-const rules = [(v: string) => v.length >= 2 || "Escreva ao menos de 2 letras"];
+const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
 
 const input = ref("");
 const items = ref<SignPuddleResult[]>([]);
@@ -111,7 +111,7 @@ function addSelected(sign: string) {
         >
           <template #append>
             <v-btn
-              type="submit"
+              type="search"
               block
               class="mt-2 submit-button"
               icon
@@ -153,7 +153,7 @@ function addSelected(sign: string) {
           color="rgba(0,0,0,0.5)"
           width="40%"
           @click="handleOk"
-          :disabled="input.length < 2"
+          :disabled="selected.length < 1"
         >
           Ok
         </v-btn>
