@@ -28,7 +28,7 @@ function handleEvent(event: Event) {
     return;
   }
 
-  if(input.value?.trim() == "") {
+  if (input.value?.trim() == "") {
     return;
   }
 

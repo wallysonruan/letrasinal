@@ -59,7 +59,7 @@ function signOrSignText(result: SignPuddleResult): string {
   // }
 }
 
-async function handleSubmit() {
+async function handleSearch() {
   items.value = []; // Clear the items array
   await getSigns();
 }
@@ -105,6 +105,7 @@ const selected = ref<string[]>([]);
           type="search"
           class="input"
           :rules="rules"
+          @keydown.enter="handleSearch"
         >
           <template #append>
             <v-btn
@@ -113,7 +114,7 @@ const selected = ref<string[]>([]);
               class="mt-2 submit-button"
               icon
               :disabled="input.length < 2"
-              @click="handleSubmit"
+              @click="handleSearch"
             >
               <i class="bi bi-search"></i>
             </v-btn>
