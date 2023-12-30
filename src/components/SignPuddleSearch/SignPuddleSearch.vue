@@ -53,11 +53,11 @@ function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
 }
 
 function signOrSignText(result: SignPuddleResult): string {
-  if (result.sign != null && result.sign.length > 0) {
+  // if (result.sign != null && result.sign.length > 0) {
     return result.sign;
-  } else {
-    return result.signtext;
-  }
+  // } else {
+  //   return result.signtext;
+  // }
 }
 
 function handleSubmit(e: SubmitEventPromise) {
@@ -113,7 +113,7 @@ const signPuddleSearch = signPuddleSearchStore();
       <v-infinite-scroll mode="manual" height="400" @load="load">
         <ul class="list-results">
           <template v-for="(item, index) in items" :key="index">
-            <li class="results">
+            <li class="result">
               <AlphabetDisplay :word="signOrSignText(item)" />
             </li>
           </template>
@@ -178,13 +178,13 @@ const signPuddleSearch = signPuddleSearchStore();
 }
 .list-results {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   list-style-type: none;
   padding: 0;
   margin: 0;
-  .results {
-    width: max-content;
+  .result {
+    width: 50%;
   }
 }
 .buttons {
