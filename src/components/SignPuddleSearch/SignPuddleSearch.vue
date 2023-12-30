@@ -170,17 +170,16 @@ const selected = ref<string[]>([]);
 }
 .list-results {
   height: 20rem;
-  overflow: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  list-style-type: none;
   padding: 1rem;
   margin: 0 0 1rem 0;
+  list-style-type: none;
+  overflow: auto;
+  //
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
   .result {
-    width: 25%;
-    min-height: min-content;
-    height: max-content;
+    height: min-content;
     display: grid;
     place-content: center;
   }
@@ -193,9 +192,7 @@ const selected = ref<string[]>([]);
 
 @media (max-width: 600px) {
   .list-results {
-    .result {
-      width: 50%;
-    }
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>
