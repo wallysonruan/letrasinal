@@ -126,7 +126,7 @@ function addSelected(sign: string) {
         <template v-for="(item, index) in items" :key="index">
           <li class="result">
             <input
-            class="checkbox"
+              class="checkbox"
               type="checkbox"
               :id="`result-${index}`"
               @input="addSelected(signOrSignText(item))"
