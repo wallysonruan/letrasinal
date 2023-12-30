@@ -172,9 +172,12 @@ const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
 .list-results {
   height: 20rem;
   padding: 1rem;
-  margin: 0 0 1rem 0;
-  list-style-type: none;
+  margin: 0 0 .5rem 0;
   overflow: auto;
+  //
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: .3rem;
+  list-style-type: none;
   //
   display: grid;
   grid-template-columns: repeat(4, 1fr);
