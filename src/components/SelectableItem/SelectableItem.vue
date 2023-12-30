@@ -45,7 +45,6 @@ function toggleStyle() {
   display: grid;
   place-items: center;
 }
-
 </style>
 <style lang="scss">
 // Overrode the default style of v-checkbox-btn

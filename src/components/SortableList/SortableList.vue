@@ -54,7 +54,7 @@ onMounted(() => {
   height: inherit;
   width: inherit;
   list-style: none;
-  padding: 0 1rem;
+  padding: 1rem;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
@@ -62,5 +62,14 @@ onMounted(() => {
   align-content: baseline;
   // Adds space between the columns
   column-gap: 2rem;
+}
+</style>
+<style lang="scss">
+.sortable-list {
+  & > * {
+    // Makes all items on the same column have the same width.
+    flex: none;
+    width: auto;
+  }
 }
 </style>
