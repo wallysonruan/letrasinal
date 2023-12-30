@@ -74,16 +74,18 @@ type load: ((options: {
 }) => any)
 */
 // @ts-ignore
-async function load({ done }) {
-  await getSigns();
-  done("ok");
-}
+// async function load({ done }) {
+//   await getSigns();
+//   done("ok");
+// }
 
 function handleOk() {
   props.selectedSigns(selected.value);
+
   selected.value.forEach(() => {
-    selected.value.pop();
+    selected.value = [];
   });
+
   signPuddleSearch.toggleSignPuddleSearch();
 }
 
@@ -93,9 +95,6 @@ const input = ref("");
 const items = ref<SignPuddleResult[]>([]);
 const signPuddleSearch = signPuddleSearchStore();
 const selected = ref<string[]>([]);
-function addSelected(sign: string) {
-  selected.value.push(sign);
-}
 </script>
 <template>
   <div class="overlay" v-if="props.show">
@@ -126,15 +125,15 @@ function addSelected(sign: string) {
       <ul class="list-results">
         <template v-for="(item, index) in items" :key="index">
           <li class="result">
-            <input
-              class="checkbox"
-              type="checkbox"
-              :id="`result-${index}`"
-              @input="addSelected(signOrSignText(item))"
-            />
-            <label class="checkbox-label" :for="`result-${index}`">
-              <AlphabetDisplay :word="signOrSignText(item)" />
-            </label>
+            <v-checkbox
+              :value="signOrSignText(item)"
+              v-model="selected"
+              hide-details
+            >
+              <template #label>
+                <AlphabetDisplay :word="signOrSignText(item)" />
+              </template>
+            </v-checkbox>
           </li>
         </template>
       </ul>
@@ -199,16 +198,10 @@ function addSelected(sign: string) {
   margin: 0 0 1rem 0;
   .result {
     width: 25%;
+    min-height: min-content;
+    height: max-content;
     display: grid;
     place-content: center;
-
-    .checkbox {
-      display: none;
-
-      &:checked + .checkbox-label {
-        border: 1px solid green;
-      }
-    }
   }
 }
 .buttons {
