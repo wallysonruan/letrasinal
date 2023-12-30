@@ -172,21 +172,17 @@ const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
 .list-results {
   height: 20rem;
   padding: 1rem;
-  margin: 0 0 .5rem 0;
+  margin: 0 0 0.5rem 0;
   overflow: auto;
   //
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: .3rem;
+  border-radius: 0.3rem;
   list-style-type: none;
   //
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-
-  .result {
-    height: min-content;
-    display: grid;
-    place-content: center;
-  }
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
 }
 .buttons-container {
   display: flex;
