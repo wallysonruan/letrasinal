@@ -4,6 +4,8 @@ import { getSignsByWord } from "@/utils/client/client";
 import { ref } from "vue";
 import type { SubmitEventPromise } from "vuetify";
 
+import signPuddleSearchStore from "@/stores/SignPuddleStore";
+
 type SignPuddleResult = {
   created_at: string;
   detail: Array<string>;
@@ -28,9 +30,12 @@ type SignPuddlePayload = {
   results: SignPuddleResult[];
 };
 
-const props = defineProps({
-  show: Boolean,
-});
+type SignPuddleSearchProps = {
+  selected: Array<string>;
+  show: boolean;
+};
+
+const props = defineProps<SignPuddleSearchProps>();
 
 async function getSigns() {
   await getSignsByWord(sign.value).then((res: unknown) => {
@@ -77,50 +82,82 @@ async function load({ done }) {
 
 const sign = ref("");
 const items = ref<SignPuddleResult[]>([]);
+const signPuddleSearch = signPuddleSearchStore();
 </script>
 <template>
-  <v-sheet class="mx-auto parent-container">
-    <v-form @submit.prevent class="form-container" @submit="handleSubmit">
-      <v-text-field
-        v-model="sign"
-        label="Sinal"
-        variant="solo"
-        type="search"
-        hide-details
-        class="input"
-      >
-        <template #append>
+  <div class="overlay" v-if="props.show">
+    <v-sheet class="mx-auto parent-container">
+      <v-form @submit.prevent class="form-container" @submit="handleSubmit">
+        <v-text-field
+          v-model="sign"
+          label="Sinal"
+          variant="solo"
+          type="search"
+          hide-details
+          class="input"
+        >
+          <template #append>
+            <v-btn
+              type="submit"
+              block
+              class="mt-2 submit-button"
+              append-icon="mdi-plus"
+            >
+              Pesquisar
+            </v-btn>
+          </template>
+        </v-text-field>
+      </v-form>
+      <v-infinite-scroll mode="manual" height="400" @load="load">
+        <ul class="list-results">
+          <template v-for="(item, index) in items" :key="index">
+            <li class="results">
+              <AlphabetDisplay :word="signOrSignText(item)" />
+            </li>
+          </template>
+        </ul>
+        <template v-slot:load-more="{ props }">
           <v-btn
-            type="submit"
-            block
-            class="mt-2 submit-button"
-            append-icon="mdi-plus"
-          >
-            Pesquisar
-          </v-btn>
+            icon="mdi-refresh"
+            variant="text"
+            size="small"
+            v-bind="props"
+          ></v-btn>
         </template>
-      </v-text-field>
-    </v-form>
-    <v-infinite-scroll mode="manual" height="400" @load="load">
-      <ul class="list-results">
-        <template v-for="(item, index) in items" :key="index">
-          <li class="results">
-            <AlphabetDisplay :word="signOrSignText(item)" />
-          </li>
-        </template>
-      </ul>
-      <template v-slot:load-more="{ props }">
+      </v-infinite-scroll>
+      <div>
         <v-btn
-          icon="mdi-refresh"
-          variant="text"
-          size="small"
-          v-bind="props"
-        ></v-btn>
-      </template>
-    </v-infinite-scroll>
-  </v-sheet>
+          class="mt-2"
+          color="rgba(0,0,0,0.5)"
+          width="50%"
+          @click="signPuddleSearch.toggleSignPuddleSearch"
+        >
+          Fechar
+        </v-btn>
+        <v-btn
+          class="mt-2"
+          color="rgba(0,0,0,0.5)"
+          width="50%"
+          @click="signPuddleSearch.toggleSignPuddleSearch"
+        >
+          Ok
+        </v-btn>
+      </div>
+    </v-sheet>
+  </div>
 </template>
 <style scoped lang="scss">
+.overlay {
+  background-color: rgb(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+}
 .parent-container {
   position: absolute;
   top: 50%;
