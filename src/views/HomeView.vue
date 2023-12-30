@@ -80,16 +80,15 @@ const signPuddleSearch = signPuddleSearchStore();
   padding: 1.5rem;
 }
 .list {
-  height: 40rem;
+  height: 46rem;
   resize: vertical;
   overflow: auto;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: .3rem;
+  padding: .5rem;
 }
 
 .signpuddle-btn {
-  position: relative;
-  // margin-right: 2.5rem;
-  border: black;
-
   img {
     width: 2rem;
   }
