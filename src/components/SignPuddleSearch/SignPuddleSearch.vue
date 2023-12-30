@@ -8,6 +8,21 @@ import SelectableItem from "../SelectableItem/SelectableItem.vue";
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 import { computed } from "vue";
 
+/* 
+There's a typing error with this "done", unfortunatlly there's no way to type it correctly because I have no access to the required types.
+  Required types:
+
+type load: ((options: {
+    side: InfiniteScrollSide;
+    done: (status: InfiniteScrollStatus) => void;
+}) => any)
+*/
+// @ts-ignore
+// async function load({ done }) {
+//   await getSigns();
+//   done("ok");
+// }
+
 type SignPuddleResult = {
   created_at: string;
   detail: Array<string>;
@@ -39,19 +54,19 @@ type SignPuddleSearchProps = {
 
 const props = defineProps<SignPuddleSearchProps>();
 
-async function getSigns() {
-  await getSignsByWord(input.value).then((res: unknown) => {
-    const payload = res as SignPuddlePayload;
-    signsFromSignPuddle.value.push(...processPayload(payload));
-  });
-}
-
 function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
   const results = payload.results;
   return results.filter(
     // (result) => result.sign.length > 0 || result.signtext.length > 0,
     (result) => result.sign.length > 0,
   );
+}
+
+async function getSigns() {
+  await getSignsByWord(input.value).then((res: unknown) => {
+    const payload = res as SignPuddlePayload;
+    signsFromSignPuddle.value.push(...processPayload(payload));
+  });
 }
 
 function signOrSignText(result: SignPuddleResult): string {
@@ -67,30 +82,29 @@ async function handleSearch() {
   await getSigns();
 }
 
-/* 
-There's a typing error with this "done", unfortunatlly there's no way to type it correctly because I have no access to the required types.
-  Required types:
+function removeAllResultsNodes() {
+  const list = document.querySelector(".list-results");
+  if (list == null) {
+    return;
+  }
+  list.innerHTML = "";
+}
 
-type load: ((options: {
-    side: InfiniteScrollSide;
-    done: (status: InfiniteScrollStatus) => void;
-}) => any)
-*/
-// @ts-ignore
-// async function load({ done }) {
-//   await getSigns();
-//   done("ok");
-// }
+function clearSearchDialog() {
+  input.value = "";
+  signsFromSignPuddle.value = [];
+  selected.value = [];
+  removeAllResultsNodes();
+}
 
 function handleClose() {
+  clearSearchDialog();
   signPuddleSearch.toggleSignPuddleSearch();
 }
 
 function handleOk() {
   props.selectedSigns(selected.value);
-
-  selected.value = [];
-
+  clearSearchDialog();
   signPuddleSearch.toggleSignPuddleSearch();
 }
 
@@ -124,7 +138,7 @@ const selected = ref<string[]>([]);
           label="Sinal"
           variant="solo"
           type="search"
-          class="input"
+          class="input-sign"
           :rules="rules"
           @keydown.enter="handleSearch"
         >
@@ -182,26 +196,30 @@ const selected = ref<string[]>([]);
   max-width: 35rem;
   padding: 1.5rem;
   border-radius: 0.5rem;
-}
-.list-results {
-  height: 20rem;
-  padding: 1rem;
-  margin: 0 0 0.5rem 0;
-  overflow: auto;
-  //
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.3rem;
-  list-style-type: none;
-  //
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: 0.5rem;
-  row-gap: 0.5rem;
-}
-.buttons-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+
+  .input-sign {
+    margin-bottom: 0.5rem;
+  }
+  .list-results {
+    height: 20rem;
+    padding: 1rem;
+    margin: 0%;
+    overflow: auto;
+    //
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    list-style-type: none;
+    //
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+  }
+  .buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 
 @media (max-width: 600px) {
