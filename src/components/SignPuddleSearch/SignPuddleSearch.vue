@@ -80,6 +80,8 @@ async function load({ done }) {
   done("ok");
 }
 
+const rules = [(v: string) => v.length >= 2 || "Escreva ao menos de 2 letras"];
+
 const sign = ref("");
 const items = ref<SignPuddleResult[]>([]);
 const signPuddleSearch = signPuddleSearchStore();
@@ -93,18 +95,18 @@ const signPuddleSearch = signPuddleSearchStore();
           label="Sinal"
           variant="solo"
           type="search"
-          hide-details
           class="input"
+          :rules="rules"
         >
           <template #append>
             <v-btn
               type="submit"
               block
               class="mt-2 submit-button"
-              append-icon="mdi-plus"
-            >
-              Pesquisar
-            </v-btn>
+              append-icon="mdi-search"
+              icon
+              :disabled="sign.length < 2"
+            />
           </template>
         </v-text-field>
       </v-form>
@@ -122,14 +124,14 @@ const signPuddleSearch = signPuddleSearchStore();
             variant="text"
             size="small"
             v-bind="props"
-          ></v-btn>
+          />
         </template>
       </v-infinite-scroll>
-      <div>
+      <div class="buttons">
         <v-btn
           class="mt-2"
           color="rgba(0,0,0,0.5)"
-          width="50%"
+          width="40%"
           @click="signPuddleSearch.toggleSignPuddleSearch"
         >
           Fechar
@@ -137,8 +139,9 @@ const signPuddleSearch = signPuddleSearchStore();
         <v-btn
           class="mt-2"
           color="rgba(0,0,0,0.5)"
-          width="50%"
+          width="40%"
           @click="signPuddleSearch.toggleSignPuddleSearch"
+          :disabled="sign.length < 2"
         >
           Ok
         </v-btn>
@@ -166,6 +169,8 @@ const signPuddleSearch = signPuddleSearchStore();
   min-width: 4rem;
   width: 80%;
   max-width: 35rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
 }
 .form-container {
   display: flex;
@@ -181,5 +186,10 @@ const signPuddleSearch = signPuddleSearchStore();
   .results {
     width: max-content;
   }
+}
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>
