@@ -17,8 +17,5 @@ const isPunctuation = isFswType(props.fsw, "punctuation");
 <style scoped lang="scss">
 .sign {
   text-align: center;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  margin-bottom: 0.7rem;
 }
 </style>
