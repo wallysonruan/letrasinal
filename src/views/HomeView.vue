@@ -9,8 +9,8 @@ import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearch.vue
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 
-const input = ref("");
-const inputed = ref([""]);
+const input = ref<string>();
+const inputed = ref<string[]>([]);
 const separatedText = computed(() =>
   inputed.value.filter((text) => text.trim() != ""),
 );
@@ -27,7 +27,12 @@ function handleEvent(event: Event) {
   if ((event as KeyboardEvent).key != "Enter" && event.type != "click") {
     return;
   }
-  setInputed(input.value);
+
+  if(input.value?.trim() == "") {
+    return;
+  }
+
+  setInputed(input.value as string);
   clearInput();
 }
 
