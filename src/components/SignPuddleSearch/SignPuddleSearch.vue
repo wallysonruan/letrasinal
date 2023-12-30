@@ -3,6 +3,8 @@ import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import { getSignsByWord } from "@/utils/client/client";
 import { ref } from "vue";
 
+import SelectableItem from "../SelectableItem/SelectableItem.vue";
+
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 
 type SignPuddleResult = {
@@ -125,15 +127,9 @@ const selected = ref<string[]>([]);
       <ul class="list-results">
         <template v-for="(item, index) in items" :key="index">
           <li class="result">
-            <v-checkbox
-              :value="signOrSignText(item)"
-              v-model="selected"
-              hide-details
-            >
-              <template #label>
-                <AlphabetDisplay :word="signOrSignText(item)" />
-              </template>
-            </v-checkbox>
+            <SelectableItem :value="signOrSignText(item)" v-model="selected">
+              <AlphabetDisplay :word="signOrSignText(item)" />
+            </SelectableItem>
           </li>
         </template>
       </ul>
