@@ -6,6 +6,7 @@ import { ref } from "vue";
 import SelectableItem from "../SelectableItem/SelectableItem.vue";
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
+import { computed } from "vue";
 
 type SignPuddleResult = {
   created_at: string;
@@ -89,15 +90,15 @@ function handleOk() {
   signPuddleSearch.toggleSignPuddleSearch();
 }
 
-const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
-
 const input = ref("");
 const items = ref<SignPuddleResult[]>([]);
 const signPuddleSearch = signPuddleSearchStore();
 const selected = ref<string[]>([]);
+const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
+const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
 </script>
 <template>
-  <v-dialog v-model="props.show">
+  <v-dialog v-model="showDialog">
     <v-sheet class="mx-auto parent-container">
       <div>
         <v-text-field
