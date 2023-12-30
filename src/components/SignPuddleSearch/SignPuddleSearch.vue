@@ -59,9 +59,9 @@ function signOrSignText(result: SignPuddleResult): string {
   // }
 }
 
-function handleSubmit() {
+async function handleSubmit() {
   items.value = []; // Clear the items array
-  getSigns();
+  await getSigns();
 }
 
 /* 
@@ -82,9 +82,7 @@ type load: ((options: {
 function handleOk() {
   props.selectedSigns(selected.value);
 
-  selected.value.forEach(() => {
-    selected.value = [];
-  });
+  selected.value = [];
 
   signPuddleSearch.toggleSignPuddleSearch();
 }
@@ -99,7 +97,7 @@ const selected = ref<string[]>([]);
 <template>
   <div class="overlay" v-if="props.show">
     <v-sheet class="mx-auto parent-container">
-      <v-form @submit.prevent class="form-container" @submit="handleSubmit">
+      <div>
         <v-text-field
           v-model="input"
           label="Sinal"
@@ -115,12 +113,13 @@ const selected = ref<string[]>([]);
               class="mt-2 submit-button"
               icon
               :disabled="input.length < 2"
+              @click="handleSubmit"
             >
               <i class="bi bi-search"></i>
             </v-btn>
           </template>
         </v-text-field>
-      </v-form>
+      </div>
       <!-- <v-infinite-scroll mode="manual" height="400" @load="load"> -->
       <ul class="list-results">
         <template v-for="(item, index) in items" :key="index">
