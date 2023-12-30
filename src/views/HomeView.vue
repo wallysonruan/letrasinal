@@ -65,7 +65,7 @@ const signPuddleSearch = signPuddleSearchStore();
       </SortableList>
     </div>
     <SignPuddleSearch
-      :selected="getSelectedFromSignPuddleSearch"
+      :selected-signs="getSelectedFromSignPuddleSearch"
       :show="signPuddleSearch.isSignPuddleSearchActive()"
     />
   </div>
@@ -75,7 +75,7 @@ const signPuddleSearch = signPuddleSearchStore();
   padding: 1.5rem;
 }
 .list {
-  height: 30rem;
+  height: 40rem;
   resize: vertical;
   overflow: auto;
 }

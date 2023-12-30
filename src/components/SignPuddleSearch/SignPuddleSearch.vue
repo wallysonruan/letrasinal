@@ -2,7 +2,6 @@
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import { getSignsByWord } from "@/utils/client/client";
 import { ref } from "vue";
-import type { SubmitEventPromise } from "vuetify";
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 
@@ -32,7 +31,7 @@ type SignPuddlePayload = {
 
 type SignPuddleSearchProps = {
   show: boolean;
-  selected: (selected: string[]) => void;
+  selectedSigns: (selected: string[]) => void;
 };
 
 const props = defineProps<SignPuddleSearchProps>();
@@ -54,13 +53,13 @@ function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
 
 function signOrSignText(result: SignPuddleResult): string {
   // if (result.sign != null && result.sign.length > 0) {
-    return result.sign;
+  return result.sign;
   // } else {
   //   return result.signtext;
   // }
 }
 
-function handleSubmit(e: SubmitEventPromise) {
+function handleSubmit() {
   items.value = []; // Clear the items array
   getSigns();
 }
@@ -81,9 +80,9 @@ async function load({ done }) {
 }
 
 function handleOk() {
-  props.selected(selected.value);
+  props.selectedSigns(selected.value);
   selected.value.forEach(() => {
-    selected.value.pop()
+    selected.value.pop();
   });
   signPuddleSearch.toggleSignPuddleSearch();
 }
@@ -94,6 +93,9 @@ const input = ref("");
 const items = ref<SignPuddleResult[]>([]);
 const signPuddleSearch = signPuddleSearchStore();
 const selected = ref<string[]>([]);
+function addSelected(sign: string) {
+  selected.value.push(sign);
+}
 </script>
 <template>
   <div class="overlay" v-if="props.show">
@@ -119,25 +121,23 @@ const selected = ref<string[]>([]);
           </template>
         </v-text-field>
       </v-form>
-      <v-infinite-scroll mode="manual" height="400" @load="load">
-        <ul class="list-results">
-          <template v-for="(item, index) in items" :key="index">
-            <li class="result">
-              <v-checkbox v-model="selected" :value="signOrSignText(item)">
-                <AlphabetDisplay :word="signOrSignText(item)" />
-              </v-checkbox>
-            </li>
-          </template>
-        </ul>
-        <template v-slot:load-more="{ props }">
-          <v-btn
-            icon="mdi-refresh"
-            variant="text"
-            size="small"
-            v-bind="props"
-          />
+      <!-- <v-infinite-scroll mode="manual" height="400" @load="load"> -->
+      <ul class="list-results">
+        <template v-for="(item, index) in items" :key="index">
+          <li class="result">
+            <input
+            class="checkbox"
+              type="checkbox"
+              :id="`result-${index}`"
+              @input="addSelected(signOrSignText(item))"
+            />
+            <label class="checkbox-label" :for="`result-${index}`">
+              <AlphabetDisplay :word="signOrSignText(item)" />
+            </label>
+          </li>
         </template>
-      </v-infinite-scroll>
+      </ul>
+      <!-- </v-infinite-scroll> -->
       <div class="buttons">
         <v-btn
           class="mt-2"
@@ -188,19 +188,39 @@ const selected = ref<string[]>([]);
   flex-direction: row;
 }
 .list-results {
+  height: 20rem;
+  overflow: auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   list-style-type: none;
-  padding: 0;
-  margin: 0;
+  padding: 1rem;
+  margin: 0 0 1rem 0;
   .result {
-    width: 50%;
+    width: 25%;
+    display: grid;
+    place-content: center;
+
+    .checkbox {
+      display: none;
+
+      &:checked + .checkbox-label {
+        border: 1px solid green;
+      }
+    }
   }
 }
 .buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+  .list-results {
+    .result {
+      width: 50%;
+    }
+  }
 }
 </style>
