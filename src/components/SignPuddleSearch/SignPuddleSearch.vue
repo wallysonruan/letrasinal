@@ -99,9 +99,18 @@ const signPuddleSearch = signPuddleSearchStore();
 const input = ref("");
 const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
 
+function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
+  let seen = new Set();
+  return signs.filter((sign) => {
+    let duplicate = seen.has(sign.sign);
+    seen.add(sign.sign);
+    return !duplicate;
+  });
+}
+
 const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
-const filteredSigns = computed(
-  () => new Set(signsFromSignPuddle.value.map((sign) => signOrSignText(sign))),
+const filteredSigns = computed(() =>
+  removeSignsWithDuplicateFswSign(signsFromSignPuddle.value),
 );
 const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
 const selected = ref<string[]>([]);
@@ -135,7 +144,7 @@ const selected = ref<string[]>([]);
       </div>
       <!-- <v-infinite-scroll mode="manual" height="400" @load="load"> -->
       <ul class="list-results">
-        <template v-for="(sign, index) in signsFromSignPuddle" :key="index">
+        <template v-for="(sign, index) in filteredSigns" :key="index">
           <li class="result">
             <SelectableItem :value="signOrSignText(sign)" v-model="selected">
               <AlphabetDisplay :word="signOrSignText(sign)" />
