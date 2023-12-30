@@ -31,14 +31,14 @@ type SignPuddlePayload = {
 };
 
 type SignPuddleSearchProps = {
-  selected: Array<string>;
   show: boolean;
+  selected: (selected: string[]) => void;
 };
 
 const props = defineProps<SignPuddleSearchProps>();
 
 async function getSigns() {
-  await getSignsByWord(sign.value).then((res: unknown) => {
+  await getSignsByWord(input.value).then((res: unknown) => {
     const payload = res as SignPuddlePayload;
     items.value.push(...processPayload(payload));
     console.log(items);
@@ -80,18 +80,27 @@ async function load({ done }) {
   done("ok");
 }
 
+function handleOk() {
+  props.selected(selected.value);
+  selected.value.forEach(() => {
+    selected.value.pop()
+  });
+  signPuddleSearch.toggleSignPuddleSearch();
+}
+
 const rules = [(v: string) => v.length >= 2 || "Escreva ao menos de 2 letras"];
 
-const sign = ref("");
+const input = ref("");
 const items = ref<SignPuddleResult[]>([]);
 const signPuddleSearch = signPuddleSearchStore();
+const selected = ref<string[]>([]);
 </script>
 <template>
   <div class="overlay" v-if="props.show">
     <v-sheet class="mx-auto parent-container">
       <v-form @submit.prevent class="form-container" @submit="handleSubmit">
         <v-text-field
-          v-model="sign"
+          v-model="input"
           label="Sinal"
           variant="solo"
           type="search"
@@ -105,7 +114,7 @@ const signPuddleSearch = signPuddleSearchStore();
               class="mt-2 submit-button"
               append-icon="mdi-search"
               icon
-              :disabled="sign.length < 2"
+              :disabled="input.length < 2"
             />
           </template>
         </v-text-field>
@@ -114,7 +123,9 @@ const signPuddleSearch = signPuddleSearchStore();
         <ul class="list-results">
           <template v-for="(item, index) in items" :key="index">
             <li class="result">
-              <AlphabetDisplay :word="signOrSignText(item)" />
+              <v-checkbox v-model="selected" :value="signOrSignText(item)">
+                <AlphabetDisplay :word="signOrSignText(item)" />
+              </v-checkbox>
             </li>
           </template>
         </ul>
@@ -140,8 +151,8 @@ const signPuddleSearch = signPuddleSearchStore();
           class="mt-2"
           color="rgba(0,0,0,0.5)"
           width="40%"
-          @click="signPuddleSearch.toggleSignPuddleSearch"
-          :disabled="sign.length < 2"
+          @click="handleOk"
+          :disabled="input.length < 2"
         >
           Ok
         </v-btn>

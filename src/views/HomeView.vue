@@ -31,6 +31,12 @@ function handleEvent(event: Event) {
   clearInput();
 }
 
+function getSelectedFromSignPuddleSearch(selected: string[]) {
+  selected.forEach((text) => {
+    setInputed(text);
+  });
+}
+
 const signPuddleSearch = signPuddleSearchStore();
 </script>
 <template>
@@ -59,7 +65,7 @@ const signPuddleSearch = signPuddleSearchStore();
       </SortableList>
     </div>
     <SignPuddleSearch
-      :selected="inputed"
+      :selected="getSelectedFromSignPuddleSearch"
       :show="signPuddleSearch.isSignPuddleSearchActive()"
     />
   </div>
