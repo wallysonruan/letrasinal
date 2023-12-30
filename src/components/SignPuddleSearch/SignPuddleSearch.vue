@@ -42,15 +42,15 @@ const props = defineProps<SignPuddleSearchProps>();
 async function getSigns() {
   await getSignsByWord(input.value).then((res: unknown) => {
     const payload = res as SignPuddlePayload;
-    items.value.push(...processPayload(payload));
-    console.log(items);
+    signsFromSignPuddle.value.push(...processPayload(payload));
   });
 }
 
 function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
   const results = payload.results;
   return results.filter(
-    (result) => result.sign.length > 0 || result.signtext.length > 0,
+    // (result) => result.sign.length > 0 || result.signtext.length > 0,
+    (result) => result.sign.length > 0,
   );
 }
 
@@ -63,7 +63,7 @@ function signOrSignText(result: SignPuddleResult): string {
 }
 
 async function handleSearch() {
-  items.value = []; // Clear the items array
+  signsFromSignPuddle.value = [];
   await getSigns();
 }
 
@@ -82,6 +82,10 @@ type load: ((options: {
 //   done("ok");
 // }
 
+function handleClose() {
+  signPuddleSearch.toggleSignPuddleSearch();
+}
+
 function handleOk() {
   props.selectedSigns(selected.value);
 
@@ -90,16 +94,21 @@ function handleOk() {
   signPuddleSearch.toggleSignPuddleSearch();
 }
 
-const input = ref("");
-const items = ref<SignPuddleResult[]>([]);
 const signPuddleSearch = signPuddleSearchStore();
-const selected = ref<string[]>([]);
+
+const input = ref("");
 const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
+
+const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
+const filteredSigns = computed(
+  () => new Set(signsFromSignPuddle.value.map((sign) => signOrSignText(sign))),
+);
 const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
+const selected = ref<string[]>([]);
 </script>
 <template>
   <v-dialog v-model="showDialog">
-    <v-sheet class="mx-auto parent-container">
+    <v-sheet class="mx-auto spuddle-search-container">
       <div>
         <v-text-field
           v-model="input"
@@ -126,10 +135,10 @@ const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
       </div>
       <!-- <v-infinite-scroll mode="manual" height="400" @load="load"> -->
       <ul class="list-results">
-        <template v-for="(item, index) in items" :key="index">
+        <template v-for="(sign, index) in signsFromSignPuddle" :key="index">
           <li class="result">
-            <SelectableItem :value="signOrSignText(item)" v-model="selected">
-              <AlphabetDisplay :word="signOrSignText(item)" />
+            <SelectableItem :value="signOrSignText(sign)" v-model="selected">
+              <AlphabetDisplay :word="signOrSignText(sign)" />
             </SelectableItem>
           </li>
         </template>
@@ -140,7 +149,7 @@ const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
           class="mt-2"
           width="40%"
           color="rgba(192, 63, 63, 1)"
-          @click="signPuddleSearch.toggleSignPuddleSearch"
+          @click="handleClose"
         >
           Fechar
         </v-btn>
@@ -158,16 +167,12 @@ const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
   </v-dialog>
 </template>
 <style scoped lang="scss">
-.parent-container {
+.spuddle-search-container {
   min-width: 4rem;
   width: 90%;
   max-width: 35rem;
   padding: 1.5rem;
   border-radius: 0.5rem;
-}
-.form-container {
-  display: flex;
-  flex-direction: row;
 }
 .list-results {
   height: 20rem;
