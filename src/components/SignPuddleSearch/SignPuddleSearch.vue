@@ -114,10 +114,11 @@ function addSelected(sign: string) {
               type="submit"
               block
               class="mt-2 submit-button"
-              append-icon="mdi-search"
               icon
               :disabled="input.length < 2"
-            />
+            >
+              <i class="bi bi-search"></i>
+            </v-btn>
           </template>
         </v-text-field>
       </v-form>

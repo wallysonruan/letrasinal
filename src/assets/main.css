@@ -1,12 +1,4 @@
 @import "./base.css";
 
-.custom-card {
-  background-color: var(--card-background-color);
-  border-radius: 5px;
-}
-
-@media (hover: hover) {
-}
-
-@media (min-width: 1024px) {
-}
+/* Bootstrap icons */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css");
