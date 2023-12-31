@@ -18,9 +18,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm i
       - name: Run linter
         run: npm run lint
@@ -41,9 +41,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm i
       - name: Build
         run: npm run build
@@ -56,6 +56,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      hasCommitChanges: ${{ steps.commit.outputs.hasCommitChanges }}
     steps:
       - name: Checkout code on prod branch
         uses: actions/checkout@v4
@@ -70,12 +72,14 @@ jobs:
         with:
           name: bundle
       - name: Commit new bundle
+        id: commit
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
-          git commit -m "Update bundle"
+          git commit -m "Update bundle" 2>&1 echo 'hasCommitChanges={}' >> $GITHUB_OUTPUT ';'
       - name: Push changes
+        if: steps.commit.outputs.hasCommitChanges == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.PAT_TO_PUSH_ONTO_PROD }}
