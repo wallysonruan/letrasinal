@@ -15,7 +15,7 @@ jobs:
           node-version: '20.10.0'
       - name: Cache Dependencies
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -38,7 +38,7 @@ jobs:
           node-version: '20.10.0'
       - name: Cache Dependencies
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
