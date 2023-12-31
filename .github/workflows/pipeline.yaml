@@ -63,7 +63,7 @@ jobs:
           if-no-files-found: error
   deploy:
     needs: build
-    if: jobs.build.outputs.cache-hit != 'true'
+    if: needs.jobs.build.outputs.cache-hit != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code on prod branch
