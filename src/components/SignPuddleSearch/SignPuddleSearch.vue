@@ -8,6 +8,13 @@ import SelectableItem from "../SelectableItem/SelectableItem.vue";
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 import { computed } from "vue";
 
+enum InfiniteScrollLoadStatus {
+  CONTENT_ADDED_SUCCESSFULLY = "ok",
+  LOADING = "loading",
+  NO_MORE_CONTENT = "empty",
+  ERROR = "error",
+}
+
 /* 
 There's a typing error with this "done", unfortunatlly there's no way to type it correctly because I have no access to the required types.
   Required types:
@@ -18,10 +25,10 @@ type load: ((options: {
 }) => any)
 */
 // @ts-ignore
-// async function load({ done }) {
-//   await getSigns();
-//   done("ok");
-// }
+async function load({ done }) {
+  // await getSigns();
+  done(InfiniteScrollLoadStatus.NO_MORE_CONTENT);
+}
 
 type SignPuddleResult = {
   created_at: string;
@@ -156,17 +163,53 @@ const selected = ref<string[]>([]);
           </template>
         </v-text-field>
       </div>
-      <!-- <v-infinite-scroll mode="manual" height="400" @load="load"> -->
-      <ul class="list-results">
-        <template v-for="(sign, index) in filteredSigns" :key="index">
-          <li class="result">
-            <SelectableItem :value="signOrSignText(sign)" v-model="selected">
-              <AlphabetDisplay :word="signOrSignText(sign)" />
-            </SelectableItem>
-          </li>
-        </template>
-      </ul>
-      <!-- </v-infinite-scroll> -->
+      <div class="search-list">
+        <v-infinite-scroll
+          v-if="signsFromSignPuddle.length > 0"
+          @load="load"
+          class="infinite-scroller"
+        >
+          <ul class="search-results">
+            <template v-for="(sign, index) in filteredSigns" :key="index">
+              <li class="result">
+                <SelectableItem
+                  :value="signOrSignText(sign)"
+                  v-model="selected"
+                >
+                  <AlphabetDisplay :word="signOrSignText(sign)" />
+                </SelectableItem>
+              </li>
+            </template>
+          </ul>
+          <template v-slot:load-more="{ props }">
+            <v-btn
+              icon="mdi-refresh"
+              variant="text"
+              size="small"
+              v-bind="props"
+            ></v-btn>
+          </template>
+          <template v-slot:error="{ props }">
+            <v-alert type="error">
+              <div class="d-flex justify-space-between align-center">
+                Algo deu errado.
+                <v-btn
+                  color="white"
+                  variant="outlined"
+                  size="small"
+                  v-bind="props"
+                >
+                  Tentar outra vez
+                </v-btn>
+              </div>
+            </v-alert>
+          </template>
+          <template v-slot:empty>
+            <!-- <v-alert type="warning">Não há mais sinais.</v-alert> -->
+            <v-alert type="info">Paginação não implementada.</v-alert>
+          </template>
+        </v-infinite-scroll>
+      </div>
       <div class="buttons-container">
         <v-btn
           class="mt-2"
@@ -200,20 +243,29 @@ const selected = ref<string[]>([]);
   .input-sign {
     margin-bottom: 0.5rem;
   }
-  .list-results {
-    height: 20rem;
-    padding: 1rem;
-    margin: 0%;
-    overflow: auto;
-    //
+
+  .search-list {
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
-    list-style-type: none;
-    //
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    column-gap: 0.5rem;
-    row-gap: 0.5rem;
+    min-height: 10rem;
+    max-height: 20rem;
+    margin: 0%;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+    overflow: auto;
+
+    .infinite-scroller {
+      overflow: unset;
+    }
+
+    .search-results {
+      list-style-type: none;
+      //
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 0.5rem;
+      row-gap: 0.5rem;
+    }
   }
   .buttons-container {
     display: flex;
@@ -223,7 +275,7 @@ const selected = ref<string[]>([]);
 }
 
 @media (max-width: 600px) {
-  .list-results {
+  .search-results {
     grid-template-columns: repeat(2, 1fr);
   }
 }
