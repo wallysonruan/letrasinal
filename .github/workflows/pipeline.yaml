@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  quality:
+  tests-and-linter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,20 +14,20 @@ jobs:
         with:
           node-version: '20.10.0'
       - name: Cache Dependencies
-        id: cache
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm i
       - name: Run linter
         run: npm run lint
       - name: Run tests
         run: npm run test:unit
   build:
-    needs: quality
+    needs: tests-and-linter
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -37,17 +37,25 @@ jobs:
         with:
           node-version: '20.10.0'
       - name: Cache Dependencies
-        id: cache
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm i
+      - name: Cache Build
+        id: cache-build
+        uses: actions/cache@v3
+        with:
+          path: dist
+          key: dist-${{ hashFiles('/*') }}
       - name: Build
+        if: steps.cache-build.outputs.cache-hit != 'true'
         run: npm run build
       - name: Upload bundle as artifact
+        if: steps.cache-build.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: bundle
@@ -55,9 +63,8 @@ jobs:
           if-no-files-found: error
   deploy:
     needs: build
+    if: jobs.build.outputs.cache-hit != 'true'
     runs-on: ubuntu-latest
-    outputs:
-      hasCommitChanges: ${{ steps.commit.outputs.hasCommitChanges }}
     steps:
       - name: Checkout code on prod branch
         uses: actions/checkout@v4
@@ -77,9 +84,8 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
-          echo 'hasCommitChanges=${git commit -m "Update bundle" 2>&1}' >> $GITHUB_OUTPUT ';'
+          git commit -m "Update bundle"
       - name: Push changes
-        if: steps.commit.outputs.hasCommitChanges == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.PAT_TO_PUSH_ONTO_PROD }}
