@@ -77,7 +77,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
-          git commit -m "Update bundle" 2>&1 echo 'hasCommitChanges={}' >> $GITHUB_OUTPUT ';'
+          echo 'hasCommitChanges=${git commit -m "Update bundle" 2>&1}' >> $GITHUB_OUTPUT ';'
       - name: Push changes
         if: steps.commit.outputs.hasCommitChanges == 'true'
         uses: ad-m/github-push-action@master
