@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: dist
-          key: dist-${{ hashFiles('/*') }}
+          key: dist-${{ hashFiles('**/dist/*') }}
       - name: Build
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: npm run build
