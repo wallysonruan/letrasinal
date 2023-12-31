@@ -29,6 +29,8 @@ jobs:
   build:
     needs: tests-and-linter
     runs-on: ubuntu-latest
+    outputs:
+      cacheHit: ${{ steps.cache-build.outputs.cache-hit }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,7 +65,7 @@ jobs:
           if-no-files-found: error
   deploy:
     needs: build
-    if: needs.jobs.build.outputs.cache-build.cache-hit != 'true'
+    if: needs.build.outputs.cacheHit != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code on prod branch
