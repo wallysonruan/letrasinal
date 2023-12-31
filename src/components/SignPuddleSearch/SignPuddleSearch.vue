@@ -274,9 +274,13 @@ const selected = ref<string[]>([]);
   }
 }
 
-@media (max-width: 600px) {
-  .search-results {
-    grid-template-columns: repeat(2, 1fr);
+@media only screen and (max-width: 600px) {
+  .spuddle-search-container {
+    .search-list {
+      .search-results {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   }
 }
 </style>
