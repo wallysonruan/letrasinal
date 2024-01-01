@@ -5,7 +5,9 @@ const props = defineProps<{
 </script>
 <template>
   <div>
-    <p>{{ props.word }}</p>
+    <p>
+      {{ props.word }}
+    </p>
   </div>
 </template>
 <style scoped lang="scss">
