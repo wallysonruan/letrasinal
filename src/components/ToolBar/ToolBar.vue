@@ -2,7 +2,7 @@
 import { ref } from "vue";
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
-import pageStore from "@/stores/PageStore"
+import pageStore from "@/stores/PageStore";
 
 const input = ref<string>();
 
@@ -11,7 +11,7 @@ function clearInput() {
 }
 
 function setInputed(text: string) {
-  pageStore().addItem(text)
+  pageStore().addItem(text);
 }
 
 function handleEvent(event: Event) {

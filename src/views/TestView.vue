@@ -2,22 +2,21 @@
 import SortableList from "@/components/SortableList/SortableList.vue";
 import DraggableItem from "@/components/DraggableItem/DraggableItem.vue";
 
-import { ref } from "vue";
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import { computed } from "vue";
 import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearch.vue";
 import PageSheet from "@/components/Page/PageSheet.vue";
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
+import pageStore from "@/stores/PageStore";
 import ToolBar from "@/components/ToolBar/ToolBar.vue";
 
-const inputed = ref<string[]>([]);
 const separatedText = computed(() =>
-  inputed.value.filter((text) => text.trim() != ""),
+  pageStore().items.filter((text: string) => text.trim() != ""),
 );
 
 function setInputed(text: string) {
-  inputed.value.push(text);
+  pageStore().items.push(text);
 }
 
 function getSelectedFromSignPuddleSearch(selected: string[]) {
@@ -30,7 +29,7 @@ const signPuddleSearch = signPuddleSearchStore();
 </script>
 <template>
   <div class="home-container">
-    <ToolBar> </ToolBar>
+    <ToolBar />
     <div class="sheets">
       <PageSheet>
         <SortableList>

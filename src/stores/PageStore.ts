@@ -7,8 +7,8 @@ const signPuddleSearchStore = defineStore({
   }),
   actions: {
     addItem(item: unknown) {
-        this.items.push(item)
-    }
+      this.items.push(item);
+    },
   },
 });
 
