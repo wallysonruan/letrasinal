@@ -5,7 +5,8 @@ import type { StyleValue } from "vue";
 const sheetSizes = {
   a4: {
     width: 794,
-    height: 1123,
+    // height: 1123,
+    height: 1100,
   },
 };
 
@@ -87,7 +88,7 @@ const items = {
 };
 </script>
 <template>
-  <div class="printable">
+  <div>
     <v-sheet
       class="sheet"
       :width="sheetSizes.a4.width"
@@ -107,6 +108,10 @@ const items = {
 
   &:hover {
     cursor: text;
+  }
+
+  .page-content {
+    overflow: hidden;
   }
 }
 </style>

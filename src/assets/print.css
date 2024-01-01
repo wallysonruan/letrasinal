@@ -1,5 +1,17 @@
 @media print {
-  *:not(.printable) {
-    display: none;
+  *.no-printable {
+    display: none !important;
   }
+
+  .sheet {
+    border: none !important;
+  }
+
+  *{
+    resize: unset !important;
+  }
+}
+
+@page {
+  margin: 1cm;
 }

@@ -5,7 +5,6 @@ import PageSheet from "@/components/Page/PageSheet.vue";
 <template>
   <div class="home-container">
     <HeaderBar />
-    <br />
     <div class="sheets">
       <PageSheet />
     </div>
