@@ -49,7 +49,7 @@ const signPuddleSearch = signPuddleSearchStore();
 <style scoped lang="scss">
 .home-container {
   padding: 1.5rem;
-  width: max-content;
+  max-width: max-content;
 
   .sheets {
     display: grid;
