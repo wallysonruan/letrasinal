@@ -3,11 +3,11 @@
     display: none !important;
   }
 
-  .sheet {
+  .sheet-container {
     border: none !important;
   }
 
-  *{
+  * {
     resize: unset !important;
   }
 }

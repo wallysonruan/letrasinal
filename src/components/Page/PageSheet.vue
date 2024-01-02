@@ -4,14 +4,16 @@ import type { StyleValue } from "vue";
 
 const sheetSizes = {
   a4: {
-    width: 794,
+    width: "790px",
     // height: 1123,
-    height: 1100,
+    height: "1100px",
   },
 };
 
 const sheetStyles: StyleValue = {
   padding: "1rem",
+  width: sheetSizes.a4.width,
+  height: sheetSizes.a4.height,
 };
 
 const sheetContentStyles: StyleValue = {
@@ -88,21 +90,14 @@ const items = {
 };
 </script>
 <template>
-  <div>
-    <v-sheet
-      class="sheet"
-      :width="sheetSizes.a4.width"
-      :height="sheetSizes.a4.height"
-      :style="sheetStyles"
-    >
-      <div class="page-content" :style="sheetContentStyles">
-        <PageItem v-for="item in items.text" :key="item" :item="item" />
-      </div>
-    </v-sheet>
+  <div class="sheet-container" :style="sheetStyles">
+    <div class="page-content" :style="sheetContentStyles">
+      <PageItem v-for="item in items.text" :key="item" :item="item" />
+    </div>
   </div>
 </template>
 <style scoped lang="scss">
-.sheet {
+.sheet-container {
   border: 1px solid rgb(0, 0, 0, 0.2);
   overflow: hidden;
 
@@ -112,6 +107,12 @@ const items = {
 
   .page-content {
     overflow: hidden;
+  }
+}
+
+@media print {
+  .sheet-container {
+    border: none !important;
   }
 }
 </style>
