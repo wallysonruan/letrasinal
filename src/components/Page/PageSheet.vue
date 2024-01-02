@@ -4,6 +4,7 @@ import type { StyleValue } from "vue";
 
 const sheetSizes = {
   a4: {
+    // width: 794p,
     width: "790px",
     // height: 1123,
     height: "1100px",

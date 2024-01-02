@@ -11,4 +11,15 @@ const props = defineProps<PageItemProps>();
     <AlphabetDisplay :word="props.item"></AlphabetDisplay>
   </div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.page-item {
+  overflow: auto; // resize need this
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  &:hover {
+    resize: both;
+  }
+}
+</style>

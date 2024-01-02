@@ -8,10 +8,9 @@ const props = defineProps<{
 }>();
 
 const isSignWriting = isValidFswString(props.word.split(" ")[0]);
-const isSentence = props.word.split(" ").length > 1;
 </script>
 <template>
-  <div :sentence="isSentence">
+  <div>
     <template v-if="isSignWriting">
       <SignWriting
         v-for="(word, index) in props.word.split(' ')"
@@ -22,12 +21,3 @@ const isSentence = props.word.split(" ").length > 1;
     <LatinAlphabet v-else :word="word" />
   </div>
 </template>
-<style scoped lang="scss">
-div[sentence="true"] {
-  resize: both;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-}
-</style>
