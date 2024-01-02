@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import HeaderBar from "@/components/HeaderBar/HeaderBar.vue";
 import PageSheet from "@/components/Page/PageSheet.vue";
+// import ToolBar from "@/components/ToolBar/ToolBar.vue";
 </script>
 <template>
   <div class="home-container">
-    <HeaderBar />
+    <!-- <ToolBar /> -->
     <div class="sheets">
       <PageSheet />
     </div>
@@ -12,16 +12,20 @@ import PageSheet from "@/components/Page/PageSheet.vue";
 </template>
 <style scoped lang="scss">
 .home-container {
-  padding-bottom: 1.5rem;
   .sheets {
     display: grid;
     place-content: center;
+    margin: 1.5rem 0;
   }
 }
 
 @media print {
   .home-container {
     padding: 0% !important;
+
+    .sheets {
+      margin: 0% !important;
+    }
   }
 }
 </style>
