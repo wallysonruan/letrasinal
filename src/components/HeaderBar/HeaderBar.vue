@@ -2,11 +2,11 @@
 import Logo from "@/components/Logo/LogoItem.vue";
 </script>
 <template>
-  <v-toolbar density="compact" class="no-printable header-bar">
-    <v-toolbar-title>
+  <v-app-bar class="no-printable header-bar" density="compact">
+    <v-app-bar-title>
       <Logo />
-    </v-toolbar-title>
-  </v-toolbar>
+    </v-app-bar-title>
+  </v-app-bar>
 </template>
 <style scoped lang="scss">
 .header-bar {
