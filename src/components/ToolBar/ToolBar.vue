@@ -1,10 +1,7 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 <template>
   <div class="toolbar-container no-printable">
-    <div class="toolbar">
-
-    </div>
+    <div class="toolbar"></div>
   </div>
 </template>
 <style scoped lang="scss">
