@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
+// import HeaderBar from "@/components/HeaderBar/HeaderBar.vue";
 </script>
 <template>
   <v-app>
+    <!-- <HeaderBar /> -->
     <v-main>
       <RouterView />
     </v-main>
   </v-app>
 </template>
-<style lang="scss">
-a {
-  text-decoration: none;
-  color: inherit;
-
-  &:visited {
-    color: inherit;
-  }
-}
-</style>
