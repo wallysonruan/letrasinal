@@ -13,5 +13,9 @@ const props = defineProps<{
 <style scoped lang="scss">
 p {
   word-break: break-word;
+
+  &:hover {
+    cursor: default;
+  }
 }
 </style>

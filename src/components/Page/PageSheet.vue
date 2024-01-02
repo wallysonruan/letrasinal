@@ -102,10 +102,6 @@ const items = {
   border: 1px solid rgb(0, 0, 0, 0.2);
   overflow: hidden;
 
-  &:hover {
-    cursor: text;
-  }
-
   .page-content {
     overflow: hidden;
   }
