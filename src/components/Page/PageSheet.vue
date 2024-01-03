@@ -166,8 +166,15 @@ const items = {
     overflow: hidden;
 
     .sheet-item {
-      cursor: pointer;
+      cursor: grab;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .sheet-container {
+    width: 100% !important;
+    height: 100% !important;
   }
 }
 

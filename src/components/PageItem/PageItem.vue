@@ -19,6 +19,7 @@ const props = defineProps<PageItemProps>();
   flex-wrap: wrap;
   padding: 0.5rem 0;
   //
+  max-width: 20rem;
   overflow: auto; // resize need this
 
   &:hover {
@@ -34,6 +35,12 @@ const props = defineProps<PageItemProps>();
       border: 2px solid #0d99ff;
       border-radius: 0.3rem;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .page-item {
+    max-width: 50%;
   }
 }
 

@@ -31,8 +31,8 @@ import signPuddleSearchStore from "@/stores/SignPuddleStore";
   }
 
   .sheets {
-    display: grid;
-    place-content: center;
+    display: flex;
+    justify-content: center;
   }
 }
 
