@@ -4,7 +4,9 @@ import ToolBar from "@/components/ToolBar/ToolBar.vue";
 </script>
 <template>
   <div class="home-container">
-    <ToolBar />
+    <div class="sticky no-printable">
+      <ToolBar />
+    </div>
     <div class="sheets">
       <PageSheet />
     </div>
@@ -14,6 +16,13 @@ import ToolBar from "@/components/ToolBar/ToolBar.vue";
 .home-container {
   background-color: rgb(128, 128, 128, 0.06);
   padding-bottom: 1.5rem;
+
+  .sticky {
+    position: sticky;
+    top: 10px;
+    z-index: 1;
+  }
+
   .sheets {
     display: grid;
     place-content: center;

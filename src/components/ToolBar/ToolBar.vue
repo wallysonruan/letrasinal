@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LogoItem from "../Logo/LogoItem.vue";
 function print() {
   window.print();
 }
@@ -6,6 +7,9 @@ function print() {
 <template>
   <div class="toolbar-container no-printable">
     <v-toolbar class="toolbar">
+      <v-toolbar-title>
+        <LogoItem />
+      </v-toolbar-title>
       <v-btn icon @click="print">
         <v-icon>mdi-printer</v-icon>
       </v-btn>
@@ -14,12 +18,10 @@ function print() {
 </template>
 <style scoped lang="scss">
 .toolbar-container {
-  top: 0; // Sticky will only work with this, it's to keep the toolbar at the top of the page.
-  position: sticky;
-
   .toolbar {
+    background-color: rgb(193, 185, 185);
+    opacity: 1;
     width: 90%;
-    height: 4rem;
     border-radius: 1.5rem;
     margin: 1rem auto;
   }
