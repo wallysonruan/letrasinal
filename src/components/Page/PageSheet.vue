@@ -1,6 +1,59 @@
 <script setup lang="ts">
 import PageItem from "@/components/PageItem/PageItem.vue";
 import type { StyleValue } from "vue";
+import { onMounted, ref } from "vue";
+
+let draggedItem = ref<HTMLElement>();
+
+/**
+ * @param {DragEvent} e
+ * @returns {void}
+ * @description Handle the drag start event and set the dragged item.
+ */
+const handleDragStart = (e: DragEvent) => {
+  draggedItem.value = e.target as HTMLElement;
+};
+
+/**
+ * @param {DragEvent} e
+ * @returns {void}
+ * @description Handle the drag over event and insert the dragged item after the target item, but only if the target is a sheet-item.
+ */
+const handleDragOver = (e: DragEvent) => {
+  e.preventDefault();
+  let target = e.target as HTMLElement;
+
+  // Check if the target is not a sheet-item
+  if (!target.classList.contains("sheet-item")) {
+    // Find the closest sheet-item parent
+    target = target.closest(".sheet-item") as HTMLElement;
+  }
+
+  // Check if the target is not null and is a sheet-item
+  if (target && target.classList.contains("sheet-item")) {
+    target.parentNode?.insertBefore(
+      draggedItem.value as HTMLElement,
+      target.nextSibling,
+    );
+  }
+};
+
+/**
+ * @returns {void}
+ * @description Handle the drag end event and set the dragged item to undefined.
+ */
+const handleDragEnd = () => {
+  draggedItem.value = undefined;
+};
+
+onMounted(() => {
+  const items = document.querySelectorAll(".sheet-item");
+  items.forEach((item) => {
+    (item as HTMLElement).addEventListener("dragstart", handleDragStart);
+    (item as HTMLElement).addEventListener("dragover", handleDragOver);
+    item.addEventListener("dragend", handleDragEnd);
+  });
+});
 
 const sheetSizes = {
   a4: {
@@ -92,18 +145,29 @@ const items = {
 </script>
 <template>
   <div class="sheet-container" :style="sheetStyles">
-    <div class="page-content" :style="sheetContentStyles">
-      <PageItem v-for="item in items.text" :key="item" :item="item" />
+    <div class="sheet-content" :style="sheetContentStyles">
+      <PageItem
+        draggable="true"
+        class="sheet-item"
+        v-for="item in items.text"
+        :key="item"
+        :item="item"
+      />
     </div>
   </div>
 </template>
 <style scoped lang="scss">
 .sheet-container {
+  background-color: white;
   border: 1px solid rgb(0, 0, 0, 0.2);
   overflow: hidden;
 
-  .page-content {
+  .sheet-content {
     overflow: hidden;
+
+    .sheet-item {
+      cursor: pointer;
+    }
   }
 }
 

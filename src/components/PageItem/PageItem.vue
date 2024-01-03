@@ -36,4 +36,14 @@ const props = defineProps<PageItemProps>();
     }
   }
 }
+
+@media print {
+  .page-item {
+    &:hover {
+      &::before {
+        border: none !important;
+      }
+    }
+  }
+}
 </style>
