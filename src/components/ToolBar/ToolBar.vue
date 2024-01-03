@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import LogoItem from "../Logo/LogoItem.vue";
+import signPuddleSearchStore from "@/stores/SignPuddleStore";
+
 function print() {
   window.print();
 }
@@ -10,6 +12,15 @@ function print() {
       <v-toolbar-title>
         <LogoItem />
       </v-toolbar-title>
+      <v-btn icon>
+        <v-icon @click="signPuddleSearchStore().toggleSignPuddleSearch">
+          <img
+            width="100%"
+            src="@/assets/sign-puddle-icon.png"
+            alt="SignPuddle"
+          />
+        </v-icon>
+      </v-btn>
       <v-btn icon @click="print">
         <v-icon>mdi-printer</v-icon>
       </v-btn>

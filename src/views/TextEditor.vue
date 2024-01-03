@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import PageSheet from "@/components/Page/PageSheet.vue";
 import ToolBar from "@/components/ToolBar/ToolBar.vue";
+import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearch.vue";
+
+import signPuddleSearchStore from "@/stores/SignPuddleStore";
 </script>
 <template>
   <div class="home-container">
@@ -10,6 +13,10 @@ import ToolBar from "@/components/ToolBar/ToolBar.vue";
     <div class="sheets">
       <PageSheet />
     </div>
+    <SignPuddleSearch
+      :selected-signs="() => {}"
+      :show="signPuddleSearchStore().isSignPuddleSearchActive()"
+    />
   </div>
 </template>
 <style scoped lang="scss">
