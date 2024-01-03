@@ -110,10 +110,6 @@ const items = {
 
   .sheet-content {
     overflow: hidden;
-
-    .sheet-item {
-      cursor: grab;
-    }
   }
 }
 
