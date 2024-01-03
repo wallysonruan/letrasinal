@@ -6,7 +6,7 @@ function print() {
 </script>
 <template>
   <div class="toolbar-container no-printable">
-    <v-toolbar class="toolbar">
+    <v-toolbar class="toolbar" density="comfortable">
       <v-toolbar-title>
         <LogoItem />
       </v-toolbar-title>
