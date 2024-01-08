@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
-import DraggableItemV2 from "../DraggableItem/DraggableItemV2.vue";
-import ResizableItem from "@/components/ResizableItem/ResizableItem.vue";
 
 type PageItemProps = {
   item: string;
@@ -9,13 +7,9 @@ type PageItemProps = {
 const props = defineProps<PageItemProps>();
 </script>
 <template>
-  <DraggableItemV2>
-    <ResizableItem>
-      <div class="page-item">
-        <AlphabetDisplay :word="props.item"></AlphabetDisplay>
-      </div>
-    </ResizableItem>
-  </DraggableItemV2>
+  <div class="page-item">
+    <AlphabetDisplay :word="props.item"></AlphabetDisplay>
+  </div>
 </template>
 <style scoped lang="scss">
 .page-item {
