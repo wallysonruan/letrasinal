@@ -2,8 +2,14 @@
 import LogoItem from "../Logo/LogoItem.vue";
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 
+import e_pageOrientation from "./PageOrientationEvent";
+
 function print() {
   window.print();
+}
+
+function pageOrientation(e: Event) {
+  e.target?.dispatchEvent(e_pageOrientation);
 }
 </script>
 <template>
@@ -13,10 +19,19 @@ function print() {
         <LogoItem />
       </v-toolbar-title>
       <v-btn icon>
+        <v-icon @click="pageOrientation">
+          <img
+            width="30"
+            src="../../assets/page-orientation-icon.svg"
+            alt="Page orientation"
+          />
+        </v-icon>
+      </v-btn>
+      <v-btn icon>
         <v-icon @click="signPuddleSearchStore().toggleSignPuddleSearch">
           <img
-            width="100%"
-            src="@/assets/sign-puddle-icon.png"
+            width="25"
+            src="../../assets/sign-puddle-icon.png"
             alt="SignPuddle"
           />
         </v-icon>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PageItem from "@/components/PageItem/PageItem.vue";
-import type { StyleValue } from "vue";
+import { ref, type StyleValue } from "vue";
 
 const sheetSizes = {
   a4: {
@@ -11,11 +11,8 @@ const sheetSizes = {
   },
 };
 
-const sheetStyles: StyleValue = {
-  padding: "1rem",
-  width: `${sheetSizes.a4.width}px`,
-  height: `${sheetSizes.a4.height}px`,
-};
+const pageWidth = ref(sheetSizes.a4.width);
+const pageHeight = ref(sheetSizes.a4.height);
 
 const sheetContentStyles: StyleValue = {
   display: "flex",
@@ -25,6 +22,21 @@ const sheetContentStyles: StyleValue = {
   alignContent: "baseline",
   height: "inherit",
 };
+
+function changePageOrientation() {
+  if (pageWidth.value === sheetSizes.a4.width) {
+    pageWidth.value = sheetSizes.a4.height;
+    pageHeight.value = sheetSizes.a4.width;
+    console.log("oi");
+  } else {
+    pageWidth.value = sheetSizes.a4.width;
+    pageHeight.value = sheetSizes.a4.height;
+  }
+}
+
+window.addEventListener("page-orientation", () => {
+  changePageOrientation();
+});
 
 const items = {
   text: [
@@ -64,9 +76,14 @@ const items = {
     "M527x527S1bb40506x485S21e00512x474S21e00475x474S1bb48474x483S26a20487x513",
   ],
 };
+
+// const sheetContainer = ref(0);
 </script>
 <template>
-  <div class="sheet-container" :style="sheetStyles">
+  <div
+    class="sheet-container"
+    :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
+  >
     <Vue3DraggableResizable
       :active="false"
       :parent="true"
