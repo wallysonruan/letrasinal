@@ -119,7 +119,6 @@ const items = {
 @media screen and (max-width: 600px) {
   .sheet-container {
     width: 100% !important;
-    height: 100% !important;
   }
 }
 
