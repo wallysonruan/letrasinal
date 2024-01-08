@@ -5,16 +5,16 @@ import type { StyleValue } from "vue";
 const sheetSizes = {
   a4: {
     // width: 794p,
-    width: "790px",
+    width: 790,
     // height: 1123,
-    height: "1100px",
+    height: 1100,
   },
 };
 
 const sheetStyles: StyleValue = {
   padding: "1rem",
-  width: sheetSizes.a4.width,
-  height: sheetSizes.a4.height,
+  width: `${sheetSizes.a4.width}px`,
+  height: `${sheetSizes.a4.height}px`,
 };
 
 const sheetContentStyles: StyleValue = {
@@ -92,24 +92,35 @@ const items = {
 </script>
 <template>
   <div class="sheet-container" :style="sheetStyles">
-    <div class="sheet-content" :style="sheetContentStyles">
-      <PageItem
-        class="sheet-item"
-        v-for="item in items.text"
-        :key="item"
-        :item="item"
-      />
-    </div>
+    <Vue3DraggableResizable
+      :active="false"
+      :parent="true"
+      :draggable="false"
+      :w="sheetSizes.a4.width"
+      :h="sheetSizes.a4.height"
+      :handles="['tm', 'mr', 'bm', 'ml']"
+    >
+      <div class="sheet-content" :style="sheetContentStyles">
+        <PageItem
+          class="sheet-item"
+          v-for="item in items.text"
+          :key="item"
+          :item="item"
+        />
+      </div>
+    </Vue3DraggableResizable>
   </div>
 </template>
 <style scoped lang="scss">
 .sheet-container {
+  position: relative;
   background-color: white;
   border: 1px solid rgb(0, 0, 0, 0.2);
   overflow: hidden;
 
   .sheet-content {
     overflow: hidden;
+    height: 2rem;
   }
 }
 
