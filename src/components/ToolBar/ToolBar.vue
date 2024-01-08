@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import LogoItem from "../Logo/LogoItem.vue";
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
-
-import e_pageOrientation from "./PageOrientationEvent";
+import SheetFormatOptions from "../SheetFormatOptions/SheetFormatOptions.vue";
 
 function print() {
   window.print();
-}
-
-function pageOrientation(e: Event) {
-  e.target?.dispatchEvent(e_pageOrientation);
 }
 </script>
 <template>
@@ -18,15 +13,7 @@ function pageOrientation(e: Event) {
       <v-toolbar-title>
         <LogoItem />
       </v-toolbar-title>
-      <v-btn icon>
-        <v-icon @click="pageOrientation">
-          <img
-            width="30"
-            src="../../assets/page-orientation-icon.svg"
-            alt="Page orientation"
-          />
-        </v-icon>
-      </v-btn>
+      <SheetFormatOptions />
       <v-btn icon>
         <v-icon @click="signPuddleSearchStore().toggleSignPuddleSearch">
           <img
