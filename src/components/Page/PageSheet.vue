@@ -115,7 +115,12 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 // Add a global keydown event listener
-window.addEventListener("keydown", handleKeyDown);
+window.addEventListener("keydown", (e) => {
+  if (isCaretVisible.value) {
+    e.preventDefault();
+  }
+  handleKeyDown(e);
+});
 
 const items = {
   text: [
