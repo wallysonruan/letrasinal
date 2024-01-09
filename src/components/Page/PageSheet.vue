@@ -157,11 +157,11 @@ onUnmounted(() => {
       :active="pageMargin"
       :parent="true"
       :draggable="false"
-      :w="sheetSizes.a4.width"
-      :h="sheetSizes.a4.height"
+      :w="pageWidth"
+      :h="pageHeight"
       :handles="['tm', 'mr', 'bm', 'ml']"
     >
-      <div class="sheet-content" :style="sheetContentStyles">
+      <div class="sheet-content">
         <PageItem
           class="sheet-item"
           v-for="(text, index) in props.text"
