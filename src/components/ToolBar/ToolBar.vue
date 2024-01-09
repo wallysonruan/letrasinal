@@ -13,6 +13,7 @@ function print() {
       <v-toolbar-title>
         <LogoItem />
       </v-toolbar-title>
+      <!---->
       <SheetFormatOptions />
       <v-btn icon>
         <v-icon @click="signPuddleSearchStore().toggleSignPuddleSearch">

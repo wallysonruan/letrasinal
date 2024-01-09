@@ -38,6 +38,12 @@ window.addEventListener("page-orientation", () => {
   changePageOrientation();
 });
 
+window.addEventListener("page-margin", () => {
+  pageMargin.value = !pageMargin.value;
+});
+
+const pageMargin = ref(false);
+
 const items = {
   text: [
     "M519x515S1005f498x485S26501481x486",
@@ -76,8 +82,6 @@ const items = {
     "M527x527S1bb40506x485S21e00512x474S21e00475x474S1bb48474x483S26a20487x513",
   ],
 };
-
-// const sheetContainer = ref(0);
 </script>
 <template>
   <div
@@ -85,7 +89,7 @@ const items = {
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
   >
     <Vue3DraggableResizable
-      :active="false"
+      :active="pageMargin"
       :parent="true"
       :draggable="false"
       :w="sheetSizes.a4.width"
