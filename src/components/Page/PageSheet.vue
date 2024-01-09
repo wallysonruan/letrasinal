@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import PageItem from "@/components/PageItem/PageItem.vue";
-import { ref, type StyleValue } from "vue";
+import { onMounted, onUnmounted, ref, type StyleValue } from "vue";
+
+type PageSheetProps = {
+  text: string[];
+};
+
+const props = defineProps<PageSheetProps>();
 
 const sheetSizes = {
   a4: {
-    width: 790, // width: 794p, // original size
-    height: 1100, // height: 1123, // original size
+    width: 790, // original size: 794px
+    height: 1100, // original size: 1123px
   },
 };
 
@@ -46,7 +52,8 @@ window.addEventListener("page-margin", () => {
 const pageMargin = ref(false);
 
 const isCaretVisible = ref(false);
-window.addEventListener("click", (event: MouseEvent) => {
+
+function handleMouseClick(event: MouseEvent) {
   const elementClickedOn = event.target as HTMLElement;
   const classesOfelementClickedOn = elementClickedOn.classList;
   const customCaret = document.querySelector(
@@ -69,7 +76,7 @@ window.addEventListener("click", (event: MouseEvent) => {
       return;
     }
   }
-});
+}
 
 function handleKeyDown(event: KeyboardEvent) {
   if (
@@ -132,54 +139,19 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 }
 
-// Add a global keydown event listener
-window.addEventListener("keydown", (e) => {
-  handleKeyDown(e);
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
 });
 
-const items = {
-  text: [
-    "M519x515S1005f498x485S26501481x486",
-    "M518x560S2ff00482x483S14c00488x503S26c06491x533S22130474x497",
-    "M527x533S10059474x495S2ea06502x500S14040485x467S2d728486x519",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M527x527S1bb40506x485S21e00512x474S21e00475x474S1bb48474x483S26a20487x513",
-    "M519x515S1005f498x485S26501481x486",
-    "M518x560S2ff00482x483S14c00488x503S26c06491x533S22130474x497",
-    "M521x526S36d00479x475S37800480x478S37804480x509S15a32470x483S20e00456x483S2380b467x503",
-    "M527x533S10059474x495S2ea06502x500S14040485x467S2d728486x519",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M527x527S1bb40506x485S21e00512x474S21e00475x474S1bb48474x483S26a20487x513",
-    "M519x515S1005f498x485S26501481x486",
-    "M518x560S2ff00482x483S14c00488x503S26c06491x533S22130474x497",
-    "M521x526S36d00479x475S37800480x478S37804480x509S15a32470x483S20e00456x483S2380b467x503",
-    "M527x533S10059474x495S2ea06502x500S14040485x467S2d728486x519",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M527x527S1bb40506x485S21e00512x474S21e00475x474S1bb48474x483S26a20487x513",
-    "M519x515S1005f498x485S26501481x486",
-    "M518x560S2ff00482x483S14c00488x503S26c06491x533S22130474x497",
-    "M521x526S36d00479x475S37800480x478S37804480x509S15a32470x483S20e00456x483S2380b467x503",
-    "M527x533S10059474x495S2ea06502x500S14040485x467S2d728486x519",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M527x527S1bb40506x485S21e00512x474S21e00475x474S1bb48474x483S26a20487x513",
-    "M519x515S1005f498x485S26501481x486",
-    "M518x560S2ff00482x483S14c00488x503S26c06491x533S22130474x497",
-    "M521x526S36d00479x475S37800480x478S37804480x509S15a32470x483S20e00456x483S2380b467x503",
-    "M527x533S10059474x495S2ea06502x500S14040485x467S2d728486x519",
-    "M529x554S30004482x483S1dc09506x501S2df10506x533",
-    "M527x527S1bb40506x485S21e00512x474S21e00475x474S1bb48474x483S26a20487x513",
-  ],
-};
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
 </script>
 <template>
   <div
     class="sheet-container"
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
+    @click="handleMouseClick"
   >
     <Vue3DraggableResizable
       :active="pageMargin"
@@ -192,9 +164,9 @@ const items = {
       <div class="sheet-content" :style="sheetContentStyles">
         <PageItem
           class="sheet-item"
-          v-for="item in items.text"
-          :key="item"
-          :item="item"
+          v-for="(text, index) in props.text"
+          :key="index"
+          :item="text"
         />
         <div
           class="sheet-item custom-blinking-caret"
