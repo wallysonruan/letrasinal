@@ -63,14 +63,13 @@ function handleMouseClick(event: MouseEvent) {
 
 function handleKeyDown(event: KeyboardEvent) {
   if (
-    event.key === "ArrowUp" ||
-    event.key === "ArrowDown" ||
-    event.code === "Space" ||
-    event.code === "Tab"
+    (event.key === "ArrowUp" ||
+      event.key === "ArrowDown" ||
+      event.code === "Space" ||
+      event.code === "Tab") &&
+    isCaretVisible.value
   ) {
-    if (isCaretVisible.value) {
-      event.preventDefault();
-    }
+    event.preventDefault();
   }
 
   const customCaret = document.querySelector(
