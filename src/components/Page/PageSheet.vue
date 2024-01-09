@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PageItem from "@/components/PageItem/PageItem.vue";
-import { onMounted, onUnmounted, ref, type StyleValue } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 type PageSheetProps = {
   text: string[];
@@ -144,27 +144,18 @@ onUnmounted(() => {
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
     @click="handleMouseClick"
   >
-    <Vue3DraggableResizable
-      :active="pageMargin"
-      :parent="true"
-      :draggable="false"
-      :w="pageWidth"
-      :h="pageHeight"
-      :handles="['tm', 'mr', 'bm', 'ml']"
-    >
-      <div class="sheet-content">
-        <PageItem
-          class="sheet-item"
-          v-for="(text, index) in props.text"
-          :key="index"
-          :item="text"
-        />
-        <div
-          class="sheet-item custom-blinking-caret"
-          v-show="isCaretVisible"
-        ></div>
-      </div>
-    </Vue3DraggableResizable>
+    <div class="sheet-content">
+      <PageItem
+        class="sheet-item"
+        v-for="(text, index) in props.text"
+        :key="index"
+        :item="text"
+      />
+      <div
+        class="sheet-item custom-blinking-caret"
+        v-show="isCaretVisible"
+      ></div>
+    </div>
   </div>
 </template>
 <style scoped lang="scss">

@@ -20,11 +20,6 @@ import { VAlert } from "vuetify/components";
 import { VDatePicker } from "vuetify/labs/components";
 import { VInfiniteScroll } from "vuetify/labs/components";
 
-// https://www.npmjs.com/package/vue3-draggable-resizable?activeTab=readme
-import Vue3DraggableResizable from "vue3-draggable-resizable";
-//default styles
-import "vue3-draggable-resizable/dist/Vue3DraggableResizable.css";
-
 const vuetify = createVuetify({
   components: {
     VApp,
@@ -37,7 +32,6 @@ const vuetify = createVuetify({
     VAlert,
     VDatePicker,
     VInfiniteScroll,
-    Vue3DraggableResizable,
   },
 });
 

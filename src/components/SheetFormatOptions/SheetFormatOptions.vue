@@ -12,7 +12,7 @@ function pageMargin(e: Event) {
 </script>
 <template>
   <div class="no-printable">
-    <v-btn icon @click="pageMargin">
+    <v-btn icon @click="pageMargin" disabled>
       <v-icon>
         <img
           width="25"
