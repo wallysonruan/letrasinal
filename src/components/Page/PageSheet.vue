@@ -34,15 +34,37 @@ function changePageOrientation() {
   }
 }
 
+function editPageMargin() {
+  pageMargin.value = !pageMargin.value;
+}
+
 window.addEventListener("page-orientation", () => {
   changePageOrientation();
 });
 
 window.addEventListener("page-margin", () => {
-  pageMargin.value = !pageMargin.value;
+  editPageMargin();
 });
 
 const pageMargin = ref(false);
+
+const isCaretVisible = ref(false);
+window.addEventListener("click", (e) => {
+  const customCaret = document.querySelector(
+    ".custom-blinking-caret",
+  ) as HTMLElement;
+
+  if (customCaret) {
+    if ((e.target as HTMLElement).classList.contains("sheet-content")) {
+      isCaretVisible.value = true;
+      return;
+    }
+    if ((e.target as HTMLElement).classList.contains("sheet-content") !== true) {
+      isCaretVisible.value = false;
+      return;
+    }
+  }
+});
 
 const items = {
   text: [
@@ -103,6 +125,7 @@ const items = {
           :key="item"
           :item="item"
         />
+        <div class="custom-blinking-caret" v-show="isCaretVisible"></div>
       </div>
     </Vue3DraggableResizable>
   </div>
@@ -117,6 +140,28 @@ const items = {
   .sheet-content {
     overflow: hidden;
     height: 2rem;
+
+    &:hover {
+      cursor: text;
+    }
+
+    .custom-blinking-caret {
+      display: block;
+      height: 3rem;
+      width: 2px;
+      font-size: 3rem;
+      background-color: black;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+      40% {
+        opacity: 0;
+      }
+    }
   }
 }
 
