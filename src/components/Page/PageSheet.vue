@@ -78,7 +78,8 @@ function handleKeyDown(event: KeyboardEvent) {
   if (
     event.key === "ArrowUp" ||
     event.key === "ArrowDown" ||
-    event.code === "Space"
+    event.code === "Space" ||
+    event.code === "Tab"
   ) {
     if (isCaretVisible.value) {
       event.preventDefault();
@@ -121,6 +122,15 @@ function handleKeyDown(event: KeyboardEvent) {
     if (previousElement) {
       previousElement.remove();
     }
+    return;
+  }
+
+  if (event.code === "Tab") {
+    const emptyDiv = document.createElement("div");
+    emptyDiv.classList.add("sheet-item");
+    emptyDiv.classList.add("tab-space");
+    emptyDiv.style.height = "4rem";
+    customCaret.before(emptyDiv);
     return;
   }
 }
