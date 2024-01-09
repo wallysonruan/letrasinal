@@ -212,8 +212,8 @@ const items = {
         content: "";
         display: block;
         height: 2px;
+        min-width: 2rem;
         width: 100%;
-        font-size: 3rem;
         background-color: black;
         animation: pulse 1s infinite;
 
