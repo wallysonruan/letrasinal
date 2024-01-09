@@ -205,20 +205,26 @@ const items = {
     }
 
     .custom-blinking-caret {
-      display: block;
-      height: 2px;
-      width: inherit;
-      font-size: 3rem;
-      background-color: black;
-      animation: pulse 1s infinite;
-    }
+      position: relative;
 
-    @keyframes pulse {
-      0% {
-        opacity: 1;
-      }
-      40% {
-        opacity: 0;
+      &::after {
+        position: absolute;
+        content: "";
+        display: block;
+        height: 2px;
+        width: 100%;
+        font-size: 3rem;
+        background-color: black;
+        animation: pulse 1s infinite;
+
+        @keyframes pulse {
+          0% {
+            opacity: 1;
+          }
+          40% {
+            opacity: 0;
+          }
+        }
       }
     }
   }
