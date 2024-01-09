@@ -18,15 +18,6 @@ const sheetSizes = {
 const pageWidth = ref(sheetSizes.a4.width);
 const pageHeight = ref(sheetSizes.a4.height);
 
-const sheetContentStyles: StyleValue = {
-  display: "flex",
-  flexDirection: "column",
-  flexWrap: "wrap",
-  columnGap: "1.5rem",
-  alignContent: "baseline",
-  height: "inherit",
-};
-
 function changePageOrientation() {
   if (pageWidth.value === sheetSizes.a4.width) {
     pageWidth.value = sheetSizes.a4.height;
@@ -186,6 +177,12 @@ onUnmounted(() => {
   .sheet-content {
     overflow: hidden;
     height: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    column-gap: 1.5rem;
+    align-content: baseline;
+    height: inherit;
 
     &:hover {
       cursor: text;
