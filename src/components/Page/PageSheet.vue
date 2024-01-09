@@ -50,21 +50,56 @@ const pageMargin = ref(false);
 
 const isCaretVisible = ref(false);
 window.addEventListener("click", (e) => {
+  console.log((e.target as HTMLElement).classList);
+
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
   ) as HTMLElement;
 
   if (customCaret) {
+    //
     if ((e.target as HTMLElement).classList.contains("sheet-content")) {
       isCaretVisible.value = true;
       return;
     }
-    if ((e.target as HTMLElement).classList.contains("sheet-content") !== true) {
+
+    //
+    if ((e.target as HTMLElement).classList.contains("sheet-item")) {
+      (e.target as HTMLElement).before(customCaret);
+      return;
+    }
+
+    //
+    if (
+      (e.target as HTMLElement).classList.contains("sheet-content") !== true
+    ) {
       isCaretVisible.value = false;
       return;
     }
   }
 });
+
+// Add a new method to handle the keydown event
+function handleKeyDown(event: KeyboardEvent) {
+  const customCaret = document.querySelector(
+    ".custom-blinking-caret",
+  ) as HTMLElement;
+  if (!customCaret) return;
+
+  const sheetItems = Array.from(document.querySelectorAll(".sheet-item"));
+  const caretIndex = sheetItems.indexOf(customCaret);
+
+  if (event.key === "ArrowUp" && caretIndex > 0) {
+    // Move the caret before the previous .sheet-item
+    sheetItems[caretIndex - 1].before(customCaret);
+  } else if (event.key === "ArrowDown" && caretIndex < sheetItems.length - 1) {
+    // Move the caret after the next .sheet-item
+    sheetItems[caretIndex + 1].after(customCaret);
+  }
+}
+
+// Add a global keydown event listener
+window.addEventListener("keydown", handleKeyDown);
 
 const items = {
   text: [
@@ -125,7 +160,10 @@ const items = {
           :key="item"
           :item="item"
         />
-        <div class="custom-blinking-caret" v-show="isCaretVisible"></div>
+        <div
+          class="sheet-item custom-blinking-caret"
+          v-show="isCaretVisible"
+        ></div>
       </div>
     </Vue3DraggableResizable>
   </div>
@@ -147,8 +185,8 @@ const items = {
 
     .custom-blinking-caret {
       display: block;
-      height: 3rem;
-      width: 2px;
+      height: 2px;
+      width: inherit;
       font-size: 3rem;
       background-color: black;
       animation: pulse 1s infinite;
