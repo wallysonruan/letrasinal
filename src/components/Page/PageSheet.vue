@@ -75,7 +75,11 @@ window.addEventListener("click", (e) => {
 });
 
 function handleKeyDown(event: KeyboardEvent) {
-  if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+  if (
+    event.key === "ArrowUp" ||
+    event.key === "ArrowDown" ||
+    event.code === "Space"
+  ) {
     if (isCaretVisible.value) {
       event.preventDefault();
     }
