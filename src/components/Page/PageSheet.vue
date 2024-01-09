@@ -4,10 +4,8 @@ import { ref, type StyleValue } from "vue";
 
 const sheetSizes = {
   a4: {
-    // width: 794p, // original size
-    width: 790,
-    // height: 1123, // original size
-    height: 1100,
+    width: 790, // width: 794p, // original size
+    height: 1100, // height: 1123, // original size
   },
 };
 
@@ -27,7 +25,6 @@ function changePageOrientation() {
   if (pageWidth.value === sheetSizes.a4.width) {
     pageWidth.value = sheetSizes.a4.height;
     pageHeight.value = sheetSizes.a4.width;
-    console.log("oi");
   } else {
     pageWidth.value = sheetSizes.a4.width;
     pageHeight.value = sheetSizes.a4.height;
@@ -50,8 +47,6 @@ const pageMargin = ref(false);
 
 const isCaretVisible = ref(false);
 window.addEventListener("click", (e) => {
-  console.log((e.target as HTMLElement).classList);
-
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
   ) as HTMLElement;
@@ -79,11 +74,11 @@ window.addEventListener("click", (e) => {
   }
 });
 
-// Add a new method to handle the keydown event
 function handleKeyDown(event: KeyboardEvent) {
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
   ) as HTMLElement;
+
   if (!customCaret) return;
 
   const sheetItems = Array.from(document.querySelectorAll(".sheet-item"));
@@ -92,9 +87,30 @@ function handleKeyDown(event: KeyboardEvent) {
   if (event.key === "ArrowUp" && caretIndex > 0) {
     // Move the caret before the previous .sheet-item
     sheetItems[caretIndex - 1].before(customCaret);
-  } else if (event.key === "ArrowDown" && caretIndex < sheetItems.length - 1) {
+    return;
+  }
+
+  if (event.key === "ArrowDown" && caretIndex < sheetItems.length - 1) {
     // Move the caret after the next .sheet-item
     sheetItems[caretIndex + 1].after(customCaret);
+    return;
+  }
+
+  if (event.code === "Space") {
+    const emptyDiv = document.createElement("div");
+    emptyDiv.classList.add("sheet-item");
+    emptyDiv.classList.add("space");
+    emptyDiv.style.height = "1rem";
+    customCaret.before(emptyDiv);
+    return;
+  }
+
+  if (event.code === "Backspace") {
+    const previousElement = customCaret.previousElementSibling;
+    if (previousElement) {
+      previousElement.remove();
+    }
+    return;
   }
 }
 
