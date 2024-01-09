@@ -125,19 +125,20 @@ onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
   window.addEventListener("page-orientation", changePageOrientation);
   window.addEventListener("page-margin", editPageMargin);
+  window.addEventListener("click", handleMouseClick);
 });
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
   window.removeEventListener("page-orientation", changePageOrientation);
   window.removeEventListener("page-margin", editPageMargin);
+  window.removeEventListener("click", handleMouseClick);
 });
 </script>
 <template>
   <div
     class="sheet-container"
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
-    @click="handleMouseClick"
   >
     <div class="sheet-content">
       <PageItem
