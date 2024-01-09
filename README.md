@@ -19,3 +19,13 @@ LetraSinal ("LetterSign" in Portuguese), it's a plataform to edit text using bot
       - [ ] Dictionary, Literature, Encyclopedia.
     - [ ] Choose to see signs written by a specific author.
   - [ ] Use LetraSinal to create signs or texts, and publish them on SignPuddle.
+- [X] User can use arrow keys to navigate in the text;
+- [X] User can add space between PageItem by pressing SPACE;
+- [X] User can move caret around with mouse clicks also;
+- [X] User can change sheet orientation (Vertical / Horizontal);
+- [ ] User can save their texts, open them later and re-edit as they like;
+  - [ ] User can save;
+  - [ ] User can retrieve saved page (s);
+  - [ ] User can edit pages after retrieving them;
+  - [ ] User can save again, overwriting the previous version.
+- [ ] User can undo actions (such as delete or insert);
