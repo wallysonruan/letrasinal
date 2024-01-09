@@ -75,6 +75,12 @@ window.addEventListener("click", (e) => {
 });
 
 function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+    if (isCaretVisible.value) {
+      event.preventDefault();
+    }
+  }
+
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
   ) as HTMLElement;
@@ -105,6 +111,7 @@ function handleKeyDown(event: KeyboardEvent) {
     return;
   }
 
+  // Delete
   if (event.code === "Backspace") {
     const previousElement = customCaret.previousElementSibling;
     if (previousElement) {
@@ -116,9 +123,6 @@ function handleKeyDown(event: KeyboardEvent) {
 
 // Add a global keydown event listener
 window.addEventListener("keydown", (e) => {
-  if (isCaretVisible.value) {
-    e.preventDefault();
-  }
   handleKeyDown(e);
 });
 
