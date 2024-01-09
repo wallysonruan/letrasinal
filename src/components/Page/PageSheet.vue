@@ -32,14 +32,6 @@ function editPageMargin() {
   pageMargin.value = !pageMargin.value;
 }
 
-window.addEventListener("page-orientation", () => {
-  changePageOrientation();
-});
-
-window.addEventListener("page-margin", () => {
-  editPageMargin();
-});
-
 const pageMargin = ref(false);
 
 const isCaretVisible = ref(false);
@@ -132,10 +124,14 @@ function handleKeyDown(event: KeyboardEvent) {
 
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
+  window.addEventListener("page-orientation", changePageOrientation);
+  window.addEventListener("page-margin", editPageMargin);
 });
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
+  window.removeEventListener("page-orientation", changePageOrientation);
+  window.removeEventListener("page-margin", editPageMargin);
 });
 </script>
 <template>
