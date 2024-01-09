@@ -46,28 +46,25 @@ window.addEventListener("page-margin", () => {
 const pageMargin = ref(false);
 
 const isCaretVisible = ref(false);
-window.addEventListener("click", (e) => {
+window.addEventListener("click", (event: MouseEvent) => {
+  const elementClickedOn = event.target as HTMLElement;
+  const classesOfelementClickedOn = elementClickedOn.classList;
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
   ) as HTMLElement;
 
   if (customCaret) {
-    //
-    if ((e.target as HTMLElement).classList.contains("sheet-content")) {
+    if (classesOfelementClickedOn.contains("sheet-content")) {
       isCaretVisible.value = true;
       return;
     }
 
-    //
-    if ((e.target as HTMLElement).classList.contains("sheet-item")) {
-      (e.target as HTMLElement).before(customCaret);
+    if (classesOfelementClickedOn.contains("sheet-item")) {
+      elementClickedOn.before(customCaret);
       return;
     }
 
-    //
-    if (
-      (e.target as HTMLElement).classList.contains("sheet-content") !== true
-    ) {
+    if (classesOfelementClickedOn.contains("sheet-content") !== true) {
       isCaretVisible.value = false;
       return;
     }
