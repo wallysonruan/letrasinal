@@ -121,18 +121,39 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 }
 
+function addSignsBeforeCaret(signs: string[]) {
+  const customCaret = document.querySelector(
+    ".custom-blinking-caret",
+  ) as HTMLElement;
+
+  signs.forEach((sign) => customCaret.before(sign));
+}
+
+function handleSignPuddleSelectionFinished(event: Event) {
+  const customEvent = event as CustomEvent;
+  addSignsBeforeCaret(customEvent.detail);
+}
+
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
+  window.addEventListener("click", handleMouseClick);
   window.addEventListener("page-orientation", changePageOrientation);
   window.addEventListener("page-margin", editPageMargin);
-  window.addEventListener("click", handleMouseClick);
+  window.addEventListener(
+    "sign-puddle-search-finished",
+    handleSignPuddleSelectionFinished,
+  );
 });
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
+  window.removeEventListener("click", handleMouseClick);
   window.removeEventListener("page-orientation", changePageOrientation);
   window.removeEventListener("page-margin", editPageMargin);
-  window.removeEventListener("click", handleMouseClick);
+  window.removeEventListener(
+    "sign-puddle-search-finished",
+    handleSignPuddleSelectionFinished,
+  );
 });
 </script>
 <template>

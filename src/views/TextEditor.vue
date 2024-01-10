@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PageSheet from "@/components/Page/PageSheet.vue";
 import ToolBar from "@/components/ToolBar/ToolBar.vue";
-import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearch.vue";
+import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearchV2.vue";
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 
