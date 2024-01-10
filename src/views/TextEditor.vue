@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import PageSheet from "@/components/Page/PageSheet.vue";
 import ToolBar from "@/components/ToolBar/ToolBar.vue";
-import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearchV2.vue";
+import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearch.vue";
 
-import signPuddleSearchStore from "@/stores/SignPuddleStore";
 import pageStore from "@/stores/PageStore";
 import { computed } from "vue";
 
@@ -17,10 +16,7 @@ const items = computed(() => pageStore().items);
     <div class="sheets">
       <PageSheet :text="items" />
     </div>
-    <SignPuddleSearch
-      :selected-signs="() => {}"
-      :show="signPuddleSearchStore().isSignPuddleSearchActive()"
-    />
+    <SignPuddleSearch />
   </div>
 </template>
 <style scoped lang="scss">
