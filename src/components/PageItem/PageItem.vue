@@ -1,14 +1,45 @@
+<script lang="ts">
+type SignDetails = {
+  fsw: string;
+  words: string[];
+};
+
+type SignParagraphDetails = {
+  signs: SignDetails[];
+};
+
+type TextDetails = {
+  text: string;
+};
+
+type TextParagraphDetails = {
+  text: string;
+};
+
+export type PageItemType = {
+  id: string;
+  type: "sign" | "signParagraph" | "text" | "textParagraph";
+  details:
+    | SignDetails
+    | SignParagraphDetails
+    | TextDetails
+    | TextParagraphDetails;
+};
+</script>
 <script setup lang="ts">
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 
 type PageItemProps = {
-  item: string;
+  items: PageItemType[];
 };
 const props = defineProps<PageItemProps>();
 </script>
 <template>
   <div class="page-item">
-    <AlphabetDisplay :word="props.item"></AlphabetDisplay>
+    <AlphabetDisplay
+      v-for="item in props.items"
+      :word="(item.details as SignDetails).fsw"
+    ></AlphabetDisplay>
   </div>
 </template>
 <style scoped lang="scss">

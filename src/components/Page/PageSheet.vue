@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { PageItemType } from "@/components/PageItem/PageItem.vue";
 import PageItem from "@/components/PageItem/PageItem.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 
 type PageSheetProps = {
-  text: string[];
+  text: PageItemType[];
 };
 
 const props = defineProps<PageSheetProps>();
@@ -126,7 +127,13 @@ function addSignsBeforeCaret(signs: string[]) {
     ".custom-blinking-caret",
   ) as HTMLElement;
 
-  signs.forEach((sign) => customCaret.before(sign));
+  signs.forEach((sign) => {
+    if(customCaret.previousSibling){
+      customCaret.previousSibling.after(sign)
+      return
+    }
+    customCaret.before(sign)
+  });
 }
 
 function handleSignPuddleSelectionFinished(event: Event) {
@@ -164,9 +171,7 @@ onUnmounted(() => {
     <div class="sheet-content">
       <PageItem
         class="sheet-item"
-        v-for="(text, index) in props.text"
-        :key="index"
-        :item="text"
+        :items="props.text"
       />
       <div
         class="sheet-item custom-blinking-caret"
