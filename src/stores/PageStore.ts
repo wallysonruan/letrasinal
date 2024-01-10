@@ -20,7 +20,12 @@ const items: PageItemType[] = [
   },
 ];
 
-function addPageItem(newItem: PageItemType, id: string) {
+function addPageItem(newItem: PageItemType, id: string = "") {
+  if (id === "") {
+    items.push(newItem);
+    return;
+  }
+
   const index = items.findIndex((item) => item.id === id);
   if (index !== -1) {
     items.splice(index + 1, 0, newItem);

@@ -35,9 +35,13 @@ type PageItemProps = {
 const props = defineProps<PageItemProps>();
 </script>
 <template>
-  <div class="page-item">
+  <div
+    class="page-item"
+    v-for="(item, index) in props.items"
+    :key="index"
+    :id="item.id"
+  >
     <AlphabetDisplay
-      v-for="item in props.items"
       :word="(item.details as SignDetails).fsw"
     ></AlphabetDisplay>
   </div>

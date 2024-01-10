@@ -9,7 +9,7 @@ import { ref } from "vue";
 import { onMounted } from "vue";
 import pageStore from "@/stores/PageStore";
 
-const items = ref<PageItemType[]>([]);
+const items = ref<PageItemType[]>(pageStore().items);
 
 onMounted(() => {
   items.value = pageStore().items;

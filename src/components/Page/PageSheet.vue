@@ -2,6 +2,7 @@
 import type { PageItemType } from "@/components/PageItem/PageItem.vue";
 import PageItem from "@/components/PageItem/PageItem.vue";
 import { onMounted, onUnmounted, ref } from "vue";
+import pageStore from "@/stores/PageStore";
 
 type PageSheetProps = {
   text: PageItemType[];
@@ -55,10 +56,10 @@ function handleMouseClick(event: MouseEvent) {
       return;
     }
 
-    if (classesOfelementClickedOn.contains("sheet-content") !== true) {
-      isCaretVisible.value = false;
-      return;
-    }
+    // if (classesOfelementClickedOn.contains("sheet-content") !== true) {
+    //   isCaretVisible.value = false;
+    //   return;
+    // }
   }
 }
 
@@ -122,17 +123,20 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 }
 
-function addSignsBeforeCaret(signs: string[]) {
+function addSignsBeforeCaret(signs: PageItemType[]) {
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
   ) as HTMLElement;
 
   signs.forEach((sign) => {
-    if (customCaret.previousSibling) {
-      customCaret.previousSibling.after(sign);
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addPageItem(sign, siblingId);
       return;
     }
-    customCaret.before(sign);
+    pageStore().addPageItem(sign);
   });
 }
 

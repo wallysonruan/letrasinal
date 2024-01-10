@@ -9,6 +9,7 @@ import signPuddleSearchStore from "@/stores/SignPuddleStore";
 import { computed } from "vue";
 
 import dispatchSignPuddleSearchFinishedEvent from "./SignPuddleSearchFinished";
+import type { PageItemType } from "../PageItem/PageItem.vue";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -86,6 +87,26 @@ function signOrSignText(result: SignPuddleResult): string {
   // }
 }
 
+function findResultById(
+  id: string,
+  results: SignPuddleResult[],
+): SignPuddleResult {
+  return results.find((result) => {
+    return result.id === id;
+  })!;
+}
+
+function returnPageItem(result: SignPuddleResult): PageItemType {
+  return {
+    id: crypto.randomUUID().slice(0, 5),
+    type: "sign",
+    details: {
+      fsw: result.sign,
+      words: result.terms,
+    },
+  };
+}
+
 async function handleSearch() {
   signsFromSignPuddle.value = [];
   await getSigns();
@@ -112,7 +133,14 @@ function handleClose() {
 }
 
 function handleOk(event: MouseEvent) {
-  dispatchSignPuddleSearchFinishedEvent(event, selected.value);
+  const pageItem: PageItemType[] = [];
+  selected.value.forEach((selection) => {
+    pageItem.push(
+      returnPageItem(findResultById(selection, filteredSigns.value)),
+    );
+  });
+
+  dispatchSignPuddleSearchFinishedEvent(event, pageItem);
   clearSearchDialog();
   signPuddleSearch.toggleSignPuddleSearch();
 }
@@ -174,10 +202,7 @@ const selected = ref<string[]>([]);
           <ul class="search-results">
             <template v-for="(sign, index) in filteredSigns" :key="index">
               <li class="result">
-                <SelectableItem
-                  :value="signOrSignText(sign)"
-                  v-model="selected"
-                >
+                <SelectableItem :value="sign.id" v-model="selected">
                   <AlphabetDisplay :word="signOrSignText(sign)" />
                 </SelectableItem>
               </li>
