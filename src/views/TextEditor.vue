@@ -5,17 +5,15 @@ import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearchV2.v
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
 import { type PageItemType } from "@/components/PageItem/PageItem.vue";
+import { ref } from "vue";
+import { onMounted } from "vue";
+import pageStore from "@/stores/PageStore";
 
-const items: PageItemType[] = [
-  {
-    id: "askldjas",
-    type: "sign",
-    details: {
-      fsw: "M521x520S36d00479x480S37900478x480S20500465x508S20311466x488",
-      words: ["oi", "OI"],
-    },
-  },
-];
+const items = ref<PageItemType[]>([]);
+
+onMounted(() => {
+  items.value = pageStore().items;
+});
 </script>
 <template>
   <div class="home-container">

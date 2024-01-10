@@ -128,11 +128,11 @@ function addSignsBeforeCaret(signs: string[]) {
   ) as HTMLElement;
 
   signs.forEach((sign) => {
-    if(customCaret.previousSibling){
-      customCaret.previousSibling.after(sign)
-      return
+    if (customCaret.previousSibling) {
+      customCaret.previousSibling.after(sign);
+      return;
     }
-    customCaret.before(sign)
+    customCaret.before(sign);
   });
 }
 
@@ -169,10 +169,7 @@ onUnmounted(() => {
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
   >
     <div class="sheet-content">
-      <PageItem
-        class="sheet-item"
-        :items="props.text"
-      />
+      <PageItem class="sheet-item" :items="props.text" />
       <div
         class="sheet-item custom-blinking-caret"
         v-show="isCaretVisible"
