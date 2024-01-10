@@ -30,19 +30,14 @@ export type PageItemType = {
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 
 type PageItemProps = {
-  items: PageItemType[];
+  item: PageItemType;
 };
 const props = defineProps<PageItemProps>();
 </script>
 <template>
-  <div
-    class="page-item"
-    v-for="(item, index) in props.items"
-    :key="index"
-    :id="item.id"
-  >
+  <div class="page-item" :id="props.item.id">
     <AlphabetDisplay
-      :word="(item.details as SignDetails).fsw"
+      :word="(props.item.details as SignDetails).fsw"
     ></AlphabetDisplay>
   </div>
 </template>

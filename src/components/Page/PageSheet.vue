@@ -173,7 +173,12 @@ onUnmounted(() => {
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
   >
     <div class="sheet-content">
-      <PageItem class="sheet-item" :items="props.text" />
+      <PageItem
+        class="sheet-item"
+        :item="word"
+        v-for="(word, index) in props.text"
+        :key="index"
+      />
       <div
         class="sheet-item custom-blinking-caret"
         v-show="isCaretVisible"
