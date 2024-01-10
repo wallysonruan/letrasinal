@@ -4,6 +4,51 @@
 
 LetraSinal ("LetterSign" in Portuguese), it's a plataform to edit text using both Latin and/or SignWriting Sutton writing systems. It's main goal is to allow people to write their texts without having to split the between multiple applications as it's done today.
 
+## Technologies Used
+
+This project uses the following technologies:
+
+- **[npm](https://www.npmjs.com/):** A package manager for the JavaScript programming language. npm is used to manage the project's dependencies.
+
+- **[Vue.js](https://vuejs.org/):** A progressive JavaScript framework for building user interfaces. Vue.js is the core framework used in this project.
+
+  - **TypeScript:** An open-source language which builds on JavaScript by adding static type definitions. TypeScript is used in this project to provide a more robust architecture, making the code more readable and maintainable.
+
+- **[Sutton-SignWriting/core](https://github.com/sutton-signwriting/core):** A core library for SignWriting that provides basic functionality for processing SignWriting scripts. This library is used in this project to process and manipulate Formal SignWriting (FSW) strings.
+
+- **[Sutton-Signwriting/Sgnw-Components](https://github.com/sutton-signwriting/sgnw-components):** A library for SignWriting, the international standard for writing sign languages by hand or with computers. This library is used in this project to handle SignWriting scripts. This library is imported into the project through its official Content Delivery Network (CDN), check `index.html`.
+
+Please note that this is a basic list and the project may use other technologies not mentioned here.
+
+## How to Use
+
+To use LetraSinal Text Editor, follow these steps:
+
+1. **Clone this repository:** Use the following command to clone this repository to your local machine:
+
+```bash
+git clone https://github.com/wallysonruan/sw-something.git
+```
+
+2. **Install dependencies:** Navigate to the project directory and install the necessary dependencies with:
+
+```bash
+cd sw-something
+npm install
+```
+
+3. **Start the application:** Start the application with the following command:
+
+```bash
+npm run serve
+```
+
+4. **Navigate to the application:** Open your web browser and navigate to http://localhost:5173 (or the URL provided in your terminal after running the previous command).
+
+5. **Use the application:** You can now use the LetraSinal Text Editor to edit text using both Latin and/or SignWriting Sutton writing systems. Currently, there are two versions. The first one can be accessed as soon as the application is launched, the second one can be accessed at the http://localhost:5173/sw-something/test/. In the second version you can use the arrow keys to navigate in the text, press SPACE to add space between PageItem, and use mouse clicks to move the caret around. You can also change the sheet orientation between Vertical and Horizontal.
+
+Please note that this is a work in progress and some features may not be fully implemented yet. Check the Road Map section for more details.
+
 ## Road Map
 
 - [X] Support inputs in Formal SignWriting (FSW) – they should be converted to iconic writing as soon as inputed;
