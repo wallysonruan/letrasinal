@@ -4,16 +4,10 @@ import ToolBar from "@/components/ToolBar/ToolBar.vue";
 import SignPuddleSearch from "@/components/SignPuddleSearch/SignPuddleSearchV2.vue";
 
 import signPuddleSearchStore from "@/stores/SignPuddleStore";
-import { type PageItemType } from "@/components/PageItem/PageItem.vue";
-import { ref } from "vue";
-import { onMounted } from "vue";
 import pageStore from "@/stores/PageStore";
+import { computed } from "vue";
 
-const items = ref<PageItemType[]>(pageStore().items);
-
-onMounted(() => {
-  items.value = pageStore().items;
-});
+const items = computed(() => pageStore().items);
 </script>
 <template>
   <div class="home-container">

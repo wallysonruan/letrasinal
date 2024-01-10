@@ -57,13 +57,6 @@ type SignPuddlePayload = {
   results: SignPuddleResult[];
 };
 
-type SignPuddleSearchProps = {
-  show: boolean;
-  selectedSigns: (selected: string[]) => void;
-};
-
-const props = defineProps<SignPuddleSearchProps>();
-
 function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
   const results = payload.results;
   return results.filter(
