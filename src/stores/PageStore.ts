@@ -1,6 +1,32 @@
 import { defineStore } from "pinia";
-import { type PageItemType } from "@/components/PageItem/PageItem.vue";
 import { ref } from "vue";
+
+export type SignDetails = {
+  fsw: string;
+  words: string[];
+};
+
+type SignParagraphDetails = {
+  signs: SignDetails[];
+};
+
+type TextDetails = {
+  text: string;
+};
+
+type TextParagraphDetails = {
+  text: string;
+};
+
+export type PageItemType = {
+  id: string;
+  type: "sign" | "signParagraph" | "text" | "textParagraph";
+  details:
+    | SignDetails
+    | SignParagraphDetails
+    | TextDetails
+    | TextParagraphDetails;
+};
 
 const items = ref<PageItemType[]>([]);
 

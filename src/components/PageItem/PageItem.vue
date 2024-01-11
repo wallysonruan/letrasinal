@@ -1,33 +1,6 @@
-<script lang="ts">
-type SignDetails = {
-  fsw: string;
-  words: string[];
-};
-
-type SignParagraphDetails = {
-  signs: SignDetails[];
-};
-
-type TextDetails = {
-  text: string;
-};
-
-type TextParagraphDetails = {
-  text: string;
-};
-
-export type PageItemType = {
-  id: string;
-  type: "sign" | "signParagraph" | "text" | "textParagraph";
-  details:
-    | SignDetails
-    | SignParagraphDetails
-    | TextDetails
-    | TextParagraphDetails;
-};
-</script>
 <script setup lang="ts">
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
+import type { PageItemType, SignDetails } from "@/stores/PageStore";
 
 type PageItemProps = {
   item: PageItemType;
