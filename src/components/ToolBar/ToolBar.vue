@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LogoItem from "../Logo/LogoItem.vue";
-import signPuddleSearchStore from "@/stores/SignPuddleStore";
 import SheetFormatOptions from "../SheetFormatOptions/SheetFormatOptions.vue";
+import { dispatchSignPuddleSearchToggleEvent } from "../SignPuddleSearch/SignPuddleSearchEvents";
 
 function print() {
   window.print();
@@ -16,7 +16,7 @@ function print() {
       <!---->
       <SheetFormatOptions />
       <v-btn icon>
-        <v-icon @click="signPuddleSearchStore().toggleSignPuddleSearch">
+        <v-icon @click="dispatchSignPuddleSearchToggleEvent">
           <img
             width="25"
             src="../../assets/sign-puddle-icon.png"

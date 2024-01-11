@@ -2,14 +2,14 @@
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import { getSignsByWord } from "@/utils/client/client";
 import { ref } from "vue";
+import { computed } from "vue";
 
 import SelectableItem from "../SelectableItem/SelectableItem.vue";
 
-import signPuddleSearchStore from "@/stores/SignPuddleStore";
-import { computed } from "vue";
-
-import dispatchSignPuddleSearchFinishedEvent from "./SignPuddleSearchFinished";
+import { dispatchSignPuddleSearchFinishedEvent } from "./SignPuddleSearchEvents";
 import type { PageItemType } from "../PageItem/PageItem.vue";
+import { onMounted } from "vue";
+import { onUnmounted } from "vue";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -122,7 +122,7 @@ function clearSearchDialog() {
 
 function handleClose() {
   clearSearchDialog();
-  signPuddleSearch.toggleSignPuddleSearch();
+  toggle();
 }
 
 function handleOk(event: MouseEvent) {
@@ -135,10 +135,8 @@ function handleOk(event: MouseEvent) {
 
   dispatchSignPuddleSearchFinishedEvent(event, pageItem);
   clearSearchDialog();
-  signPuddleSearch.toggleSignPuddleSearch();
+  toggle();
 }
-
-const signPuddleSearch = signPuddleSearchStore();
 
 const input = ref("");
 const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
@@ -156,8 +154,20 @@ const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
 const filteredSigns = computed(() =>
   removeSignsWithDuplicateFswSign(signsFromSignPuddle.value),
 );
-const showDialog = computed(() => signPuddleSearch.isSignPuddleSearchActive());
+const showDialog = ref(false);
 const selected = ref<string[]>([]);
+
+function toggle() {
+  showDialog.value = !showDialog.value;
+}
+
+onMounted(() => {
+  window.addEventListener("sign-puddle-search-toggle", toggle);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("sign-puddle-search-toggle", toggle);
+});
 </script>
 <template>
   <v-dialog v-model="showDialog">
@@ -304,3 +314,4 @@ const selected = ref<string[]>([]);
   }
 }
 </style>
+./SignPuddleEvents
