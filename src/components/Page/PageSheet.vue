@@ -136,7 +136,7 @@ function addSignsBeforeCaret(signs: PageItemType[]) {
       pageStore().addPageItem(sign, siblingId);
       return;
     }
-    pageStore().addPageItem(sign);
+    pageStore().addPageItem(sign, "start");
   });
 }
 

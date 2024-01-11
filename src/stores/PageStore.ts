@@ -30,15 +30,20 @@ export type PageItemType = {
 
 const items = ref<PageItemType[]>([]);
 
-function addPageItem(newItem: PageItemType, id: string = "") {
-  if (id === "") {
-    items.value.push(newItem);
+function addPageItem(newItem: PageItemType, id: string = "end") {
+  if (id === "end") {
+    items.value.push(newItem); // Insert item at the end of the array
+    return;
+  }
+
+  if (id === "start") {
+    items.value.unshift(newItem); // Insert item at the beginning of the array
     return;
   }
 
   const index = items.value.findIndex((item) => item.id === id);
   if (index !== -1) {
-    items.value.splice(index + 1, 0, newItem);
+    items.value.splice(index + 1, 0, newItem); // Insert item after the item with the given id
   }
 }
 
