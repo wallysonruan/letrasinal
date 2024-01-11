@@ -74,3 +74,11 @@ Please note that this is a work in progress and some features may not be fully i
   - [ ] User can edit pages after retrieving them;
   - [ ] User can save again, overwriting the previous version.
 - [ ] User can undo actions (such as delete or insert);
+- [ ] User can choose diffente sizes for the page;
+  - [ ] predefined sizes for pages (A4, A5, A10)
+  - [ ] define their own custom sizes;
+- [ ] SignWriting punctuations should be available by default for the user;
+  - [ ] They should be able to add the punctuations by pressing the corresponding keyboard key;
+  - [ ] They should be able to see them in the screen, and click on them by using tab-order and mouse cursor;
+- [ ] User should be able to group signs in a cluster, such as a paragraph;
+- [ ] User should be able to apply "title/h1" format on the signs (bigger font size, and bold formats)
