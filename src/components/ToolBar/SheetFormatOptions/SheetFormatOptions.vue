@@ -15,7 +15,7 @@ function pageMargin(e: Event) {
       <v-icon>
         <img
           width="25"
-          src="../../assets/page-margin-icon.png"
+          src="../../../assets/page-margin-icon.png"
           alt="Text margin"
         />
       </v-icon>
@@ -24,7 +24,7 @@ function pageMargin(e: Event) {
       <v-icon>
         <img
           width="30"
-          src="../../assets/page-orientation-icon.svg"
+          src="../../../assets/page-orientation-icon.svg"
           alt="Page orientation"
         />
       </v-icon>
