@@ -78,13 +78,13 @@ function deletePageItemById(id: string) {
 }
 
 enum PunctuationFsw {
-  Comma = "S38700", // , S38700463x496
-  Period = "S38800", // . S38800464x496
-  QuestionMark = "?",
-  ExclamationMark = "!",
-  OpenParenthesis = "(",
-  CloseParenthesis = ")",
-  Colon = ":",
+  Comma = "S38700", // , S38700463x496 Source: Escrita de Sinais Sem Mistério, page 185.
+  Period = "S38800", // . S38800464x496  Source: Escrita de Sinais Sem Mistério, page 158.
+  QuestionMark = "S38900", // ? S38900464x493  Source: Escrita de Sinais Sem Mistério, page 245.
+  ExclamationMark = "S38814", // !  S38814463x495 Source: SignPuddle https://www.signbank.org/signpuddle2.0/canvas.php?ui=1&sgn=46&sid=19060
+  OpenParenthesis = "S38b00", // ( S38b00470x493 Source: Escrita de Sinais Sem Mistério, page 284.
+  CloseParenthesis = "S38b04", // ) S38b04470x493 Source: Escrita de Sinais Sem Mistério, page 284.
+  Colon = "S38a00", // : S38a00464x490  Source: Escrita de Sinais Sem Mistério, page 185.
 }
 
 function addCommaAfter(itemId: string = "start") {

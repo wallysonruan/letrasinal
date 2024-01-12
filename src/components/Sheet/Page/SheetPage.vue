@@ -68,7 +68,15 @@ function handleKeyDown(event: KeyboardEvent) {
     (event.key === "ArrowUp" ||
       event.key === "ArrowDown" ||
       event.code === "Space" ||
-      event.code === "Tab") &&
+      event.code === "Backspace" ||
+      event.code === "Tab" ||
+      event.key === "," ||
+      event.key === "." ||
+      event.key === ":" ||
+      event.key === "!" ||
+      event.key === "?" ||
+      event.key === "(" ||
+      event.key === ")") &&
     isCaretVisible.value
   ) {
     event.preventDefault();
@@ -104,7 +112,6 @@ function handleKeyDown(event: KeyboardEvent) {
     return;
   }
 
-  // Delete
   if (event.code === "Backspace") {
     const previousElement = customCaret.previousElementSibling;
     if (previousElement) {
@@ -184,6 +191,32 @@ function handleKeyDown(event: KeyboardEvent) {
     }
 
     pageStore().addQuestionMarkAfter();
+  }
+
+  if (event.key === "(") {
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addOpenParenthesisAfter(siblingId);
+      return;
+    }
+
+    pageStore().addOpenParenthesisAfter();
+  }
+
+  if (event.key === ")") {
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addCloseParenthesisAfter(siblingId);
+      return;
+    }
+
+    pageStore().addCloseParenthesisAfter();
   }
 }
 
