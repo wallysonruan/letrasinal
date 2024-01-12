@@ -10,6 +10,7 @@ import { dispatchSignPuddleSearchFinishedEvent } from "./SignPuddleSearchEvents"
 import type { PageItemType } from "../../stores/PageStore";
 import { onMounted } from "vue";
 import { onUnmounted } from "vue";
+import pageStore from "../../stores/PageStore";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -90,14 +91,7 @@ function findResultById(
 }
 
 function returnPageItem(result: SignPuddleResult): PageItemType {
-  return {
-    id: crypto.randomUUID().slice(0, 5),
-    type: "sign",
-    details: {
-      fsw: result.sign,
-      words: result.terms,
-    },
-  };
+  return pageStore().createPageItem("sign", result.sign, result.terms);
 }
 
 async function handleSearch() {

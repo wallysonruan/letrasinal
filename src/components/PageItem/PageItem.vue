@@ -2,6 +2,7 @@
 import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
 import type { PageItemType, SignDetails } from "@/stores/PageStore";
 import SignComponent from "../common/SignComponent/SignComponent.vue";
+import SignPunctuation from "../common/SignPunctuation/SignPunctuation.vue";
 
 type PageItemProps = {
   item: PageItemType;
@@ -31,7 +32,6 @@ const props = defineProps<PageItemProps>();
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  padding: 0.5rem 0;
   //
   max-width: 20rem;
 }

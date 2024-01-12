@@ -18,9 +18,16 @@ type TextParagraphDetails = {
   text: string;
 };
 
+type PageItemTypes =
+  | "sign"
+  | "signParagraph"
+  | "signPunctuation"
+  | "text"
+  | "textParagraph";
+
 export type PageItemType = {
   id: string;
-  type: "sign" | "signParagraph" | "signPunctuation" | "text" | "textParagraph";
+  type: PageItemTypes;
   details:
     | SignDetails
     | SignParagraphDetails
@@ -29,6 +36,25 @@ export type PageItemType = {
 };
 
 const items = ref<PageItemType[]>([]);
+
+function generateRandomId(): string {
+  return crypto.randomUUID().slice(0, 5);
+}
+
+function createPageItem(
+  type: PageItemTypes,
+  fsw: string,
+  words: string[],
+): PageItemType {
+  return {
+    id: generateRandomId(),
+    type: type,
+    details: {
+      fsw: fsw,
+      words: words,
+    },
+  };
+}
 
 function addPageItem(newItem: PageItemType, id: string = "end") {
   if (id === "end") {
@@ -47,12 +73,6 @@ function addPageItem(newItem: PageItemType, id: string = "end") {
   }
 }
 
-function addPageItems(itemsArray: PageItemType[]) {
-  itemsArray.forEach((item) => {
-    items.value.push(item);
-  });
-}
-
 function deletePageItemById(id: string) {
   items.value = items.value.filter((item) => item.id !== id);
 }
@@ -68,93 +88,65 @@ enum PunctuationFsw {
 }
 
 function addCommaAfter(itemId: string) {
-  const commaPageItem: PageItemType = {
-    type: "sign",
-    id: "comma",
-    details: {
-      fsw: PunctuationFsw.Comma,
-      words: ["comma"],
-    },
-  };
-
+  const commaPageItem = createPageItem(
+    "signPunctuation",
+    PunctuationFsw.Comma,
+    ["comma"],
+  );
   addPageItem(commaPageItem, itemId);
 }
 
 function addPeriodAfter(itemId: string) {
-  const periodPageItem: PageItemType = {
-    type: "sign",
-    id: "period",
-    details: {
-      fsw: PunctuationFsw.Period,
-      words: ["period"],
-    },
-  };
-
+  const periodPageItem = createPageItem(
+    "signPunctuation",
+    PunctuationFsw.Period,
+    ["period"],
+  );
   addPageItem(periodPageItem, itemId);
 }
 
 function addQuestionMarkAfter(itemId: string) {
-  const questionMarkPageItem: PageItemType = {
-    type: "sign",
-    id: "questionMark",
-    details: {
-      fsw: PunctuationFsw.QuestionMark,
-      words: ["question mark"],
-    },
-  };
-
+  const questionMarkPageItem = createPageItem(
+    "signPunctuation",
+    PunctuationFsw.QuestionMark,
+    ["question mark"],
+  );
   addPageItem(questionMarkPageItem, itemId);
 }
 
 function addExclamationMarkAfter(itemId: string) {
-  const exclamationMarkPageItem: PageItemType = {
-    type: "sign",
-    id: "exclamationMark",
-    details: {
-      fsw: PunctuationFsw.ExclamationMark,
-      words: ["exclamation mark"],
-    },
-  };
-
+  const exclamationMarkPageItem = createPageItem(
+    "signPunctuation",
+    PunctuationFsw.ExclamationMark,
+    ["exclamation mark"],
+  );
   addPageItem(exclamationMarkPageItem, itemId);
 }
 
 function addOpenParenthesisAfter(itemId: string) {
-  const openParenthesisPageItem: PageItemType = {
-    id: "openParenthesis",
-    type: "sign",
-    details: {
-      fsw: PunctuationFsw.OpenParenthesis,
-      words: ["open parenthesis"],
-    },
-  };
-
+  const openParenthesisPageItem = createPageItem(
+    "signPunctuation",
+    PunctuationFsw.OpenParenthesis,
+    ["open parenthesis"],
+  );
   addPageItem(openParenthesisPageItem, itemId);
 }
 
 function addCloseParenthesisAfter(itemId: string) {
-  const closeParenthesisPageItem: PageItemType = {
-    type: "sign",
-    id: "closeParenthesis",
-    details: {
-      fsw: PunctuationFsw.CloseParenthesis,
-      words: ["close parenthesis"],
-    },
-  };
-
+  const closeParenthesisPageItem = createPageItem(
+    "signPunctuation",
+    PunctuationFsw.CloseParenthesis,
+    ["close parenthesis"],
+  );
   addPageItem(closeParenthesisPageItem, itemId);
 }
 
 function addColonAfter(itemId: string) {
-  const colonPageItem: PageItemType = {
-    type: "sign",
-    id: "colon",
-    details: {
-      fsw: PunctuationFsw.Colon,
-      words: ["colon"],
-    },
-  };
-
+  const colonPageItem = createPageItem(
+    "signPunctuation",
+    PunctuationFsw.Colon,
+    ["colon"],
+  );
   addPageItem(colonPageItem, itemId);
 }
 
@@ -164,8 +156,8 @@ const pageStore = defineStore({
     items: items,
   }),
   actions: {
+    createPageItem,
     addPageItem,
-    addPageItems,
     deletePageItemById,
     addCommaAfter,
     addPeriodAfter,
