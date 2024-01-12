@@ -66,6 +66,52 @@ function handleClick(event: MouseEvent | TouchEvent) {
   }
 }
 
+function handleKeyEvent(
+  event: KeyboardEvent,
+  caretPreviousSibling: Element | null,
+) {
+  let siblingId = "start";
+  if (caretPreviousSibling) {
+    siblingId = caretPreviousSibling.getAttribute("id") ?? siblingId;
+  }
+  const pageStoreMethods = pageStore();
+
+  switch (event.key) {
+    case " ":
+      pageStoreMethods.addSpaceAfter(siblingId);
+      break;
+    case "Backspace":
+      pageStoreMethods.deletePageItemById(siblingId);
+      break;
+    case "Tab":
+      pageStoreMethods.addLongSpaceAfter(siblingId);
+      break;
+    case ",":
+      pageStoreMethods.addCommaAfter(siblingId);
+      break;
+    case ".":
+      pageStoreMethods.addPeriodAfter(siblingId);
+      break;
+    case ":":
+      pageStoreMethods.addColonAfter(siblingId);
+      break;
+    case "!":
+      pageStoreMethods.addExclamationMarkAfter(siblingId);
+      break;
+    case "?":
+      pageStoreMethods.addQuestionMarkAfter(siblingId);
+      break;
+    case "(":
+      pageStoreMethods.addOpenParenthesisAfter(siblingId);
+      break;
+    case ")":
+      pageStoreMethods.addCloseParenthesisAfter(siblingId);
+      break;
+    default:
+      return;
+  }
+}
+
 function handleKeyDown(event: KeyboardEvent) {
   if (
     (event.key === "ArrowUp" ||
@@ -109,103 +155,7 @@ function handleKeyDown(event: KeyboardEvent) {
     return;
   }
 
-  if (event.code === "Space") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addSpaceAfter(siblingId);
-      return;
-    }
-    pageStore().addSpaceAfter();
-    return;
-  }
-
-  if (event.code === "Backspace") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().deletePageItemById(siblingId);
-      return;
-    }
-    return;
-  }
-
-  if (event.code === "Tab") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addLongSpaceAfter(siblingId);
-      return;
-    }
-    pageStore().addLongSpaceAfter();
-    return;
-  }
-
-  if (event.key === ",") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addCommaAfter(siblingId);
-      return;
-    }
-    pageStore().addCommaAfter();
-  }
-
-  if (event.key === ".") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addPeriodAfter(siblingId);
-      return;
-    }
-
-    pageStore().addPeriodAfter();
-  }
-
-  if (event.key === ":") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addColonAfter(siblingId);
-      return;
-    }
-
-    pageStore().addColonAfter();
-  }
-
-  if (event.key === "!") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addExclamationMarkAfter(siblingId);
-      return;
-    }
-
-    pageStore().addExclamationMarkAfter();
-  }
-
-  if (event.key === "?") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addQuestionMarkAfter(siblingId);
-      return;
-    }
-
-    pageStore().addQuestionMarkAfter();
-  }
-
-  if (event.key === "(") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addOpenParenthesisAfter(siblingId);
-      return;
-    }
-
-    pageStore().addOpenParenthesisAfter();
-  }
-
-  if (event.key === ")") {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addCloseParenthesisAfter(siblingId);
-      return;
-    }
-
-    pageStore().addCloseParenthesisAfter();
-  }
+  handleKeyEvent(event, caretPreviousSibling);
 }
 
 /**
