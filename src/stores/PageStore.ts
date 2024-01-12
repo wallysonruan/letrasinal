@@ -20,7 +20,7 @@ type TextParagraphDetails = {
 
 export type PageItemType = {
   id: string;
-  type: "sign" | "signParagraph" | "text" | "textParagraph";
+  type: "sign" | "signParagraph" | "signPunctuation" | "text" | "textParagraph";
   details:
     | SignDetails
     | SignParagraphDetails

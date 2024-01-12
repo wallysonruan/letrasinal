@@ -14,6 +14,11 @@ const props = defineProps<PageItemProps>();
       v-if="props.item.type === 'sign'"
       :sign="props.item.details as SignDetails"
     ></SignComponent>
+    <SignPunctuation
+      v-else-if="props.item.type === 'signPunctuation'"
+      :sign="props.item.details as SignDetails"
+    >
+    </SignPunctuation>
     <AlphabetDisplay
       v-else
       :word="(props.item.details as SignDetails).fsw"
