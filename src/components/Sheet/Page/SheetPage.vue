@@ -91,6 +91,9 @@ function handleKeyDown(event: KeyboardEvent) {
 
   if (!customCaret) return;
 
+  const caretPreviousSibling =
+    customCaret.previousElementSibling as HTMLElement;
+
   const sheetItems = Array.from(document.querySelectorAll(".sheet-item"));
   const caretIndex = sheetItems.indexOf(customCaret);
 
@@ -107,9 +110,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.code === "Space") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addSpaceAfter(siblingId);
@@ -120,9 +120,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.code === "Backspace") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().deletePageItemById(siblingId);
@@ -132,9 +129,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.code === "Tab") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addLongSpaceAfter(siblingId);
@@ -145,9 +139,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.key === ",") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addCommaAfter(siblingId);
@@ -157,9 +148,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.key === ".") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addPeriodAfter(siblingId);
@@ -170,9 +158,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.key === ":") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addColonAfter(siblingId);
@@ -183,9 +168,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.key === "!") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addExclamationMarkAfter(siblingId);
@@ -196,9 +178,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.key === "?") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addQuestionMarkAfter(siblingId);
@@ -209,9 +188,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.key === "(") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addOpenParenthesisAfter(siblingId);
@@ -222,9 +198,6 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.key === ")") {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
-
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addCloseParenthesisAfter(siblingId);
@@ -244,9 +217,10 @@ function addSignsBeforeCaret(signs: PageItemType[]) {
     ".custom-blinking-caret",
   ) as HTMLElement;
 
+  const caretPreviousSibling =
+    customCaret.previousElementSibling as HTMLElement;
+
   signs.forEach((sign) => {
-    const caretPreviousSibling =
-      customCaret.previousElementSibling as HTMLElement;
     if (caretPreviousSibling) {
       const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
       pageStore().addPageItem(sign, siblingId);
