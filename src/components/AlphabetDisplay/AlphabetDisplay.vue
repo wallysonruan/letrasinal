@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isValidFswString } from "@/utils/SignWritingUtilities";
 import LatinAlphabet from "../LatinAlphabet/LatinAlphabet.vue";
-import SignWriting from "../SignWriting/SignWriting.vue";
+import SignWriting from "../common/SignWriting/SignWriting.vue";
 
 const props = defineProps<{
   word: string;

@@ -7,7 +7,7 @@ import { computed } from "vue";
 import SelectableItem from "../SelectableItem/SelectableItem.vue";
 
 import { dispatchSignPuddleSearchFinishedEvent } from "./SignPuddleSearchEvents";
-import type { PageItemType } from "../PageItem/PageItem.vue";
+import type { PageItemType } from "../../stores/PageStore";
 import { onMounted } from "vue";
 import { onUnmounted } from "vue";
 
