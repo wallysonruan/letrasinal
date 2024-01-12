@@ -9,5 +9,13 @@ type SignPunctuationProps = {
 const props = defineProps<SignPunctuationProps>();
 </script>
 <template>
-  <SignWriting :fsw="props.sign.fsw"></SignWriting>
+  <div class="sign-punctuation">
+    <SignWriting :fsw="props.sign.fsw"></SignWriting>
+  </div>
 </template>
+<style scoped lang="scss">
+.sign-punctuation {
+  margin-top: 0.10rem;
+  line-height: 0.5rem;
+}
+</style>
