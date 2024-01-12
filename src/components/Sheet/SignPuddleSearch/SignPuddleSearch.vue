@@ -60,10 +60,7 @@ type SignPuddlePayload = {
 
 function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
   const results = payload.results;
-  return results.filter(
-    // (result) => result.sign.length > 0 || result.signtext.length > 0,
-    (result) => result.sign.length > 0,
-  );
+  return results.filter((result) => result.sign.length > 0);
 }
 
 async function getSigns() {
@@ -71,14 +68,6 @@ async function getSigns() {
     const payload = res as SignPuddlePayload;
     signsFromSignPuddle.value.push(...processPayload(payload));
   });
-}
-
-function signOrSignText(result: SignPuddleResult): string {
-  // if (result.sign != null && result.sign.length > 0) {
-  return result.sign;
-  // } else {
-  //   return result.signtext;
-  // }
 }
 
 function findResultById(
@@ -91,7 +80,7 @@ function findResultById(
 }
 
 function returnPageItem(result: SignPuddleResult): PageItemType {
-  return pageStore().createPageItem("sign", result.sign, result.terms);
+  return pageStore().createSignPageItem("sign", result.sign, result.terms);
 }
 
 async function handleSearch() {

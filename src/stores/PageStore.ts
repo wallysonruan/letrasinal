@@ -10,12 +10,18 @@ type SignParagraphDetails = {
   signs: SignDetails[];
 };
 
-type TextDetails = {
+export type TextDetails = {
   text: string;
 };
 
-type TextParagraphDetails = {
+type ParagraphDetails = {
   text: string;
+};
+
+type PunctuationTypes = "space" | "long-space";
+
+export type PunctuationDetails = {
+  type: PunctuationTypes;
 };
 
 type PageItemTypes =
@@ -23,7 +29,8 @@ type PageItemTypes =
   | "signParagraph"
   | "signPunctuation"
   | "text"
-  | "textParagraph";
+  | "paragraph"
+  | "punctuation";
 
 export type PageItemType = {
   id: string;
@@ -32,7 +39,8 @@ export type PageItemType = {
     | SignDetails
     | SignParagraphDetails
     | TextDetails
-    | TextParagraphDetails;
+    | ParagraphDetails
+    | PunctuationDetails;
 };
 
 const items = ref<PageItemType[]>([]);
@@ -41,7 +49,7 @@ function generateRandomId(): string {
   return crypto.randomUUID().slice(0, 5);
 }
 
-function createPageItem(
+function createSignPageItem(
   type: PageItemTypes,
   fsw: string,
   words: string[],
@@ -88,7 +96,7 @@ enum PunctuationFsw {
 }
 
 function addCommaAfter(itemId: string = "start") {
-  const commaPageItem = createPageItem(
+  const commaPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.Comma,
     ["comma"],
@@ -97,7 +105,7 @@ function addCommaAfter(itemId: string = "start") {
 }
 
 function addPeriodAfter(itemId: string = "start") {
-  const periodPageItem = createPageItem(
+  const periodPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.Period,
     ["period"],
@@ -106,7 +114,7 @@ function addPeriodAfter(itemId: string = "start") {
 }
 
 function addQuestionMarkAfter(itemId: string = "start") {
-  const questionMarkPageItem = createPageItem(
+  const questionMarkPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.QuestionMark,
     ["question mark"],
@@ -115,7 +123,7 @@ function addQuestionMarkAfter(itemId: string = "start") {
 }
 
 function addExclamationMarkAfter(itemId: string = "start") {
-  const exclamationMarkPageItem = createPageItem(
+  const exclamationMarkPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.ExclamationMark,
     ["exclamation mark"],
@@ -124,7 +132,7 @@ function addExclamationMarkAfter(itemId: string = "start") {
 }
 
 function addOpenParenthesisAfter(itemId: string = "start") {
-  const openParenthesisPageItem = createPageItem(
+  const openParenthesisPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.OpenParenthesis,
     ["open parenthesis"],
@@ -133,7 +141,7 @@ function addOpenParenthesisAfter(itemId: string = "start") {
 }
 
 function addCloseParenthesisAfter(itemId: string = "start") {
-  const closeParenthesisPageItem = createPageItem(
+  const closeParenthesisPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.CloseParenthesis,
     ["close parenthesis"],
@@ -142,12 +150,34 @@ function addCloseParenthesisAfter(itemId: string = "start") {
 }
 
 function addColonAfter(itemId: string = "start") {
-  const colonPageItem = createPageItem(
+  const colonPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.Colon,
     ["colon"],
   );
   addPageItem(colonPageItem, itemId);
+}
+
+function addSpaceAfter(itemId: string = "start") {
+  const spacePageItem: PageItemType = {
+    id: generateRandomId(),
+    type: "punctuation",
+    details: {
+      type: "space",
+    },
+  };
+  addPageItem(spacePageItem, itemId);
+}
+
+function addLongSpaceAfter(itemId: string = "start") {
+  const spacePageItem: PageItemType = {
+    id: generateRandomId(),
+    type: "punctuation",
+    details: {
+      type: "long-space",
+    },
+  };
+  addPageItem(spacePageItem, itemId);
 }
 
 const pageStore = defineStore({
@@ -156,7 +186,7 @@ const pageStore = defineStore({
     items: items,
   }),
   actions: {
-    createPageItem,
+    createSignPageItem,
     addPageItem,
     deletePageItemById,
     addCommaAfter,
@@ -166,6 +196,8 @@ const pageStore = defineStore({
     addOpenParenthesisAfter,
     addCloseParenthesisAfter,
     addColonAfter,
+    addSpaceAfter,
+    addLongSpaceAfter,
   },
 });
 

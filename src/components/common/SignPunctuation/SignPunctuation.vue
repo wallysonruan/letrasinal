@@ -15,7 +15,7 @@ const props = defineProps<SignPunctuationProps>();
 </template>
 <style scoped lang="scss">
 .sign-punctuation {
-  margin-top: 0.10rem;
+  margin-top: 0.1rem;
   line-height: 0.5rem;
 }
 </style>
