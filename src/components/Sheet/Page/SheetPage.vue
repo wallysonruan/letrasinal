@@ -120,9 +120,13 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.code === "Backspace") {
-    const previousElement = customCaret.previousElementSibling;
-    if (previousElement) {
-      previousElement.remove();
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().deletePageItemById(siblingId);
+      return;
     }
     return;
   }
