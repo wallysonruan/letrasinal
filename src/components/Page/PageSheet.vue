@@ -121,6 +121,70 @@ function handleKeyDown(event: KeyboardEvent) {
     customCaret.before(emptyDiv);
     return;
   }
+
+  if (event.key === ",") {
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addCommaAfter(siblingId);
+      return;
+    }
+    pageStore().addCommaAfter();
+  }
+
+  if (event.key === ".") {
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addPeriodAfter(siblingId);
+      return;
+    }
+
+    pageStore().addPeriodAfter();
+  }
+
+  if (event.key === ":") {
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addColonAfter(siblingId);
+      return;
+    }
+
+    pageStore().addColonAfter();
+  }
+
+  if (event.key === "!") {
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addExclamationMarkAfter(siblingId);
+      return;
+    }
+
+    pageStore().addExclamationMarkAfter();
+  }
+
+  if (event.key === "?") {
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addQuestionMarkAfter(siblingId);
+      return;
+    }
+
+    pageStore().addQuestionMarkAfter();
+  }
 }
 
 function addSignsBeforeCaret(signs: PageItemType[]) {

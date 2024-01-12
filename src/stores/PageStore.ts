@@ -87,7 +87,7 @@ enum PunctuationFsw {
   Colon = ":",
 }
 
-function addCommaAfter(itemId: string) {
+function addCommaAfter(itemId: string = "start") {
   const commaPageItem = createPageItem(
     "signPunctuation",
     PunctuationFsw.Comma,
@@ -96,7 +96,7 @@ function addCommaAfter(itemId: string) {
   addPageItem(commaPageItem, itemId);
 }
 
-function addPeriodAfter(itemId: string) {
+function addPeriodAfter(itemId: string = "start") {
   const periodPageItem = createPageItem(
     "signPunctuation",
     PunctuationFsw.Period,
@@ -105,7 +105,7 @@ function addPeriodAfter(itemId: string) {
   addPageItem(periodPageItem, itemId);
 }
 
-function addQuestionMarkAfter(itemId: string) {
+function addQuestionMarkAfter(itemId: string = "start") {
   const questionMarkPageItem = createPageItem(
     "signPunctuation",
     PunctuationFsw.QuestionMark,
@@ -114,7 +114,7 @@ function addQuestionMarkAfter(itemId: string) {
   addPageItem(questionMarkPageItem, itemId);
 }
 
-function addExclamationMarkAfter(itemId: string) {
+function addExclamationMarkAfter(itemId: string = "start") {
   const exclamationMarkPageItem = createPageItem(
     "signPunctuation",
     PunctuationFsw.ExclamationMark,
@@ -123,7 +123,7 @@ function addExclamationMarkAfter(itemId: string) {
   addPageItem(exclamationMarkPageItem, itemId);
 }
 
-function addOpenParenthesisAfter(itemId: string) {
+function addOpenParenthesisAfter(itemId: string = "start") {
   const openParenthesisPageItem = createPageItem(
     "signPunctuation",
     PunctuationFsw.OpenParenthesis,
@@ -132,7 +132,7 @@ function addOpenParenthesisAfter(itemId: string) {
   addPageItem(openParenthesisPageItem, itemId);
 }
 
-function addCloseParenthesisAfter(itemId: string) {
+function addCloseParenthesisAfter(itemId: string = "start") {
   const closeParenthesisPageItem = createPageItem(
     "signPunctuation",
     PunctuationFsw.CloseParenthesis,
@@ -141,7 +141,7 @@ function addCloseParenthesisAfter(itemId: string) {
   addPageItem(closeParenthesisPageItem, itemId);
 }
 
-function addColonAfter(itemId: string) {
+function addColonAfter(itemId: string = "start") {
   const colonPageItem = createPageItem(
     "signPunctuation",
     PunctuationFsw.Colon,
