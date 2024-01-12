@@ -10,6 +10,7 @@ import type { PageItemType } from "../../../stores/PageStore";
 import { onMounted } from "vue";
 import { onUnmounted } from "vue";
 import pageStore from "../../../stores/PageStore";
+import SignWriting from "@/components/common/SignWriting/SignWriting.vue";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -199,7 +200,7 @@ onUnmounted(() => {
             <template v-for="(sign, index) in filteredSigns" :key="index">
               <li class="result">
                 <SelectableItem :value="sign.id" v-model="selected">
-                  <AlphabetDisplay :word="signOrSignText(sign)" />
+                  <SignWriting :fsw="sign.sign"></SignWriting>
                 </SelectableItem>
               </li>
             </template>

@@ -220,6 +220,10 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 }
 
+/**
+ * Adds the given signs before caret's previous sibling.
+ * @param signs The signs to add.
+ */
 function addSignsBeforeCaret(signs: PageItemType[]) {
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
