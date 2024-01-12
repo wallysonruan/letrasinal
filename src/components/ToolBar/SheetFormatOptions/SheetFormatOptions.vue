@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import e_pageOrientation from "./PageOrientationEvent";
-import e_pageMargin from "./PageMarginEvent";
+import { e_pageOrientation, e_pageMargin } from "./Events";
 
 function pageOrientation(e: Event) {
   e.target?.dispatchEvent(e_pageOrientation);

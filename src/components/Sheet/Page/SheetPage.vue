@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PageItemType } from "@/stores/PageStore";
-import PageItem from "@/components/PageItem/PageItem.vue";
+import type { PageItemType } from "../../../stores/PageStore";
+import pageStore from "../../../stores/PageStore";
+import PageItem from "../PageItem/PageItem.vue";
 import { onMounted, onUnmounted, ref } from "vue";
-import pageStore from "@/stores/PageStore";
 
 type PageSheetProps = {
   text: PageItemType[];

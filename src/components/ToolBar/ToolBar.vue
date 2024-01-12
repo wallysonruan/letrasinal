@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import LogoItem from "../Logo/LogoItem.vue";
-import SheetFormatOptions from "../SheetFormatOptions/SheetFormatOptions.vue";
-import { dispatchSignPuddleSearchToggleEvent } from "../SignPuddleSearch/SignPuddleSearchEvents";
+import LogoItem from "../common/Logo/LogoItem.vue";
+import SheetFormatOptions from "./SheetFormatOptions/SheetFormatOptions.vue";
+import { dispatchSignPuddleSearchToggleEvent } from "../Sheet/SignPuddleSearch/Events";
 
 function print() {
   window.print();
@@ -41,3 +41,4 @@ function print() {
   }
 }
 </style>
+./SheetFormatOptions/SheetFormatOptions.vue../Sheet/SignPuddleSearch/SignPuddleSearchEvents

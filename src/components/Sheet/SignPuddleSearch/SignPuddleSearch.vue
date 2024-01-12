@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
-import { getSignsByWord } from "@/utils/client/client";
+import { getSignsByWord } from "../../../utils/client/client";
 import { ref } from "vue";
 import { computed } from "vue";
 
-import SelectableItem from "../SelectableItem/SelectableItem.vue";
+import SelectableItem from "../../common/SelectableItem/SelectableItem.vue";
 
-import { dispatchSignPuddleSearchFinishedEvent } from "./SignPuddleSearchEvents";
-import type { PageItemType } from "../../stores/PageStore";
+import { dispatchSignPuddleSearchFinishedEvent } from "./Events";
+import type { PageItemType } from "../../../stores/PageStore";
 import { onMounted } from "vue";
 import { onUnmounted } from "vue";
-import pageStore from "../../stores/PageStore";
+import pageStore from "../../../stores/PageStore";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -308,4 +307,4 @@ onUnmounted(() => {
   }
 }
 </style>
-./SignPuddleEvents
+./SignPuddleEvents ../../../stores/PageStore../../../stores/PageStore ./Events

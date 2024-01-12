@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import AlphabetDisplay from "@/components/AlphabetDisplay/AlphabetDisplay.vue";
-import type { PageItemType, SignDetails } from "@/stores/PageStore";
-import SignComponent from "../common/SignComponent/SignComponent.vue";
-import SignPunctuation from "../common/SignPunctuation/SignPunctuation.vue";
+import type { PageItemType, SignDetails } from "../../../stores/PageStore";
+import SignComponent from "../../common/SignComponent/SignComponent.vue";
+import SignPunctuation from "../../common/SignPunctuation/SignPunctuation.vue";
 
 type PageItemProps = {
   item: PageItemType;
@@ -20,10 +19,6 @@ const props = defineProps<PageItemProps>();
       :sign="props.item.details as SignDetails"
     >
     </SignPunctuation>
-    <AlphabetDisplay
-      v-else
-      :word="(props.item.details as SignDetails).fsw"
-    ></AlphabetDisplay>
   </div>
 </template>
 <style scoped lang="scss">
