@@ -38,28 +38,31 @@ const pageMargin = ref(false);
 
 const isCaretVisible = ref(false);
 
-function handleMouseClick(event: MouseEvent) {
+function handleClick(event: MouseEvent | TouchEvent) {
   const elementClickedOn = event.target as HTMLElement;
-  const classesOfelementClickedOn = elementClickedOn.classList;
+  const classesOfElementClickedOn = elementClickedOn.classList;
   const customCaret = document.querySelector(
     ".custom-blinking-caret",
   ) as HTMLElement;
 
   if (customCaret) {
-    if (classesOfelementClickedOn.contains("sheet-content")) {
+    if (classesOfElementClickedOn.contains("sheet-content")) {
       isCaretVisible.value = true;
       return;
     }
 
-    if (classesOfelementClickedOn.contains("sheet-item")) {
+    if (classesOfElementClickedOn.contains("sheet-item")) {
       elementClickedOn.before(customCaret);
       return;
     }
 
-    // if (classesOfelementClickedOn.contains("sheet-content") !== true) {
-    //   isCaretVisible.value = false;
-    //   return;
-    // }
+    if (
+      !classesOfElementClickedOn.contains("sheet-content") &&
+      !classesOfElementClickedOn.contains("sp-btn")
+    ) {
+      isCaretVisible.value = false;
+      return;
+    }
   }
 }
 
@@ -104,11 +107,15 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.code === "Space") {
-    const emptyDiv = document.createElement("div");
-    emptyDiv.classList.add("sheet-item");
-    emptyDiv.classList.add("space");
-    emptyDiv.style.height = "1rem";
-    customCaret.before(emptyDiv);
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addSpaceAfter(siblingId);
+      return;
+    }
+    pageStore().addSpaceAfter();
     return;
   }
 
@@ -121,11 +128,15 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   if (event.code === "Tab") {
-    const emptyDiv = document.createElement("div");
-    emptyDiv.classList.add("sheet-item");
-    emptyDiv.classList.add("tab-space");
-    emptyDiv.style.height = "4rem";
-    customCaret.before(emptyDiv);
+    const caretPreviousSibling =
+      customCaret.previousElementSibling as HTMLElement;
+
+    if (caretPreviousSibling) {
+      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
+      pageStore().addLongSpaceAfter(siblingId);
+      return;
+    }
+    pageStore().addLongSpaceAfter();
     return;
   }
 
@@ -248,7 +259,8 @@ function handleSignPuddleSelectionFinished(event: Event) {
 
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
-  window.addEventListener("click", handleMouseClick);
+  window.addEventListener("click", handleClick);
+  window.addEventListener("touchstart", handleClick);
   window.addEventListener("page-orientation", changePageOrientation);
   window.addEventListener("page-margin", editPageMargin);
   window.addEventListener(
@@ -259,7 +271,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
-  window.removeEventListener("click", handleMouseClick);
+  window.removeEventListener("click", handleClick);
+  window.removeEventListener("touchstart", handleClick);
   window.removeEventListener("page-orientation", changePageOrientation);
   window.removeEventListener("page-margin", editPageMargin);
   window.removeEventListener(
@@ -296,7 +309,6 @@ onUnmounted(() => {
 
   .sheet-content {
     overflow: hidden;
-    height: 2rem;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -335,9 +347,7 @@ onUnmounted(() => {
 }
 
 @media screen and (max-width: 600px) {
-  .sheet-container {
-    width: 100% !important;
-  }
+  //
 }
 
 @media print {

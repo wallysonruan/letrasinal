@@ -15,9 +15,10 @@ function print() {
       </v-toolbar-title>
       <!---->
       <SheetFormatOptions />
-      <v-btn icon>
+      <v-btn icon class="sp-btn">
         <v-icon @click="dispatchSignPuddleSearchToggleEvent">
           <img
+            class="sp-btn"
             width="25"
             src="../../assets/sign-puddle-icon.png"
             alt="SignPuddle"
@@ -41,4 +42,3 @@ function print() {
   }
 }
 </style>
-./SheetFormatOptions/SheetFormatOptions.vue../Sheet/SignPuddleSearch/SignPuddleSearchEvents
