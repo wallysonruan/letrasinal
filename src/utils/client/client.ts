@@ -9,7 +9,7 @@ export async function request(
       method: method,
     }).then((res) => res.json());
   } catch (error) {
-    console.log(error);
+    throw new Error(error as string);
   }
 }
 

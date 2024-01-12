@@ -7,7 +7,6 @@ type PunctuationComponentProps = {
 
 const props = defineProps<PunctuationComponentProps>();
 function height() {
-  console.log(props.type);
   if (props.type.type === "space") {
     return 1;
   }
