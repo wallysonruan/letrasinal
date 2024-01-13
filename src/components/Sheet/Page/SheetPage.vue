@@ -36,33 +36,21 @@ function editPageMargin() {
 
 const pageMargin = ref(false);
 
-const isCaretVisible = ref(false);
-
 function handleClick(event: MouseEvent | TouchEvent) {
   const elementClickedOn = event.target as HTMLElement;
   const classesOfElementClickedOn = elementClickedOn.classList;
-  const customCaret = document.querySelector(
-    ".custom-blinking-caret",
-  ) as HTMLElement;
 
-  if (customCaret) {
-    if (classesOfElementClickedOn.contains("sheet-content")) {
-      isCaretVisible.value = true;
-      return;
-    }
+  if (classesOfElementClickedOn.contains("sheet-content")) {
+    pageStore().setPageOnFocus(true);
+    return;
+  }
 
-    if (classesOfElementClickedOn.contains("sheet-item")) {
-      elementClickedOn.before(customCaret);
-      return;
-    }
-
-    if (
-      !classesOfElementClickedOn.contains("sheet-content") &&
-      !classesOfElementClickedOn.contains("sp-btn")
-    ) {
-      isCaretVisible.value = false;
-      return;
-    }
+  if (
+    !classesOfElementClickedOn.contains("sheet-content") &&
+    !classesOfElementClickedOn.contains("sp-btn")
+  ) {
+    pageStore().setPageOnFocus(false);
+    return;
   }
 }
 
@@ -80,95 +68,56 @@ function handleKeyDown(event: KeyboardEvent) {
       event.key === "?" ||
       event.key === "(" ||
       event.key === ")") &&
-    isCaretVisible.value
+    pageStore().pageOnFocus
   ) {
     event.preventDefault();
   }
 
-  const customCaret = document.querySelector(
-    ".custom-blinking-caret",
-  ) as HTMLElement;
-
-  if (!customCaret) return;
-
-  const caretPreviousSibling =
-    customCaret.previousElementSibling as HTMLElement;
-
-  let siblingId = "start";
-  if (caretPreviousSibling) {
-    siblingId = caretPreviousSibling.getAttribute("id") ?? siblingId;
-  }
-
-  const sheetItems = Array.from(document.querySelectorAll(".sheet-item"));
-  const caretIndex = sheetItems.indexOf(customCaret);
-
-  if (event.key === "ArrowUp" && caretIndex > 0) {
-    // Move the caret before the previous .sheet-item
-    sheetItems[caretIndex - 1].before(customCaret);
-    return;
-  }
-
-  if (event.key === "ArrowDown" && caretIndex < sheetItems.length - 1) {
-    // Move the caret after the next .sheet-item
-    sheetItems[caretIndex + 1].after(customCaret);
-    return;
-  }
-
   switch (event.key) {
     case " ":
-      pageStore().addSpaceAfter(siblingId);
+      pageStore().addSpace();
       break;
     case "Backspace":
-      pageStore().deletePageItemById(siblingId);
+      pageStore().deletePageItemBeforeCaret();
       break;
     case "Tab":
-      pageStore().addLongSpaceAfter(siblingId);
+      pageStore().addLongSpace();
       break;
     case ",":
-      pageStore().addCommaAfter(siblingId);
+      pageStore().addComma();
       break;
     case ".":
-      pageStore().addPeriodAfter(siblingId);
+      pageStore().addPeriod();
       break;
     case ":":
-      pageStore().addColonAfter(siblingId);
+      pageStore().addColon();
       break;
     case "!":
-      pageStore().addExclamationMarkAfter(siblingId);
+      pageStore().addExclamationMark();
       break;
     case "?":
-      pageStore().addQuestionMarkAfter(siblingId);
+      pageStore().addQuestionMark();
       break;
     case "(":
-      pageStore().addOpenParenthesisAfter(siblingId);
+      pageStore().addOpenParenthesis();
       break;
     case ")":
-      pageStore().addCloseParenthesisAfter(siblingId);
+      pageStore().addCloseParenthesis();
+      break;
+    case "ArrowUp":
+      pageStore().moveCaretUp();
+      break;
+    case "ArrowDown":
+      pageStore().moveCaretDown();
       break;
     default:
       return;
   }
 }
 
-/**
- * Adds the given signs before caret's previous sibling.
- * @param signs The signs to add.
- */
 function addSignsBeforeCaret(signs: PageItemType[]) {
-  const customCaret = document.querySelector(
-    ".custom-blinking-caret",
-  ) as HTMLElement;
-
-  const caretPreviousSibling =
-    customCaret.previousElementSibling as HTMLElement;
-
   signs.forEach((sign) => {
-    if (caretPreviousSibling) {
-      const siblingId = caretPreviousSibling.getAttribute("id") ?? "";
-      pageStore().addPageItem(sign, siblingId);
-      return;
-    }
-    pageStore().addPageItem(sign, "start");
+    pageStore().addPageItem(sign);
   });
 }
 
@@ -213,10 +162,6 @@ onUnmounted(() => {
         v-for="(word, index) in props.text"
         :key="index"
       />
-      <div
-        class="sheet-item custom-blinking-caret"
-        v-show="isCaretVisible"
-      ></div>
     </div>
   </div>
 </template>
@@ -238,30 +183,6 @@ onUnmounted(() => {
 
     &:hover {
       cursor: text;
-    }
-
-    .custom-blinking-caret {
-      position: relative;
-
-      &::after {
-        position: absolute;
-        content: "";
-        display: block;
-        height: 2px;
-        min-width: 2rem;
-        width: 100%;
-        background-color: black;
-        animation: pulse 1s infinite;
-
-        @keyframes pulse {
-          0% {
-            opacity: 1;
-          }
-          40% {
-            opacity: 0;
-          }
-        }
-      }
     }
   }
 }

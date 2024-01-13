@@ -30,12 +30,13 @@ type PageItemTypes =
   | "signPunctuation"
   | "text"
   | "paragraph"
-  | "punctuation";
+  | "punctuation"
+  | "caret";
 
 export type PageItemType = {
   id: string;
   type: PageItemTypes;
-  details:
+  details?:
     | SignDetails
     | SignParagraphDetails
     | TextDetails
@@ -44,6 +45,10 @@ export type PageItemType = {
 };
 
 const items = ref<PageItemType[]>([]);
+items.value.push({
+  id: "caret",
+  type: "caret",
+});
 
 function generateRandomId(): string {
   return crypto.randomUUID().slice(0, 5);
@@ -64,7 +69,7 @@ function createSignPageItem(
   };
 }
 
-function addPageItem(newItem: PageItemType, id: string = "end") {
+function addPageItem(newItem: PageItemType, id: string = "caret") {
   if (id === "end") {
     items.value.push(newItem); // Insert item at the end of the array
     return;
@@ -77,12 +82,19 @@ function addPageItem(newItem: PageItemType, id: string = "end") {
 
   const index = items.value.findIndex((item) => item.id === id);
   if (index !== -1) {
-    items.value.splice(index + 1, 0, newItem); // Insert item after the item with the given id
+    items.value.splice(index, 0, newItem); // Insert item before the item with the given id
   }
 }
 
 function deletePageItemById(id: string) {
   items.value = items.value.filter((item) => item.id !== id);
+}
+
+function deletePageItemBeforeCaret() {
+  const index = items.value.findIndex((item) => item.id === "caret");
+  if (index !== -1 && index !== 0) {
+    items.value.splice(index - 1, 1);
+  }
 }
 
 enum PunctuationFsw {
@@ -95,7 +107,7 @@ enum PunctuationFsw {
   Colon = "S38a00", // : S38a00464x490  Source: Escrita de Sinais Sem Mistério, page 185.
 }
 
-function addCommaAfter(itemId: string = "start") {
+function addComma(itemId: string = "caret") {
   const commaPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.Comma,
@@ -104,7 +116,7 @@ function addCommaAfter(itemId: string = "start") {
   addPageItem(commaPageItem, itemId);
 }
 
-function addPeriodAfter(itemId: string = "start") {
+function addPeriod(itemId: string = "caret") {
   const periodPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.Period,
@@ -113,7 +125,7 @@ function addPeriodAfter(itemId: string = "start") {
   addPageItem(periodPageItem, itemId);
 }
 
-function addQuestionMarkAfter(itemId: string = "start") {
+function addQuestionMark(itemId: string = "caret") {
   const questionMarkPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.QuestionMark,
@@ -122,7 +134,7 @@ function addQuestionMarkAfter(itemId: string = "start") {
   addPageItem(questionMarkPageItem, itemId);
 }
 
-function addExclamationMarkAfter(itemId: string = "start") {
+function addExclamationMark(itemId: string = "caret") {
   const exclamationMarkPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.ExclamationMark,
@@ -131,7 +143,7 @@ function addExclamationMarkAfter(itemId: string = "start") {
   addPageItem(exclamationMarkPageItem, itemId);
 }
 
-function addOpenParenthesisAfter(itemId: string = "start") {
+function addOpenParenthesis(itemId: string = "caret") {
   const openParenthesisPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.OpenParenthesis,
@@ -140,7 +152,7 @@ function addOpenParenthesisAfter(itemId: string = "start") {
   addPageItem(openParenthesisPageItem, itemId);
 }
 
-function addCloseParenthesisAfter(itemId: string = "start") {
+function addCloseParenthesis(itemId: string = "caret") {
   const closeParenthesisPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.CloseParenthesis,
@@ -149,7 +161,7 @@ function addCloseParenthesisAfter(itemId: string = "start") {
   addPageItem(closeParenthesisPageItem, itemId);
 }
 
-function addColonAfter(itemId: string = "start") {
+function addColon(itemId: string = "caret") {
   const colonPageItem = createSignPageItem(
     "signPunctuation",
     PunctuationFsw.Colon,
@@ -158,7 +170,7 @@ function addColonAfter(itemId: string = "start") {
   addPageItem(colonPageItem, itemId);
 }
 
-function addSpaceAfter(itemId: string = "start") {
+function addSpace(itemId: string = "caret") {
   const spacePageItem: PageItemType = {
     id: generateRandomId(),
     type: "punctuation",
@@ -169,7 +181,7 @@ function addSpaceAfter(itemId: string = "start") {
   addPageItem(spacePageItem, itemId);
 }
 
-function addLongSpaceAfter(itemId: string = "start") {
+function addLongSpace(itemId: string = "caret") {
   const spacePageItem: PageItemType = {
     id: generateRandomId(),
     type: "punctuation",
@@ -180,24 +192,53 @@ function addLongSpaceAfter(itemId: string = "start") {
   addPageItem(spacePageItem, itemId);
 }
 
+function moveCaretUp() {
+  const index = items.value.findIndex((item) => item.id === "caret");
+  if (index !== -1 && index !== 0) {
+    const item = items.value[index];
+    items.value.splice(index, 1);
+    items.value.splice(index - 1, 0, item);
+  }
+}
+
+function moveCaretDown() {
+  const index = items.value.findIndex((item) => item.id === "caret");
+  if (index !== -1 && index !== items.value.length - 1) {
+    const item = items.value[index];
+    items.value.splice(index, 1);
+    items.value.splice(index + 1, 0, item);
+  }
+}
+
+const pageOnFocus = ref(false);
+
+function setPageOnFocus(value: boolean) {
+  pageOnFocus.value = value;
+}
+
 const pageStore = defineStore({
   id: "pageStore",
   state: () => ({
     items: items,
+    pageOnFocus: pageOnFocus,
   }),
   actions: {
     createSignPageItem,
     addPageItem,
+    deletePageItemBeforeCaret,
     deletePageItemById,
-    addCommaAfter,
-    addPeriodAfter,
-    addQuestionMarkAfter,
-    addExclamationMarkAfter,
-    addOpenParenthesisAfter,
-    addCloseParenthesisAfter,
-    addColonAfter,
-    addSpaceAfter,
-    addLongSpaceAfter,
+    addComma,
+    addPeriod,
+    addQuestionMark,
+    addExclamationMark,
+    addOpenParenthesis,
+    addCloseParenthesis,
+    addColon,
+    addSpace,
+    addLongSpace,
+    setPageOnFocus,
+    moveCaretUp,
+    moveCaretDown,
   },
 });
 
