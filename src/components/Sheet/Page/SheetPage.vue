@@ -66,52 +66,6 @@ function handleClick(event: MouseEvent | TouchEvent) {
   }
 }
 
-function handleKeyEvent(
-  event: KeyboardEvent,
-  caretPreviousSibling: Element | null,
-) {
-  let siblingId = "start";
-  if (caretPreviousSibling) {
-    siblingId = caretPreviousSibling.getAttribute("id") ?? siblingId;
-  }
-  const pageStoreMethods = pageStore();
-
-  switch (event.key) {
-    case " ":
-      pageStoreMethods.addSpaceAfter(siblingId);
-      break;
-    case "Backspace":
-      pageStoreMethods.deletePageItemById(siblingId);
-      break;
-    case "Tab":
-      pageStoreMethods.addLongSpaceAfter(siblingId);
-      break;
-    case ",":
-      pageStoreMethods.addCommaAfter(siblingId);
-      break;
-    case ".":
-      pageStoreMethods.addPeriodAfter(siblingId);
-      break;
-    case ":":
-      pageStoreMethods.addColonAfter(siblingId);
-      break;
-    case "!":
-      pageStoreMethods.addExclamationMarkAfter(siblingId);
-      break;
-    case "?":
-      pageStoreMethods.addQuestionMarkAfter(siblingId);
-      break;
-    case "(":
-      pageStoreMethods.addOpenParenthesisAfter(siblingId);
-      break;
-    case ")":
-      pageStoreMethods.addCloseParenthesisAfter(siblingId);
-      break;
-    default:
-      return;
-  }
-}
-
 function handleKeyDown(event: KeyboardEvent) {
   if (
     (event.key === "ArrowUp" ||
@@ -140,6 +94,11 @@ function handleKeyDown(event: KeyboardEvent) {
   const caretPreviousSibling =
     customCaret.previousElementSibling as HTMLElement;
 
+  let siblingId = "start";
+  if (caretPreviousSibling) {
+    siblingId = caretPreviousSibling.getAttribute("id") ?? siblingId;
+  }
+
   const sheetItems = Array.from(document.querySelectorAll(".sheet-item"));
   const caretIndex = sheetItems.indexOf(customCaret);
 
@@ -155,7 +114,40 @@ function handleKeyDown(event: KeyboardEvent) {
     return;
   }
 
-  handleKeyEvent(event, caretPreviousSibling);
+  switch (event.key) {
+    case " ":
+      pageStore().addSpaceAfter(siblingId);
+      break;
+    case "Backspace":
+      pageStore().deletePageItemById(siblingId);
+      break;
+    case "Tab":
+      pageStore().addLongSpaceAfter(siblingId);
+      break;
+    case ",":
+      pageStore().addCommaAfter(siblingId);
+      break;
+    case ".":
+      pageStore().addPeriodAfter(siblingId);
+      break;
+    case ":":
+      pageStore().addColonAfter(siblingId);
+      break;
+    case "!":
+      pageStore().addExclamationMarkAfter(siblingId);
+      break;
+    case "?":
+      pageStore().addQuestionMarkAfter(siblingId);
+      break;
+    case "(":
+      pageStore().addOpenParenthesisAfter(siblingId);
+      break;
+    case ")":
+      pageStore().addCloseParenthesisAfter(siblingId);
+      break;
+    default:
+      return;
+  }
 }
 
 /**
