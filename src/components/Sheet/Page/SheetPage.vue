@@ -30,50 +30,33 @@ function changePageOrientation() {
   }
 }
 
+const pageMargin = ref(false);
+
 function editPageMargin() {
   pageMargin.value = !pageMargin.value;
 }
 
-const pageMargin = ref(false);
-
-function handleClick(event: MouseEvent | TouchEvent) {
-  const elementClickedOn = event.target as HTMLElement;
-  const classesOfElementClickedOn = elementClickedOn.classList;
-
-  if (classesOfElementClickedOn.contains("sheet-content")) {
-    pageStore().setPageOnFocus(true);
-    return;
-  }
-
+function handleKeyDown(event: Event) {
+  const eventAsKeyboardEvent = event as KeyboardEvent;
   if (
-    !classesOfElementClickedOn.contains("sheet-content") &&
-    !classesOfElementClickedOn.contains("sp-btn")
-  ) {
-    pageStore().setPageOnFocus(false);
-    return;
-  }
-}
-
-function handleKeyDown(event: KeyboardEvent) {
-  if (
-    (event.key === "ArrowUp" ||
-      event.key === "ArrowDown" ||
-      event.code === "Space" ||
-      event.code === "Backspace" ||
-      event.code === "Tab" ||
-      event.key === "," ||
-      event.key === "." ||
-      event.key === ":" ||
-      event.key === "!" ||
-      event.key === "?" ||
-      event.key === "(" ||
-      event.key === ")") &&
+    (eventAsKeyboardEvent.key === "ArrowUp" ||
+      eventAsKeyboardEvent.key === "ArrowDown" ||
+      eventAsKeyboardEvent.key === "Space" ||
+      eventAsKeyboardEvent.key === "Backspace" ||
+      eventAsKeyboardEvent.key === "Tab" ||
+      eventAsKeyboardEvent.key === "," ||
+      eventAsKeyboardEvent.key === "." ||
+      eventAsKeyboardEvent.key === ":" ||
+      eventAsKeyboardEvent.key === "!" ||
+      eventAsKeyboardEvent.key === "?" ||
+      eventAsKeyboardEvent.key === "(" ||
+      eventAsKeyboardEvent.key === ")") &&
     pageStore().pageOnFocus
   ) {
     event.preventDefault();
   }
 
-  switch (event.key) {
+  switch (eventAsKeyboardEvent.key) {
     case " ":
       pageStore().addSpace();
       break;
@@ -126,10 +109,16 @@ function handleSignPuddleSelectionFinished(event: Event) {
   addSignsBeforeCaret(customEvent.detail);
 }
 
+function setFocusOnHiddenTextarea() {
+  const sheetContainer = document.querySelector(".sheet-container");
+  const textarea = sheetContainer?.querySelector("textarea");
+
+  if (textarea) {
+    textarea.focus();
+  }
+}
+
 onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-  window.addEventListener("click", handleClick);
-  window.addEventListener("touchstart", handleClick);
   window.addEventListener("page-orientation", changePageOrientation);
   window.addEventListener("page-margin", editPageMargin);
   window.addEventListener(
@@ -139,9 +128,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  window.removeEventListener("keydown", handleKeyDown);
-  window.removeEventListener("click", handleClick);
-  window.removeEventListener("touchstart", handleClick);
   window.removeEventListener("page-orientation", changePageOrientation);
   window.removeEventListener("page-margin", editPageMargin);
   window.removeEventListener(
@@ -154,6 +140,8 @@ onUnmounted(() => {
   <div
     class="sheet-container"
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
+    @click="setFocusOnHiddenTextarea"
+    @touchstart="setFocusOnHiddenTextarea"
   >
     <div class="sheet-content">
       <PageItem
@@ -163,6 +151,14 @@ onUnmounted(() => {
         :key="index"
       />
     </div>
+    <textarea
+      class="hidden-textarea"
+      @keydown="handleKeyDown"
+      @focus="pageStore().setPageOnFocus(true)"
+      @focusout="pageStore().setPageOnFocus(false)"
+    >
+      <!-- Hidden. It's here just to get focus, toggle mobile virtual keyboard, and have its Events redirected to SheetPage. -->
+    </textarea>
   </div>
 </template>
 <style scoped lang="scss">
@@ -171,6 +167,14 @@ onUnmounted(() => {
   background-color: white;
   border: 1px solid rgb(0, 0, 0, 0.2);
   overflow: hidden;
+
+  textarea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 0%;
+  }
 
   .sheet-content {
     overflow: hidden;
