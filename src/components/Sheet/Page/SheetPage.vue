@@ -3,7 +3,6 @@ import { computed } from "vue";
 import type { PageItemType } from "../../../stores/PageStore";
 import pageStore from "../../../stores/PageStore";
 import PageItem from "../PageItem/PageItem.vue";
-import { onMounted, onUnmounted, ref } from "vue";
 
 type PageSheetProps = {
   text: PageItemType[];
@@ -29,28 +28,51 @@ function handleKeyDown(event: Event) {
       eventAsKeyboardEvent.key === "ArrowDown" ||
       eventAsKeyboardEvent.key === "Space" ||
       eventAsKeyboardEvent.key === "Backspace" ||
-      eventAsKeyboardEvent.key === "Tab" ||
-      eventAsKeyboardEvent.key === "," ||
-      eventAsKeyboardEvent.key === "." ||
-      eventAsKeyboardEvent.key === ":" ||
-      eventAsKeyboardEvent.key === "!" ||
-      eventAsKeyboardEvent.key === "?" ||
-      eventAsKeyboardEvent.key === "(" ||
-      eventAsKeyboardEvent.key === ")") &&
+      eventAsKeyboardEvent.key === "Tab") &&
     pageStore().pageOnFocus
   ) {
     event.preventDefault();
   }
 
   switch (eventAsKeyboardEvent.key) {
-    case " ":
-      pageStore().addSpace();
-      break;
     case "Backspace":
       pageStore().deletePageItemBeforeCaret();
       break;
     case "Tab":
       pageStore().addLongSpace();
+      break;
+    case "ArrowUp":
+      pageStore().moveCaretUp();
+      break;
+    case "ArrowDown":
+      pageStore().moveCaretDown();
+      break;
+    default:
+      return;
+  }
+}
+
+function handleInput(event: Event) {
+  const eventAsInputEvent = event as InputEvent;
+  const input = eventAsInputEvent.data;
+
+  if (
+    (input === " " ||
+      input === "," ||
+      input === "." ||
+      input === ":" ||
+      input === "!" ||
+      input === "?" ||
+      input === "(" ||
+      input === ")") &&
+    pageStore().pageOnFocus
+  ) {
+    event.preventDefault();
+  }
+
+  switch (input) {
+    case " ":
+      pageStore().addSpace();
       break;
     case ",":
       pageStore().addComma();
@@ -73,26 +95,9 @@ function handleKeyDown(event: Event) {
     case ")":
       pageStore().addCloseParenthesis();
       break;
-    case "ArrowUp":
-      pageStore().moveCaretUp();
-      break;
-    case "ArrowDown":
-      pageStore().moveCaretDown();
-      break;
     default:
       return;
   }
-}
-
-function addSignsBeforeCaret(signs: PageItemType[]) {
-  signs.forEach((sign) => {
-    pageStore().addPageItem(sign);
-  });
-}
-
-function handleSignPuddleSelectionFinished(event: Event) {
-  const customEvent = event as CustomEvent;
-  addSignsBeforeCaret(customEvent.detail);
 }
 
 function setFocusOnHiddenTextarea() {
@@ -103,20 +108,6 @@ function setFocusOnHiddenTextarea() {
     textarea.focus();
   }
 }
-
-onMounted(() => {
-  window.addEventListener(
-    "sign-puddle-search-finished",
-    handleSignPuddleSelectionFinished,
-  );
-});
-
-onUnmounted(() => {
-  window.removeEventListener(
-    "sign-puddle-search-finished",
-    handleSignPuddleSelectionFinished,
-  );
-});
 </script>
 <template>
   <div
@@ -136,6 +127,7 @@ onUnmounted(() => {
     <textarea
       class="hidden-textarea"
       @keydown="handleKeyDown"
+      @input="handleInput"
       @focus="pageStore().setPageOnFocus(true)"
       @focusout="pageStore().setPageOnFocus(false)"
     >

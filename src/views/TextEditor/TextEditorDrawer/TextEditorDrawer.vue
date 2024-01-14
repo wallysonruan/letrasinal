@@ -6,7 +6,7 @@ import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
 import DrawerSignPuddleSearch from "./DrawerSignPuddleSearch/DrawerSignPuddleSearch.vue";
 
 const drawer = ref(true);
-const rail = ref(false);
+const rail = ref(true);
 const chevronDirection = computed(() => {
   return rail.value ? "mdi-chevron-right" : "mdi-chevron-left";
 });
@@ -75,9 +75,7 @@ const chevronDirection = computed(() => {
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" title="Formal SignWriting" disabled>
               <template v-slot:prepend>
-                <div :style="'margin-right: 1.5rem;'">
-                  FSW
-                </div>
+                <div :style="'margin-right: 1.5rem;'">FSW</div>
               </template>
             </v-list-item>
           </template>
