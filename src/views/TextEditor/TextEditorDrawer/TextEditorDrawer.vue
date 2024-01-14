@@ -28,21 +28,36 @@ const chevronDirection = computed(() => {
     <v-divider></v-divider>
 
     <v-list density="compact" nav>
-      <v-list-item
-        prepend-icon="mdi-file"
-        title="Página"
-        value="pagina"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-hand"
-        title="Sinal"
-        value="sinal"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-printer"
-        title="Imprimir"
-        value="imprimir"
-      ></v-list-item>
+      <v-list-group value="pagina">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-file"
+            title="Página"
+          ></v-list-item>
+        </template>
+      </v-list-group>
+
+      <v-list-group value="sinal">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-hand"
+            title="Sinal"
+          ></v-list-item>
+        </template>
+      </v-list-group>
+
+      <v-list-group value="imprimir">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            disabled
+            v-bind="props"
+            prepend-icon="mdi-printer"
+            title="Imprimir"
+          ></v-list-item>
+        </template>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
