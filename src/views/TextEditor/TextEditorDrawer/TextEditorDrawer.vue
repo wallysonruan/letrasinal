@@ -2,6 +2,8 @@
 import { computed } from "vue";
 import { ref } from "vue";
 
+import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
+
 const drawer = ref(true);
 const rail = ref(false);
 const chevronDirection = computed(() => {
@@ -25,8 +27,6 @@ const chevronDirection = computed(() => {
       </template>
     </v-list-item>
 
-    <v-divider></v-divider>
-
     <v-list density="compact" nav>
       <v-list-group value="pagina">
         <template v-slot:activator="{ props }">
@@ -36,7 +36,11 @@ const chevronDirection = computed(() => {
             title="Página"
           ></v-list-item>
         </template>
+
+        <DrawerPageOptions />
       </v-list-group>
+
+      <v-divider></v-divider>
 
       <v-list-group value="sinal">
         <template v-slot:activator="{ props }">
@@ -47,6 +51,8 @@ const chevronDirection = computed(() => {
           ></v-list-item>
         </template>
       </v-list-group>
+
+      <v-divider></v-divider>
 
       <v-list-group value="imprimir">
         <template v-slot:activator="{ props }">

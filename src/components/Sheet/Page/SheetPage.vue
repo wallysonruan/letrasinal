@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { PageItemType } from "../../../stores/PageStore";
 import pageStore from "../../../stores/PageStore";
 import PageItem from "../PageItem/PageItem.vue";
@@ -10,31 +11,16 @@ type PageSheetProps = {
 
 const props = defineProps<PageSheetProps>();
 
-const sheetSizes = {
-  a4: {
-    width: 790, // original size: 794px
-    height: 1100, // original size: 1123px
-  },
-};
-
-const pageWidth = ref(sheetSizes.a4.width);
-const pageHeight = ref(sheetSizes.a4.height);
-
-function changePageOrientation() {
-  if (pageWidth.value === sheetSizes.a4.width) {
-    pageWidth.value = sheetSizes.a4.height;
-    pageHeight.value = sheetSizes.a4.width;
-  } else {
-    pageWidth.value = sheetSizes.a4.width;
-    pageHeight.value = sheetSizes.a4.height;
-  }
-}
-
-const pageMargin = ref(false);
-
-function editPageMargin() {
-  pageMargin.value = !pageMargin.value;
-}
+const pageWidth = computed(() => {
+  return pageStore().pages[0].orientation === "portrait"
+    ? pageStore().getSheetSize(1).width
+    : pageStore().getSheetSize(1).height;
+});
+const pageHeight = computed(() => {
+  return pageStore().pages[0].orientation === "landscape"
+    ? pageStore().getSheetSize(1).width
+    : pageStore().getSheetSize(1).height;
+});
 
 function handleKeyDown(event: Event) {
   const eventAsKeyboardEvent = event as KeyboardEvent;
@@ -119,8 +105,6 @@ function setFocusOnHiddenTextarea() {
 }
 
 onMounted(() => {
-  window.addEventListener("page-orientation", changePageOrientation);
-  window.addEventListener("page-margin", editPageMargin);
   window.addEventListener(
     "sign-puddle-search-finished",
     handleSignPuddleSelectionFinished,
@@ -128,8 +112,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  window.removeEventListener("page-orientation", changePageOrientation);
-  window.removeEventListener("page-margin", editPageMargin);
   window.removeEventListener(
     "sign-puddle-search-finished",
     handleSignPuddleSelectionFinished,

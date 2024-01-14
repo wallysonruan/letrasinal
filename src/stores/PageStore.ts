@@ -1,6 +1,46 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+const sheetSizes = new Map();
+sheetSizes.set("a4", {
+  width: 790, // original size: 794px
+  height: 1100, // original size: 1123px
+});
+
+const pages = ref([
+  {
+    page: 1,
+    size: "a4",
+    orientation: "portrait",
+  },
+]);
+
+function changePageOrientation(page: number, orientation: string) {
+  const index = pages.value.findIndex((item) => item.page === page);
+  if (index !== -1) {
+    pages.value[index].orientation = orientation;
+  }
+}
+
+function getPageOrientation(page: number) {
+  const index = pages.value.findIndex((item) => item.page === page);
+  if (index !== -1) {
+    return pages.value[index].orientation;
+  }
+}
+
+function getPageSize(page: number) {
+  const index = pages.value.findIndex((item) => item.page === page);
+  if (index !== -1) {
+    return pages.value[index].size;
+  }
+}
+
+function getSheetSize(page: number) {
+  const pageSize = getPageSize(page);
+  return sheetSizes.get(pageSize);
+}
+
 export type SignDetails = {
   fsw: string;
   words: string[];
@@ -221,8 +261,13 @@ const pageStore = defineStore({
   state: () => ({
     items: items,
     pageOnFocus: pageOnFocus,
+    pages: pages,
   }),
   actions: {
+    changePageOrientation,
+    getPageOrientation,
+    getPageSize,
+    getSheetSize,
     createSignPageItem,
     addPageItem,
     deletePageItemBeforeCaret,
