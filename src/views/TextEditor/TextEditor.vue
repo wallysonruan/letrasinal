@@ -23,11 +23,21 @@ const items = computed(() => pageStore().items);
 <style scoped lang="scss">
 .home-container {
   background-color: rgb(128, 128, 128, 0.06);
+  padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
 
   .sheets {
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
   }
 }
 
