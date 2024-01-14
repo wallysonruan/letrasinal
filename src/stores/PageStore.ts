@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-const sheetSizes = new Map();
-sheetSizes.set("a4", {
-  width: 790, // original size: 794px
-  height: 1100, // original size: 1123px
-});
-
 const pages = ref([
   {
     page: 1,
@@ -28,6 +22,18 @@ function getPageOrientation(page: number) {
     return pages.value[index].orientation;
   }
 }
+
+const pageOnFocus = ref(false);
+
+function setPageOnFocus(value: boolean) {
+  pageOnFocus.value = value;
+}
+
+const sheetSizes = new Map();
+sheetSizes.set("a4", {
+  width: 790, // original size: 794px
+  height: 1100, // original size: 1123px
+});
 
 function getPageSize(page: number) {
   const index = pages.value.findIndex((item) => item.page === page);
@@ -130,10 +136,53 @@ function deletePageItemById(id: string) {
   items.value = items.value.filter((item) => item.id !== id);
 }
 
+function movePageItemUp(id: string) {
+  const index = items.value.findIndex((item) => item.id === id);
+  if (index !== -1 && index !== 0) {
+    const item = items.value[index];
+    items.value.splice(index, 1);
+    items.value.splice(index - 1, 0, item);
+  }
+}
+
+function movePageItemDown(id: string) {
+  const index = items.value.findIndex((item) => item.id === id);
+  if (index !== -1 && index !== items.value.length - 1) {
+    const item = items.value[index];
+    items.value.splice(index, 1);
+    items.value.splice(index + 1, 0, item);
+  }
+}
+
+function moveCaretUp() {
+  movePageItemUp("caret");
+}
+
+function moveCaretDown() {
+  movePageItemDown("caret");
+}
+
 function deletePageItemBeforeCaret() {
   const index = items.value.findIndex((item) => item.id === "caret");
   if (index !== -1 && index !== 0) {
     items.value.splice(index - 1, 1);
+  }
+}
+
+function placeCaretBeforeItemById(id: string) {
+  const caretIndex = items.value.findIndex((item) => item.id === "caret");
+  let targetIndex = items.value.findIndex((item) => item.id === id);
+
+  if (caretIndex !== -1 && targetIndex !== -1) {
+    const caretItem = items.value[caretIndex];
+    // Remove the caret item from its current position
+    items.value.splice(caretIndex, 1);
+    // If the caret item was before the target item, decrement the target index
+    if (caretIndex < targetIndex) {
+      targetIndex--;
+    }
+    // Insert the caret item before the target item
+    items.value.splice(targetIndex, 0, caretItem);
   }
 }
 
@@ -232,30 +281,6 @@ function addLongSpace(itemId: string = "caret") {
   addPageItem(spacePageItem, itemId);
 }
 
-function moveCaretUp() {
-  const index = items.value.findIndex((item) => item.id === "caret");
-  if (index !== -1 && index !== 0) {
-    const item = items.value[index];
-    items.value.splice(index, 1);
-    items.value.splice(index - 1, 0, item);
-  }
-}
-
-function moveCaretDown() {
-  const index = items.value.findIndex((item) => item.id === "caret");
-  if (index !== -1 && index !== items.value.length - 1) {
-    const item = items.value[index];
-    items.value.splice(index, 1);
-    items.value.splice(index + 1, 0, item);
-  }
-}
-
-const pageOnFocus = ref(false);
-
-function setPageOnFocus(value: boolean) {
-  pageOnFocus.value = value;
-}
-
 const pageStore = defineStore({
   id: "pageStore",
   state: () => ({
@@ -264,14 +289,23 @@ const pageStore = defineStore({
     pages: pages,
   }),
   actions: {
+    // Page actions
     changePageOrientation,
     getPageOrientation,
     getPageSize,
+    setPageOnFocus,
+    // Shet actions
     getSheetSize,
+    // Page item actions
     createSignPageItem,
     addPageItem,
-    deletePageItemBeforeCaret,
     deletePageItemById,
+    movePageItemUp,
+    movePageItemDown,
+    moveCaretUp,
+    moveCaretDown,
+    placeCaretBeforeItemById,
+    deletePageItemBeforeCaret,
     addComma,
     addPeriod,
     addQuestionMark,
@@ -281,9 +315,6 @@ const pageStore = defineStore({
     addColon,
     addSpace,
     addLongSpace,
-    setPageOnFocus,
-    moveCaretUp,
-    moveCaretDown,
   },
 });
 

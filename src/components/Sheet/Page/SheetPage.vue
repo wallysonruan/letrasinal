@@ -117,7 +117,13 @@ function setFocusOnHiddenTextarea() {
     @touchstart="setFocusOnHiddenTextarea"
   >
     <div class="page-content">
-      <PageItem :item="word" v-for="(word, index) in props.text" :key="index" />
+      <PageItem
+        @click="pageStore().placeCaretBeforeItemById(word.id)"
+        @touchstart="pageStore().placeCaretBeforeItemById(word.id)"
+        :item="word"
+        v-for="(word, index) in props.text"
+        :key="index"
+      />
     </div>
     <textarea
       class="hidden-textarea"
