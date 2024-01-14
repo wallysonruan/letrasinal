@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import PageSheet from "@/components/Sheet/Page/SheetPage.vue";
-import ToolBar from "@/components/ToolBar/ToolBar.vue";
-import SignPuddleSearch from "@/components/Sheet/SignPuddleSearch/SignPuddleSearch.vue";
 import TextEditorDrawer from ".//TextEditorDrawer/TextEditorDrawer.vue";
 
 import pageStore from "@/stores/PageStore";
@@ -17,7 +15,6 @@ const items = computed(() => pageStore().items);
     <div class="sheets">
       <PageSheet :text="items" />
     </div>
-    <SignPuddleSearch />
   </div>
 </template>
 <style scoped lang="scss">
