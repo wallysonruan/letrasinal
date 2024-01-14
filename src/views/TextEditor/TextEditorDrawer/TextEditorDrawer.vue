@@ -8,6 +8,9 @@ import LogoItem from "@/components/common/Logo/LogoItem.vue";
 
 const drawer = ref(true);
 const rail = ref(true);
+const closeAllOnDrawerClose = computed(() => {
+  return rail.value === true ? "display: none;" : "display: block;";
+});
 const chevronDirection = computed(() => {
   return rail.value ? "mdi-chevron-right" : "mdi-chevron-left";
 });
@@ -40,8 +43,9 @@ const chevronDirection = computed(() => {
             title="Configurações da Página"
           ></v-list-item>
         </template>
-
-        <DrawerPageOptions />
+        <div :style="closeAllOnDrawerClose">
+          <DrawerPageOptions />
+        </div>
       </v-list-group>
 
       <v-divider></v-divider>
@@ -55,33 +59,35 @@ const chevronDirection = computed(() => {
           ></v-list-item>
         </template>
 
-        <v-list-group value="signpuddle">
-          <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" title="SignPuddle">
-              <template v-slot:prepend>
-                <v-icon>
-                  <img
-                    class="sp-btn"
-                    width="25"
-                    src="../../../assets/sign-puddle-icon.png"
-                    alt="SignPuddle"
-                  />
-                </v-icon>
-              </template>
-            </v-list-item>
-          </template>
-          <DrawerSignPuddleSearch />
-        </v-list-group>
+        <div :style="closeAllOnDrawerClose">
+          <v-list-group value="signpuddle">
+            <template v-slot:activator="{ props }">
+              <v-list-item v-bind="props" title="SignPuddle">
+                <template v-slot:prepend>
+                  <v-icon>
+                    <img
+                      class="sp-btn"
+                      width="25"
+                      src="../../../assets/sign-puddle-icon.png"
+                      alt="SignPuddle"
+                    />
+                  </v-icon>
+                </template>
+              </v-list-item>
+            </template>
+            <DrawerSignPuddleSearch />
+          </v-list-group>
 
-        <v-list-group value="fsw">
-          <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" title="Formal SignWriting" disabled>
-              <template v-slot:prepend>
-                <div :style="'margin-right: 1.5rem;'">FSW</div>
-              </template>
-            </v-list-item>
-          </template>
-        </v-list-group>
+          <v-list-group value="fsw">
+            <template v-slot:activator="{ props }">
+              <v-list-item v-bind="props" title="Formal SignWriting" disabled>
+                <template v-slot:prepend>
+                  <div :style="'margin-right: 1.5rem;'">FSW</div>
+                </template>
+              </v-list-item>
+            </template>
+          </v-list-group>
+        </div>
       </v-list-group>
 
       <v-divider></v-divider>
@@ -95,6 +101,7 @@ const chevronDirection = computed(() => {
             title="Imprimir"
           ></v-list-item>
         </template>
+        <div :style="closeAllOnDrawerClose"></div>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
