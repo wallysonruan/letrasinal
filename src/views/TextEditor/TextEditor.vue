@@ -8,17 +8,17 @@ import { computed } from "vue";
 const items = computed(() => pageStore().items);
 </script>
 <template>
-  <div class="home-container">
+  <div class="text-editor-container">
     <div class="no-printable">
       <TextEditorDrawer />
     </div>
-    <div class="sheets">
+    <div class="sheets-container">
       <PageSheet :text="items" />
     </div>
   </div>
 </template>
 <style scoped lang="scss">
-.home-container {
+.text-editor-container {
   background-color: rgb(128, 128, 128, 0.06);
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -29,7 +29,7 @@ const items = computed(() => pageStore().items);
   width: 100%;
   height: 100%;
 
-  .sheets {
+  .sheets-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,10 +39,10 @@ const items = computed(() => pageStore().items);
 }
 
 @media print {
-  .home-container {
+  .text-editor-container {
     padding: 0% !important;
 
-    .sheets {
+    .sheets-container {
       margin: 0% !important;
     }
   }

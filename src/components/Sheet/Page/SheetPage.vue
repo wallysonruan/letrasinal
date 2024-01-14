@@ -4,11 +4,11 @@ import type { PageItemType } from "../../../stores/PageStore";
 import pageStore from "../../../stores/PageStore";
 import PageItem from "../PageItem/PageItem.vue";
 
-type PageSheetProps = {
+type PagepageProps = {
   text: PageItemType[];
 };
 
-const props = defineProps<PageSheetProps>();
+const props = defineProps<PagepageProps>();
 
 const pageWidth = computed(() => {
   return pageStore().pages[0].orientation === "portrait"
@@ -101,8 +101,8 @@ function handleInput(event: Event) {
 }
 
 function setFocusOnHiddenTextarea() {
-  const sheetContainer = document.querySelector(".sheet-container");
-  const textarea = sheetContainer?.querySelector("textarea");
+  const pageContainer = document.querySelector(".page-container");
+  const textarea = pageContainer?.querySelector("textarea");
 
   if (textarea) {
     textarea.focus();
@@ -111,18 +111,13 @@ function setFocusOnHiddenTextarea() {
 </script>
 <template>
   <div
-    class="sheet-container"
+    class="page-container"
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
     @click="setFocusOnHiddenTextarea"
     @touchstart="setFocusOnHiddenTextarea"
   >
-    <div class="sheet-content">
-      <PageItem
-        class="sheet-item"
-        :item="word"
-        v-for="(word, index) in props.text"
-        :key="index"
-      />
+    <div class="page-content">
+      <PageItem :item="word" v-for="(word, index) in props.text" :key="index" />
     </div>
     <textarea
       class="hidden-textarea"
@@ -131,12 +126,12 @@ function setFocusOnHiddenTextarea() {
       @focus="pageStore().setPageOnFocus(true)"
       @focusout="pageStore().setPageOnFocus(false)"
     >
-      <!-- Hidden. It's here just to get focus, toggle mobile virtual keyboard, and have its Events redirected to SheetPage. -->
+      <!-- Hidden. It's here just to get focus, toggle mobile virtual keyboard, and have its Events redirected to pagePage. -->
     </textarea>
   </div>
 </template>
 <style scoped lang="scss">
-.sheet-container {
+.page-container {
   position: relative;
   background-color: white;
   border: 1px solid rgb(0, 0, 0, 0.2);
@@ -150,7 +145,7 @@ function setFocusOnHiddenTextarea() {
     height: 0%;
   }
 
-  .sheet-content {
+  .page-content {
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -170,7 +165,7 @@ function setFocusOnHiddenTextarea() {
 }
 
 @media print {
-  .sheet-container {
+  .page-container {
     border: none !important;
   }
 }
