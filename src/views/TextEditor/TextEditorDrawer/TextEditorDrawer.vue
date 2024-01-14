@@ -4,6 +4,7 @@ import { ref } from "vue";
 
 import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
 import DrawerSignPuddleSearch from "./DrawerSignPuddleSearch/DrawerSignPuddleSearch.vue";
+import LogoItem from "@/components/common/Logo/LogoItem.vue";
 
 const drawer = ref(true);
 const rail = ref(true);
@@ -19,7 +20,7 @@ const chevronDirection = computed(() => {
     @click="rail = false"
     width="320"
   >
-    <v-list-item title="LetraSinal">
+    <v-list-item>
       <template v-slot:append>
         <v-btn
           variant="text"
@@ -27,6 +28,7 @@ const chevronDirection = computed(() => {
           @click.stop="rail = !rail"
         ></v-btn>
       </template>
+      <LogoItem />
     </v-list-item>
 
     <v-list density="compact" nav>
