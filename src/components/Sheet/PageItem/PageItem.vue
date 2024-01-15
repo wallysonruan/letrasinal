@@ -10,6 +10,7 @@ import SignPunctuation from "../../common/SignPunctuation/SignPunctuation.vue";
 import PunctuationComponent from "../../common/PunctuationComponent/PunctuationComponent.vue";
 import CaretComponent from "@/components/common/CaretComponent/CaretComponent.vue";
 import NumberComponent from "@/components/common/NumberComponent/NumberComponent.vue";
+import SignColumn from "@/components/common/SignColumn/SignColumn.vue";
 
 type PageItemProps = {
   item: PageItemType;
@@ -18,23 +19,24 @@ const props = defineProps<PageItemProps>();
 </script>
 <template>
   <div class="page-item" :id="props.item.id">
-    <SignComponent
-      v-if="props.item.type === 'sign'"
-      :sign="props.item.details as SignDetails"
-    />
-    <SignPunctuation
-      v-else-if="props.item.type === 'signPunctuation'"
-      :sign="props.item.details as SignDetails"
-    />
-    <PunctuationComponent
-      v-else-if="props.item.type === 'punctuation'"
-      :type="props.item.details as PunctuationDetails"
-    />
+    <SignColumn v-if="props.item.type === 'sign'">
+      <SignComponent :sign="props.item.details as SignDetails" />
+    </SignColumn>
+    <!---->
+    <SignColumn v-else-if="props.item.type === 'signPunctuation'">
+      <SignPunctuation :sign="props.item.details as SignDetails" />
+    </SignColumn>
+    <!---->
+    <SignColumn v-else-if="props.item.type === 'punctuation'">
+      <PunctuationComponent :type="props.item.details as PunctuationDetails" />
+    </SignColumn>
+    <!---->
     <CaretComponent v-else-if="props.item.type === 'caret'" />
-    <NumberComponent
-      v-else-if="props.item.type === 'number'"
-      :number="props.item.details as NumberDetails"
-    />
+    <!---->
+    <SignColumn v-else-if="props.item.type === 'number'">
+      <NumberComponent :number="props.item.details as NumberDetails" />
+    </SignColumn>
+    <!---->
   </div>
 </template>
 <style scoped lang="scss">
