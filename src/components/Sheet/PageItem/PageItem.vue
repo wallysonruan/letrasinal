@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type {
-  PageItemType,
-  PunctuationDetails,
-  SignDetails,
-  TextDetails,
+import {
+  type PageItemType,
+  type PunctuationDetails,
+  type SignDetails,
+  type NumberDetails,
 } from "../../../stores/PageStore";
 import SignComponent from "../../common/SignComponent/SignComponent.vue";
 import SignPunctuation from "../../common/SignPunctuation/SignPunctuation.vue";
@@ -33,7 +33,7 @@ const props = defineProps<PageItemProps>();
     <CaretComponent v-else-if="props.item.type === 'caret'" />
     <NumberComponent
       v-else-if="props.item.type === 'number'"
-      :number="props.item.details as TextDetails"
+      :number="props.item.details as NumberDetails"
     />
   </div>
 </template>
