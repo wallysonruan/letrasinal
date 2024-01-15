@@ -3,11 +3,13 @@ import type {
   PageItemType,
   PunctuationDetails,
   SignDetails,
+  TextDetails,
 } from "../../../stores/PageStore";
 import SignComponent from "../../common/SignComponent/SignComponent.vue";
 import SignPunctuation from "../../common/SignPunctuation/SignPunctuation.vue";
 import PunctuationComponent from "../../common/PunctuationComponent/PunctuationComponent.vue";
 import CaretComponent from "@/components/common/CaretComponent/CaretComponent.vue";
+import NumberComponent from "@/components/common/NumberComponent/NumberComponent.vue";
 
 type PageItemProps = {
   item: PageItemType;
@@ -29,6 +31,10 @@ const props = defineProps<PageItemProps>();
       :type="props.item.details as PunctuationDetails"
     />
     <CaretComponent v-else-if="props.item.type === 'caret'" />
+    <NumberComponent
+      v-else-if="props.item.type === 'number'"
+      :number="props.item.details as TextDetails"
+    />
   </div>
 </template>
 <style scoped lang="scss">

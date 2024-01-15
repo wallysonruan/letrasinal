@@ -60,6 +60,10 @@ export type TextDetails = {
   text: string;
 };
 
+export type NumberDetails = {
+  number: string;
+};
+
 type ParagraphDetails = {
   text: string;
 };
@@ -77,7 +81,8 @@ type PageItemTypes =
   | "text"
   | "paragraph"
   | "punctuation"
-  | "caret";
+  | "caret"
+  | "number";
 
 export type PageItemType = {
   id: string;
@@ -87,7 +92,8 @@ export type PageItemType = {
     | SignParagraphDetails
     | TextDetails
     | ParagraphDetails
-    | PunctuationDetails;
+    | PunctuationDetails
+    | NumberDetails;
 };
 
 const items = ref<PageItemType[]>([]);
@@ -292,6 +298,17 @@ function addLongSpace(itemId: string = "caret") {
   addPageItem(spacePageItem, itemId);
 }
 
+function addNumber(number: string, itemId: string = "caret") {
+  const numberPageItem: PageItemType = {
+    id: generateRandomId(),
+    type: "number",
+    details: {
+      number: number,
+    },
+  };
+  addPageItem(numberPageItem, itemId);
+}
+
 const pageStore = defineStore({
   id: "pageStore",
   state: () => ({
@@ -327,6 +344,7 @@ const pageStore = defineStore({
     addColon,
     addSpace,
     addLongSpace,
+    addNumber,
   },
 });
 

@@ -70,6 +70,10 @@ function handleInput(event: Event) {
     event.preventDefault();
   }
 
+  if (input && /[0-9]/.test(input)) {
+    pageStore().addNumber(input);
+  }
+
   switch (input) {
     case " ":
       pageStore().addSpace();
