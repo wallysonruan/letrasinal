@@ -186,6 +186,17 @@ function placeCaretBeforeItemById(id: string) {
   }
 }
 
+function placeCaretAtTheEnd() {
+  const caretIndex = items.value.findIndex((item) => item.id === "caret");
+  if (caretIndex !== -1) {
+    const caretItem = items.value[caretIndex];
+    // Remove the caret item from its current position
+    items.value.splice(caretIndex, 1);
+    // Insert the caret item at the end
+    items.value.push(caretItem);
+  }
+}
+
 enum PunctuationFsw {
   Comma = "S38700", // , S38700463x496 Source: Escrita de Sinais Sem Mistério, page 185.
   Period = "S38800", // . S38800464x496  Source: Escrita de Sinais Sem Mistério, page 158.
@@ -306,6 +317,7 @@ const pageStore = defineStore({
     moveCaretDown,
     placeCaretBeforeItemById,
     deletePageItemBeforeCaret,
+    placeCaretAtTheEnd,
     addComma,
     addPeriod,
     addQuestionMark,

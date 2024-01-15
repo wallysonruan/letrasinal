@@ -115,6 +115,7 @@ function setFocusOnHiddenTextarea() {
     :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
     @click="setFocusOnHiddenTextarea"
     @touchstart="setFocusOnHiddenTextarea"
+    @dblclick="pageStore().placeCaretAtTheEnd"
   >
     <div class="page-content">
       <PageItem
