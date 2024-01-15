@@ -12,3 +12,8 @@ const props = defineProps<NumberComponentProps>();
     <p>{{ props.number.number }}</p>
   </div>
 </template>
+<style scoped lang="scss">
+.number-component {
+  text-align: center;
+}
+</style>
