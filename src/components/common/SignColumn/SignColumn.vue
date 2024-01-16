@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { onMounted, onUnmounted } from "vue";
 
 import SignToolBox from "./SignToolBox/SignToolBox.vue";
-import type { ColumnTypes } from "../../../stores/pageStore";
+import type { ColumnTypes } from "@/stores/PageStore";
 
 type SignColumnProps = {
   itemId: string;
@@ -12,10 +11,10 @@ type SignColumnProps = {
 
 const props = defineProps<SignColumnProps>();
 
-let pressTimer: number | null = null;
+let pressTimer: NodeJS.Timeout | null = null;
 const showToolbox = ref<"none" | "block">("none");
 
-function setToolboxDisplay(mode: string) {
+function setToolboxDisplay(mode: "none" | "block") {
   showToolbox.value = mode;
 }
 
