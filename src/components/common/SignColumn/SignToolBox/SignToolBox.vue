@@ -1,14 +1,30 @@
 <script setup lang="ts">
-import pageStore from "../../../../stores/PageStore";
+import pageStore, { type PageItemTypes } from "../../../../stores/PageStore";
 
 type SignToolBoxProps = {
   itemId: string;
+  pageItemType: PageItemTypes;
 };
 
 const props = defineProps<SignToolBoxProps>();
+
+function styleTop(type: PageItemTypes) {
+  switch (type) {
+    case "signPunctuation":
+      return "top: -170%;";
+    case "number":
+      return "top: -100%;";
+    default:
+      return "top: -60%;";
+  }
+}
 </script>
 <template>
-  <v-sheet class="toolbox-container" lines="one">
+  <v-sheet
+    class="toolbox-container"
+    lines="one"
+    :style="styleTop(props.pageItemType)"
+  >
     <div class="toolbox">
       <v-btn
         class="btn left"
@@ -43,7 +59,6 @@ const props = defineProps<SignToolBoxProps>();
   position: absolute;
   width: 100%;
   max-height: 2rem;
-  top: -60%;
   border-radius: 0.5rem;
 
   .toolbox {

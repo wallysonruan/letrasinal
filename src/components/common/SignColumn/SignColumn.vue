@@ -2,11 +2,12 @@
 import { ref } from "vue";
 
 import SignToolBox from "./SignToolBox/SignToolBox.vue";
-import type { ColumnTypes } from "@/stores/PageStore";
+import type { ColumnTypes, PageItemTypes } from "@/stores/PageStore";
 
 type SignColumnProps = {
   itemId: string;
   column: ColumnTypes;
+  pageItemType: PageItemTypes;
 };
 
 const props = defineProps<SignColumnProps>();
@@ -50,7 +51,11 @@ function columnStyle() {
     @mousedown="handlePressStart"
     @mouseup="handlePressEnd"
   >
-    <SignToolBox :style="`display: ${showToolbox};`" :item-id="props.itemId" />
+    <SignToolBox
+      :style="`display: ${showToolbox};`"
+      :item-id="props.itemId"
+      :page-item-type="props.pageItemType"
+    />
     <!--  -->
     <div class="sign-column-item" :style="columnStyle()">
       <slot></slot>

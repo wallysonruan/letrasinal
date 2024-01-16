@@ -23,6 +23,7 @@ const props = defineProps<PageItemProps>();
       v-if="props.item.type === 'sign'"
       :item-id="props.item.id"
       :column="(props.item.details as SignDetails).column"
+      :page-item-type="props.item.type"
     >
       <SignComponent :sign="props.item.details as SignDetails" />
     </SignColumn>
@@ -31,6 +32,7 @@ const props = defineProps<PageItemProps>();
       v-else-if="props.item.type === 'signPunctuation'"
       :item-id="props.item.id"
       :column="(props.item.details as SignDetails).column"
+      :page-item-type="props.item.type"
     >
       <SignPunctuation :sign="props.item.details as SignDetails" />
     </SignColumn>
@@ -39,6 +41,7 @@ const props = defineProps<PageItemProps>();
       v-else-if="props.item.type === 'punctuation'"
       :item-id="props.item.id"
       :column="(props.item.details as PunctuationDetails).column"
+      :page-item-type="props.item.type"
     >
       <PunctuationComponent :type="props.item.details as PunctuationDetails" />
     </SignColumn>
@@ -49,6 +52,7 @@ const props = defineProps<PageItemProps>();
       v-else-if="props.item.type === 'number'"
       :item-id="props.item.id"
       :column="(props.item.details as NumberDetails).column"
+      :page-item-type="props.item.type"
     >
       <NumberComponent :number="props.item.details as NumberDetails" />
     </SignColumn>

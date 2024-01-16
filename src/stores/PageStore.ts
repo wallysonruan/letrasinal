@@ -79,7 +79,7 @@ export type PunctuationDetails = {
   column: ColumnTypes;
 };
 
-type PageItemTypes =
+export type PageItemTypes =
   | "sign"
   | "signParagraph"
   | "signPunctuation"
