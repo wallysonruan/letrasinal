@@ -13,16 +13,16 @@ type SignColumnProps = {
 const props = defineProps<SignColumnProps>();
 
 let pressTimer: NodeJS.Timeout | null = null;
-const showToolbox = ref<"none" | "block">("none");
+const showToolbox = ref<boolean>(false);
 
-function setToolboxDisplay(mode: "none" | "block") {
+function setToolboxDisplay(mode: boolean) {
   showToolbox.value = mode;
 }
 
 function handlePressStart() {
   pressTimer = setTimeout(() => {
-    setToolboxDisplay("block");
-  }, 1000); // 2000ms = 2 seconds
+    setToolboxDisplay(true);
+  }, 1500); // 1500ms = 1.5 seconds
 }
 
 function handlePressEnd() {
@@ -52,9 +52,10 @@ function columnStyle() {
     @mouseup="handlePressEnd"
   >
     <SignToolBox
-      :style="`display: ${showToolbox};`"
+      :active="showToolbox"
       :item-id="props.itemId"
       :page-item-type="props.pageItemType"
+      @closeToolbox="setToolboxDisplay(false)"
     />
     <!--  -->
     <div class="sign-column-item" :style="columnStyle()">

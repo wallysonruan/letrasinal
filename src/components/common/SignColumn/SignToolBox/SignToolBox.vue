@@ -4,9 +4,11 @@ import pageStore, { type PageItemTypes } from "../../../../stores/PageStore";
 type SignToolBoxProps = {
   itemId: string;
   pageItemType: PageItemTypes;
+  active: boolean;
 };
 
 const props = defineProps<SignToolBoxProps>();
+const emit = defineEmits(["closeToolbox"]);
 
 function styleTop(type: PageItemTypes) {
   switch (type) {
@@ -18,9 +20,14 @@ function styleTop(type: PageItemTypes) {
       return "top: -60%;";
   }
 }
+
+function toggleToolbox() {
+  emit("closeToolbox");
+}
 </script>
 <template>
   <v-sheet
+    v-if="props.active"
     class="toolbox-container"
     lines="one"
     :style="styleTop(props.pageItemType)"
@@ -50,6 +57,17 @@ function styleTop(type: PageItemTypes) {
         @click="pageStore().changePageItemColumn(props.itemId, 'right')"
         >D</v-btn
       >
+      <div class="btn close-container">
+        <v-btn
+          class="btn close"
+          variant="text"
+          density="compact"
+          block
+          @click="toggleToolbox"
+        >
+          X
+        </v-btn>
+      </div>
     </div>
   </v-sheet>
 </template>
@@ -62,22 +80,35 @@ function styleTop(type: PageItemTypes) {
   border-radius: 0.5rem;
 
   .toolbox {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-  }
 
-  .btn {
-    color: white;
-    &.left {
-      grid-column: 1;
-    }
+    .btn {
+      color: white;
+      &.left {
+        grid-column: 1;
+      }
 
-    &.middle {
-      grid-column: 2;
-    }
+      &.middle {
+        grid-column: 2;
+      }
 
-    &.right {
-      grid-column: 3;
+      &.right {
+        grid-column: 3;
+      }
+
+      &.close-container {
+        position: absolute;
+        top: -25px;
+        right: 16px;
+        width: 1rem;
+        height: 1rem;
+
+        .close {
+          background-color: red;
+        }
+      }
     }
   }
 }

@@ -65,8 +65,8 @@ const props = defineProps<PageItemProps>();
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  //
   max-width: 20rem;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 600px) {
