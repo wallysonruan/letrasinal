@@ -3,11 +3,10 @@ import { getSignsByWord } from "../../../../utils/client/client";
 import { ref } from "vue";
 import { computed } from "vue";
 
-import SelectableItem from "../../../../components/common/SelectableItem/SelectableItem.vue";
-
 import type { PageItemType } from "../../../../stores/PageStore";
 import pageStore from "../../../../stores/PageStore";
-import SignWriting from "../../../../components/common/SignWriting/SignWriting.vue";
+import SignDisplayGrid from "../../../../components/common/SignDisplayGrid/SignDisplayGrid.vue";
+import SignPuddleSearchBar from "./SignPuddleSearchBar/SignPuddleSearchBar.vue";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -31,18 +30,12 @@ async function load({ done }) {
   done(InfiniteScrollLoadStatus.NO_MORE_CONTENT);
 }
 
-type SignPuddleResult = {
-  created_at: string;
-  detail: Array<string>;
-  id: string;
-  sign: string;
-  signtext: string;
-  source: string;
-  terms: Array<string>;
-  text: string;
-  updated_at: string;
-  user: string;
-};
+async function getSigns(input: string) {
+  await getSignsByWord(input).then((res: unknown) => {
+    const payload = res as SignPuddlePayload;
+    signsFromSignPuddle.value.push(...processPayload(payload));
+  });
+}
 
 type SignPuddlePayload = {
   meta: {
@@ -60,29 +53,26 @@ function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
   return results.filter((result) => result.sign.length > 0);
 }
 
-async function getSigns() {
-  await getSignsByWord(input.value).then((res: unknown) => {
-    const payload = res as SignPuddlePayload;
-    signsFromSignPuddle.value.push(...processPayload(payload));
-  });
-}
-
-function findResultById(
-  id: string,
-  results: SignPuddleResult[],
-): SignPuddleResult {
-  return results.find((result) => {
-    return result.id === id;
-  })!;
-}
+type SignPuddleResult = {
+  created_at: string;
+  detail: Array<string>;
+  id: string;
+  sign: string;
+  signtext: string;
+  source: string;
+  terms: Array<string>;
+  text: string;
+  updated_at: string;
+  user: string;
+};
 
 function returnPageItem(result: SignPuddleResult): PageItemType {
   return pageStore().createSignPageItem("sign", result.sign, result.terms);
 }
 
-async function handleSearch() {
+async function handleSearch(input: string) {
   signsFromSignPuddle.value = [];
-  await getSigns();
+  await getSigns(input);
 }
 
 function removeAllResultsNodes() {
@@ -94,7 +84,6 @@ function removeAllResultsNodes() {
 }
 
 function clearSearchDialog() {
-  input.value = "";
   signsFromSignPuddle.value = [];
   selected.value = [];
   removeAllResultsNodes();
@@ -102,15 +91,15 @@ function clearSearchDialog() {
 
 function handleOk() {
   selected.value.forEach((selection) => {
-    pageStore().addPageItem(
-      returnPageItem(findResultById(selection, filteredSigns.value)),
+    const pageItem = signPuddleResultAsPageItem.value.find(
+      (item) => item.id === selection.id,
     );
+    pageStore().addPageItem(pageItem!!);
   });
 
   clearSearchDialog();
 }
 
-const input = ref("");
 const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
 
 function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
@@ -123,43 +112,42 @@ function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
 }
 
 const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
-const filteredSigns = computed(() =>
-  removeSignsWithDuplicateFswSign(signsFromSignPuddle.value),
-);
 
-const selected = ref<string[]>([]);
+const signPuddleResultAsPageItem = computed(() => {
+  const filteredSigns: SignPuddleResult[] = removeSignsWithDuplicateFswSign(
+    signsFromSignPuddle.value,
+  );
+  let signs: PageItemType[] = [];
+
+  filteredSigns.forEach((sign) => {
+    signs.push(returnPageItem(sign));
+  });
+
+  return signs;
+});
+
+const selected = ref<PageItemType[]>([]);
+
+function getSelected(selectedSigns: PageItemType[]) {
+  selected.value = selectedSigns;
+}
 </script>
 <template>
   <v-sheet class="mx-auto spuddle-search-container">
-    <div>
-      <v-text-field
-        v-model="input"
-        label="Sinal"
-        variant="solo"
-        type="search"
-        class="input-sign"
-        :rules="rules"
-        @keydown.enter="handleSearch"
-        append-inner-icon="mdi-magnify"
-        @click:append-inner="handleSearch"
-      >
-      </v-text-field>
-    </div>
+    <SignPuddleSearchBar
+      :rules="rules"
+      :onSearch="handleSearch"
+    ></SignPuddleSearchBar>
     <div class="search-list">
       <v-infinite-scroll
         v-if="signsFromSignPuddle.length > 0"
         @load="load"
         class="infinite-scroller"
       >
-        <ul class="search-results">
-          <template v-for="(sign, index) in filteredSigns" :key="index">
-            <li class="result">
-              <SelectableItem :value="sign.id" v-model="selected">
-                <SignWriting :fsw="sign.sign"></SignWriting>
-              </SelectableItem>
-            </li>
-          </template>
-        </ul>
+        <SignDisplayGrid
+          :signs="signPuddleResultAsPageItem"
+          @onSelect="getSelected"
+        ></SignDisplayGrid>
         <template v-slot:load-more="{ props }">
           <v-btn
             icon="mdi-refresh"
@@ -208,10 +196,6 @@ const selected = ref<string[]>([]);
   max-width: 35rem;
   padding: 0.5rem 0;
 
-  .input-sign {
-    margin-bottom: 0.5rem;
-  }
-
   .search-list {
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
@@ -225,30 +209,11 @@ const selected = ref<string[]>([]);
     .infinite-scroller {
       overflow: unset;
     }
-
-    .search-results {
-      list-style-type: none;
-      //
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      column-gap: 0.5rem;
-      row-gap: 0.5rem;
-    }
   }
   .buttons-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .spuddle-search-container {
-    .search-list {
-      .search-results {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
   }
 }
 </style>
