@@ -19,21 +19,37 @@ const props = defineProps<PageItemProps>();
 </script>
 <template>
   <div class="page-item" :id="props.item.id">
-    <SignColumn v-if="props.item.type === 'sign'">
+    <SignColumn
+      v-if="props.item.type === 'sign'"
+      :item-id="props.item.id"
+      :column="(props.item.details as SignDetails).column"
+    >
       <SignComponent :sign="props.item.details as SignDetails" />
     </SignColumn>
     <!---->
-    <SignColumn v-else-if="props.item.type === 'signPunctuation'">
+    <SignColumn
+      v-else-if="props.item.type === 'signPunctuation'"
+      :item-id="props.item.id"
+      :column="(props.item.details as SignDetails).column"
+    >
       <SignPunctuation :sign="props.item.details as SignDetails" />
     </SignColumn>
     <!---->
-    <SignColumn v-else-if="props.item.type === 'punctuation'">
+    <SignColumn
+      v-else-if="props.item.type === 'punctuation'"
+      :item-id="props.item.id"
+      :column="(props.item.details as PunctuationDetails).column"
+    >
       <PunctuationComponent :type="props.item.details as PunctuationDetails" />
     </SignColumn>
     <!---->
     <CaretComponent v-else-if="props.item.type === 'caret'" />
     <!---->
-    <SignColumn v-else-if="props.item.type === 'number'">
+    <SignColumn
+      v-else-if="props.item.type === 'number'"
+      :item-id="props.item.id"
+      :column="(props.item.details as NumberDetails).column"
+    >
       <NumberComponent :number="props.item.details as NumberDetails" />
     </SignColumn>
     <!---->

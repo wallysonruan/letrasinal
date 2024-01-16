@@ -47,9 +47,12 @@ function getSheetSize(page: number) {
   return sheetSizes.get(pageSize);
 }
 
+export type ColumnTypes = "left" | "middle" | "right";
+
 export type SignDetails = {
   fsw: string;
   words: string[];
+  column: ColumnTypes;
 };
 
 type SignParagraphDetails = {
@@ -62,6 +65,7 @@ export type TextDetails = {
 
 export type NumberDetails = {
   number: string;
+  column: ColumnTypes;
 };
 
 type ParagraphDetails = {
@@ -72,6 +76,7 @@ type PunctuationTypes = "space" | "long-space";
 
 export type PunctuationDetails = {
   type: PunctuationTypes;
+  column: ColumnTypes;
 };
 
 type PageItemTypes =
@@ -117,6 +122,7 @@ function createSignPageItem(
     details: {
       fsw: fsw,
       words: words,
+      column: "middle",
     },
   };
 }
@@ -203,6 +209,22 @@ function placeCaretAtTheEnd() {
   }
 }
 
+function changePageItemColumn(id: string, column: ColumnTypes) {
+  const index = items.value.findIndex((item) => item.id === id);
+  if (index !== -1) {
+    (items.value[index].details as SignDetails).column = column;
+  }
+
+  replacePageItemById(id, items.value[index]);
+}
+
+function replacePageItemById(id: string, newItem: PageItemType) {
+  const index = items.value.findIndex((item) => item.id === id);
+  if (index !== -1) {
+    items.value.splice(index, 1, newItem);
+  }
+}
+
 enum PunctuationFsw {
   Comma = "S38700", // , S38700463x496 Source: Escrita de Sinais Sem Mistério, page 185.
   Period = "S38800", // . S38800464x496  Source: Escrita de Sinais Sem Mistério, page 158.
@@ -282,6 +304,7 @@ function addSpace(itemId: string = "caret") {
     type: "punctuation",
     details: {
       type: "space",
+      column: "middle",
     },
   };
   addPageItem(spacePageItem, itemId);
@@ -293,6 +316,7 @@ function addLongSpace(itemId: string = "caret") {
     type: "punctuation",
     details: {
       type: "long-space",
+      column: "middle",
     },
   };
   addPageItem(spacePageItem, itemId);
@@ -304,6 +328,7 @@ function addNumber(number: string, itemId: string = "caret") {
     type: "number",
     details: {
       number: number,
+      column: "middle",
     },
   };
   addPageItem(numberPageItem, itemId);
@@ -328,6 +353,7 @@ const pageStore = defineStore({
     createSignPageItem,
     addPageItem,
     deletePageItemById,
+    changePageItemColumn,
     movePageItemUp,
     movePageItemDown,
     moveCaretUp,
