@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 type SignPuddleSearchBarProps = {
   onSearch: (input: string) => void;
-  rules: Array<(v: string) => boolean | string>;
+  rules?: Array<(v: string) => boolean | string>;
 };
 const props = defineProps<SignPuddleSearchBarProps>();
 const input = ref("");
