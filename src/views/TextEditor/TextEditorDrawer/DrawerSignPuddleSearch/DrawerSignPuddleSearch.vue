@@ -210,8 +210,7 @@ async function load({ done }) {
   }
   .buttons-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: right;
   }
 }
 </style>
