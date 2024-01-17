@@ -14,6 +14,109 @@ enum InfiniteScrollLoadStatus {
   NO_MORE_CONTENT = "empty",
   ERROR = "error",
 }
+type SignPuddleResult = {
+  created_at: string;
+  detail: Array<string>;
+  id: string;
+  sign: string;
+  signtext: string;
+  source: string;
+  terms: Array<string>;
+  text: string;
+  updated_at: string;
+  user: string;
+};
+
+type SignPuddlePayload = {
+  meta: {
+    limit: number;
+    location: string;
+    offset: number;
+    searchTime: string;
+    totalResults: number;
+  };
+  results: SignPuddleResult[];
+};
+
+function filterOutSignsWithoutFsw(
+  payload: SignPuddlePayload,
+): SignPuddleResult[] {
+  const results = payload.results;
+  return results.filter((result) => result.sign.length > 0);
+}
+
+const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
+
+async function getSigns(input: string) {
+  await getSignsByWord(input).then((res: unknown) => {
+    const payload = res as SignPuddlePayload;
+    signsFromSignPuddle.value.push(...filterOutSignsWithoutFsw(payload));
+  });
+}
+
+function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
+  let seen = new Set();
+  return signs.filter((sign) => {
+    let duplicate = seen.has(sign.sign);
+    seen.add(sign.sign);
+    return !duplicate;
+  });
+}
+
+function convertSignPuddleResultToPageItem(
+  result: SignPuddleResult,
+): PageItemType {
+  return pageStore().createSignPageItem("sign", result.sign, result.terms);
+}
+
+const signPuddleResultAsPageItem = computed(() => {
+  const filteredSigns: SignPuddleResult[] = removeSignsWithDuplicateFswSign(
+    signsFromSignPuddle.value,
+  );
+  let signs: PageItemType[] = [];
+
+  filteredSigns.forEach((sign) => {
+    signs.push(convertSignPuddleResultToPageItem(sign));
+  });
+
+  return signs;
+});
+
+function removeAllResultsNodes() {
+  const list = document.querySelector(".list-results");
+  if (list == null) {
+    return;
+  }
+  list.innerHTML = "";
+}
+
+const selected = ref<string[]>([]);
+
+function getSelected(selectedSigns: string[]) {
+  selected.value = selectedSigns;
+}
+
+function clearSearchDialog() {
+  signsFromSignPuddle.value = [];
+  selected.value = [];
+  removeAllResultsNodes();
+}
+
+async function handleSearch(input: string) {
+  signsFromSignPuddle.value = [];
+  await getSigns(input);
+}
+
+function handleOk() {
+  selected.value.forEach((selection) => {
+    const pageItem = signPuddleResultAsPageItem.value.find(
+      (item) => item.id === selection,
+    );
+    pageStore().addPageItem(pageItem!!);
+  });
+
+  clearSearchDialog();
+}
 
 /* 
 There's a typing error with this "done", unfortunatlly there's no way to type it correctly because I have no access to the required types.
@@ -29,115 +132,10 @@ async function load({ done }) {
   // await getSigns();
   done(InfiniteScrollLoadStatus.NO_MORE_CONTENT);
 }
-
-async function getSigns(input: string) {
-  await getSignsByWord(input).then((res: unknown) => {
-    const payload = res as SignPuddlePayload;
-    signsFromSignPuddle.value.push(...processPayload(payload));
-  });
-}
-
-type SignPuddlePayload = {
-  meta: {
-    limit: number;
-    location: string;
-    offset: number;
-    searchTime: string;
-    totalResults: number;
-  };
-  results: SignPuddleResult[];
-};
-
-function processPayload(payload: SignPuddlePayload): SignPuddleResult[] {
-  const results = payload.results;
-  return results.filter((result) => result.sign.length > 0);
-}
-
-type SignPuddleResult = {
-  created_at: string;
-  detail: Array<string>;
-  id: string;
-  sign: string;
-  signtext: string;
-  source: string;
-  terms: Array<string>;
-  text: string;
-  updated_at: string;
-  user: string;
-};
-
-function returnPageItem(result: SignPuddleResult): PageItemType {
-  return pageStore().createSignPageItem("sign", result.sign, result.terms);
-}
-
-async function handleSearch(input: string) {
-  signsFromSignPuddle.value = [];
-  await getSigns(input);
-}
-
-function removeAllResultsNodes() {
-  const list = document.querySelector(".list-results");
-  if (list == null) {
-    return;
-  }
-  list.innerHTML = "";
-}
-
-function clearSearchDialog() {
-  signsFromSignPuddle.value = [];
-  selected.value = [];
-  removeAllResultsNodes();
-}
-
-function handleOk() {
-  selected.value.forEach((selection) => {
-    const pageItem = signPuddleResultAsPageItem.value.find(
-      (item) => item.id === selection.id,
-    );
-    pageStore().addPageItem(pageItem!!);
-  });
-
-  clearSearchDialog();
-}
-
-const rules = [(v: string) => v.length >= 2 || "Escreva ao menos 2 letras!"];
-
-function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
-  let seen = new Set();
-  return signs.filter((sign) => {
-    let duplicate = seen.has(sign.sign);
-    seen.add(sign.sign);
-    return !duplicate;
-  });
-}
-
-const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
-
-const signPuddleResultAsPageItem = computed(() => {
-  const filteredSigns: SignPuddleResult[] = removeSignsWithDuplicateFswSign(
-    signsFromSignPuddle.value,
-  );
-  let signs: PageItemType[] = [];
-
-  filteredSigns.forEach((sign) => {
-    signs.push(returnPageItem(sign));
-  });
-
-  return signs;
-});
-
-const selected = ref<PageItemType[]>([]);
-
-function getSelected(selectedSigns: PageItemType[]) {
-  selected.value = selectedSigns;
-}
 </script>
 <template>
   <v-sheet class="mx-auto spuddle-search-container">
-    <SignPuddleSearchBar
-      :rules="rules"
-      :onSearch="handleSearch"
-    ></SignPuddleSearchBar>
+    <SignPuddleSearchBar :onSearch="handleSearch"></SignPuddleSearchBar>
     <div class="search-list">
       <v-infinite-scroll
         v-if="signsFromSignPuddle.length > 0"
