@@ -102,9 +102,19 @@ function clearSearchDialog() {
   removeAllResultsNodes();
 }
 
+const isLoading = ref(false);
+function loadingOn() {
+  isLoading.value = true;
+}
+function loadingOff() {
+  isLoading.value = false;
+}
+
 async function handleSearch(input: string) {
   signsFromSignPuddle.value = [];
+  loadingOn();
   await getSigns(input);
+  loadingOff();
 }
 
 function handleOk() {
@@ -137,6 +147,11 @@ async function load({ done }) {
   <v-sheet class="mx-auto spuddle-search-container">
     <SignPuddleSearchBar :onSearch="handleSearch"></SignPuddleSearchBar>
     <div class="search-list">
+      <v-progress-circular
+        indeterminate
+        v-if="isLoading"
+        class="loading-circular"
+      />
       <v-infinite-scroll
         v-if="signsFromSignPuddle.length > 0"
         @load="load"
@@ -171,7 +186,7 @@ async function load({ done }) {
         </template>
         <template v-slot:empty>
           <!-- <v-alert type="warning">Não há mais sinais.</v-alert> -->
-          <v-alert type="info">Paginação não implementada.</v-alert>
+          <!-- <v-alert type="info">Paginação não implementada.</v-alert> -->
         </template>
       </v-infinite-scroll>
     </div>
@@ -195,16 +210,26 @@ async function load({ done }) {
   padding: 0.5rem 0;
 
   .search-list {
+    position: relative;
+    width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
-    min-height: 10rem;
+    min-height: 20rem;
     max-height: 20rem;
     margin: 0%;
     margin-bottom: 1rem;
     padding: 0 0.5rem;
     overflow: auto;
 
+    .loading-circular {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
     .infinite-scroller {
+      width: 100%;
       overflow: unset;
     }
   }
