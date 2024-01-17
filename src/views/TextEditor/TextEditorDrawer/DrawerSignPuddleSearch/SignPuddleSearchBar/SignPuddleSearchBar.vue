@@ -7,6 +7,20 @@ type SignPuddleSearchBarProps = {
 };
 const props = defineProps<SignPuddleSearchBarProps>();
 const input = ref("");
+
+const defaultRules = [
+  (v: string) => v.length !== 0 || "Campo obrigatório",
+  ...(props.rules ?? []),
+];
+
+const valid = ref(true);
+
+function checkRulesAndSearch() {
+  valid.value = defaultRules.every(rule => rule(input.value) === true);
+  if (valid.value) {
+    props.onSearch(input.value);
+  }
+};
 </script>
 <template>
   <div>
@@ -16,10 +30,10 @@ const input = ref("");
       variant="solo"
       type="search"
       class="input-sign"
-      :rules="rules"
+      :rules="defaultRules"
       clearable
-      @keydown.enter="props.onSearch(input)"
-      @click:append-inner="props.onSearch(input)"
+      @keydown.enter="checkRulesAndSearch"
+      @click:append-inner="checkRulesAndSearch"
       append-inner-icon="mdi-magnify"
     />
   </div>
