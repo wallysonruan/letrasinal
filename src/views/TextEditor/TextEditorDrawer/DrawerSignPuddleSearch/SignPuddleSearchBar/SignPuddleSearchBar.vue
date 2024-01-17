@@ -17,11 +17,11 @@ const input = ref("");
       type="search"
       class="input-sign"
       :rules="rules"
+      clearable
       @keydown.enter="props.onSearch(input)"
       @click:append-inner="props.onSearch(input)"
       append-inner-icon="mdi-magnify"
-    >
-    </v-text-field>
+    />
   </div>
 </template>
 <style scoped lang="scss">
