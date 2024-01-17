@@ -1,25 +1,85 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-const pages = ref([
+type PageConfigurations = {
+  pageId: number;
+  size: string;
+  orientation: "portrait" | "landscape";
+  writing: {
+    writingMode: "vertical" | "horizontal";
+    direction: "ltr" | "rtl";
+  };
+};
+
+const defaultPageOrientation: PageConfigurations["orientation"] = "portrait";
+const defaultWritingMode: PageConfigurations["writing"]["writingMode"] =
+  "vertical";
+const defaultWritingDirection: PageConfigurations["writing"]["direction"] =
+  "ltr";
+const defaultWritingConfiguration: PageConfigurations["writing"] = {
+  writingMode: defaultWritingMode,
+  direction: defaultWritingDirection,
+};
+
+const pages = ref<PageConfigurations[]>([
   {
-    page: 1,
+    pageId: 1,
     size: "a4",
-    orientation: "portrait",
+    orientation: defaultPageOrientation,
+    writing: {
+      writingMode: defaultWritingMode,
+      direction: defaultWritingDirection,
+    },
   },
 ]);
 
-function changePageOrientation(page: number, orientation: string) {
-  const index = pages.value.findIndex((item) => item.page === page);
+function changePageOrientation(
+  pageId: number,
+  orientation: PageConfigurations["orientation"],
+) {
+  const index = pages.value.findIndex((page) => page.pageId === pageId);
   if (index !== -1) {
     pages.value[index].orientation = orientation;
   }
 }
 
-function getPageOrientation(page: number) {
-  const index = pages.value.findIndex((item) => item.page === page);
+function getPageOrientation(pageId: number): PageConfigurations["orientation"] {
+  const index = pages.value.findIndex((page) => page.pageId === pageId);
   if (index !== -1) {
     return pages.value[index].orientation;
+  }
+
+  return defaultPageOrientation;
+}
+
+function getWritingConfiguration(
+  pageId: number,
+): PageConfigurations["writing"] {
+  const index = pages.value.findIndex((page) => page.pageId === pageId);
+  if (index !== -1) {
+    return pages.value[index].writing;
+  }
+
+  return defaultWritingConfiguration;
+}
+
+function setWritingMode(
+  pageId: number,
+  writingMode: PageConfigurations["writing"]["writingMode"],
+) {
+  const index = pages.value.findIndex((page) => page.pageId === pageId);
+  if (index !== -1) {
+    pages.value[index].writing.writingMode = writingMode;
+  }
+}
+
+function setWritingDirection(
+  pageId: number,
+  direction: PageConfigurations["writing"]["direction"],
+) {
+  const index = pages.value.findIndex((page) => page.pageId === pageId);
+  if (index !== -1) {
+    pages.value[index].writing.direction = direction;
   }
 }
 
@@ -35,15 +95,15 @@ sheetSizes.set("a4", {
   height: 1100, // original size: 1123px
 });
 
-function getPageSize(page: number) {
-  const index = pages.value.findIndex((item) => item.page === page);
+function getPageSize(pageId: number) {
+  const index = pages.value.findIndex((item) => item.pageId === pageId);
   if (index !== -1) {
     return pages.value[index].size;
   }
 }
 
-function getSheetSize(page: number) {
-  const pageSize = getPageSize(page);
+function getSheetSize(pageId: number) {
+  const pageSize = getPageSize(pageId);
   return sheetSizes.get(pageSize);
 }
 

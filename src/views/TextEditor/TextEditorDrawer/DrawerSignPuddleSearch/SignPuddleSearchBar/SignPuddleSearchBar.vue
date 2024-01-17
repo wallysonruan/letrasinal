@@ -16,11 +16,11 @@ const defaultRules = [
 const valid = ref(true);
 
 function checkRulesAndSearch() {
-  valid.value = defaultRules.every(rule => rule(input.value) === true);
+  valid.value = defaultRules.every((rule) => rule(input.value) === true);
   if (valid.value) {
     props.onSearch(input.value);
   }
-};
+}
 </script>
 <template>
   <div>
