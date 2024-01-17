@@ -18,6 +18,7 @@ export async function get(url: string) {
 }
 
 export async function getSignsByWord(word: string) {
-  const url = `${SIGN_PUDDLE_SERVER}/puddle/sgn46/search/${word}?match=start&sort=-created_at`;
+  const inputAsUrlParam = encodeURIComponent(word);
+  const url = `${SIGN_PUDDLE_SERVER}/puddle/sgn46/search/${inputAsUrlParam}?match=start&sort=-created_at`;
   return await get(url).then((res) => res);
 }
