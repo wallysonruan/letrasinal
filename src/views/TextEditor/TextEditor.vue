@@ -5,7 +5,7 @@ import TextEditorDrawer from ".//TextEditorDrawer/TextEditorDrawer.vue";
 import pageStore from "@/stores/PageStore";
 import { computed } from "vue";
 
-const items = computed(() => pageStore().items);
+const pageText = computed(() => pageStore().getPageText(1) ?? []);
 </script>
 <template>
   <div class="text-editor-container">
@@ -13,7 +13,8 @@ const items = computed(() => pageStore().items);
       <TextEditorDrawer />
     </div>
     <div class="sheets-container">
-      <PageSheet :text="items" />
+      <br />
+      <PageSheet :text="pageText" />
     </div>
   </div>
 </template>

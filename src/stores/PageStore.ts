@@ -9,6 +9,7 @@ type PageConfigurations = {
     writingMode: "vertical" | "horizontal";
     direction: "ltr" | "rtl";
   };
+  text: PageItemType[];
 };
 
 const defaultPageOrientation: PageConfigurations["orientation"] = "portrait";
@@ -30,8 +31,14 @@ const pages = ref<PageConfigurations[]>([
       writingMode: defaultWritingMode,
       direction: defaultWritingDirection,
     },
+    text: [],
   },
 ]);
+
+pages.value[0].text.push({
+  id: "caret",
+  type: "caret",
+});
 
 function changePageOrientation(
   pageId: number,
@@ -161,11 +168,19 @@ export type PageItemType = {
     | NumberDetails;
 };
 
-const items = ref<PageItemType[]>([]);
-items.value.push({
-  id: "caret",
-  type: "caret",
-});
+function getPageText(pageId: number) {
+  const index = pages.value.findIndex((page) => page.pageId === pageId);
+  if (index !== -1) {
+    return pages.value[index].text;
+  }
+}
+
+function setPageText(pageId: number, newText: PageItemType[]) {
+  const index = pages.value.findIndex((page) => page.pageId === pageId);
+  if (index !== -1) {
+    return (pages.value[index].text = newText);
+  }
+}
 
 function generateRandomId(): string {
   return crypto.randomUUID().slice(0, 5);
@@ -189,40 +204,41 @@ function createSignPageItem(
 
 function addPageItem(newItem: PageItemType, id: string = "caret") {
   if (id === "end") {
-    items.value.push(newItem); // Insert item at the end of the array
+    pages.value[0].text.push(newItem); // Insert item at the end of the array
     return;
   }
 
   if (id === "start") {
-    items.value.unshift(newItem); // Insert item at the beginning of the array
+    pages.value[0].text.unshift(newItem); // Insert item at the beginning of the array
     return;
   }
 
-  const index = items.value.findIndex((item) => item.id === id);
+  const index = pages.value[0].text.findIndex((item) => item.id === id);
   if (index !== -1) {
-    items.value.splice(index, 0, newItem); // Insert item before the item with the given id
+    pages.value[0].text.splice(index, 0, newItem); // Insert item before the item with the given id
   }
 }
 
 function deletePageItemById(id: string) {
-  items.value = items.value.filter((item) => item.id !== id);
+  pages.value[0].text = pages.value[0].text.filter((item) => item.id !== id);
 }
 
 function movePageItemUp(id: string) {
-  const index = items.value.findIndex((item) => item.id === id);
+  const index = pages.value[0].text.findIndex((item) => item.id === id);
   if (index !== -1 && index !== 0) {
-    const item = items.value[index];
-    items.value.splice(index, 1);
-    items.value.splice(index - 1, 0, item);
+    const item = pages.value[0].text[index];
+    pages.value[0].text.splice(index, 1);
+    pages.value[0].text.splice(index - 1, 0, item);
   }
 }
 
 function movePageItemDown(id: string) {
-  const index = items.value.findIndex((item) => item.id === id);
-  if (index !== -1 && index !== items.value.length - 1) {
-    const item = items.value[index];
-    items.value.splice(index, 1);
-    items.value.splice(index + 1, 0, item);
+  const index = pages.value[0].text.findIndex((item) => item.id === id);
+
+  if (index !== -1 && index !== pages.value[0].text.length - 1) {
+    const item = pages.value[0].text[index];
+    pages.value[0].text.splice(index, 1);
+    pages.value[0].text.splice(index + 1, 0, item);
   }
 }
 
@@ -235,53 +251,57 @@ function moveCaretDown() {
 }
 
 function deletePageItemBeforeCaret() {
-  const index = items.value.findIndex((item) => item.id === "caret");
+  const index = pages.value[0].text.findIndex((item) => item.id === "caret");
   if (index !== -1 && index !== 0) {
-    items.value.splice(index - 1, 1);
+    pages.value[0].text.splice(index - 1, 1);
   }
 }
 
 function placeCaretBeforeItemById(id: string) {
-  const caretIndex = items.value.findIndex((item) => item.id === "caret");
-  let targetIndex = items.value.findIndex((item) => item.id === id);
+  const caretIndex = pages.value[0].text.findIndex(
+    (item) => item.id === "caret",
+  );
+  let targetIndex = pages.value[0].text.findIndex((item) => item.id === id);
 
   if (caretIndex !== -1 && targetIndex !== -1) {
-    const caretItem = items.value[caretIndex];
+    const caretItem = pages.value[0].text[caretIndex];
     // Remove the caret item from its current position
-    items.value.splice(caretIndex, 1);
+    pages.value[0].text.splice(caretIndex, 1);
     // If the caret item was before the target item, decrement the target index
     if (caretIndex < targetIndex) {
       targetIndex--;
     }
     // Insert the caret item before the target item
-    items.value.splice(targetIndex, 0, caretItem);
+    pages.value[0].text.splice(targetIndex, 0, caretItem);
   }
 }
 
 function placeCaretAtTheEnd() {
-  const caretIndex = items.value.findIndex((item) => item.id === "caret");
+  const caretIndex = pages.value[0].text.findIndex(
+    (item) => item.id === "caret",
+  );
   if (caretIndex !== -1) {
-    const caretItem = items.value[caretIndex];
+    const caretItem = pages.value[0].text[caretIndex];
     // Remove the caret item from its current position
-    items.value.splice(caretIndex, 1);
+    pages.value[0].text.splice(caretIndex, 1);
     // Insert the caret item at the end
-    items.value.push(caretItem);
+    pages.value[0].text.push(caretItem);
   }
 }
 
 function changePageItemColumn(id: string, column: ColumnTypes) {
-  const index = items.value.findIndex((item) => item.id === id);
+  const index = pages.value[0].text.findIndex((item) => item.id === id);
   if (index !== -1) {
-    (items.value[index].details as SignDetails).column = column;
+    (pages.value[0].text[index].details as SignDetails).column = column;
   }
 
-  replacePageItemById(id, items.value[index]);
+  replacePageItemById(id, pages.value[0].text[index]);
 }
 
 function replacePageItemById(id: string, newItem: PageItemType) {
-  const index = items.value.findIndex((item) => item.id === id);
+  const index = pages.value[0].text.findIndex((item) => item.id === id);
   if (index !== -1) {
-    items.value.splice(index, 1, newItem);
+    pages.value[0].text.splice(index, 1, newItem);
   }
 }
 
@@ -397,9 +417,8 @@ function addNumber(number: string, itemId: string = "caret") {
 const pageStore = defineStore({
   id: "pageStore",
   state: () => ({
-    items: items,
-    pageOnFocus: pageOnFocus,
     pages: pages,
+    pageOnFocus: pageOnFocus,
   }),
   actions: {
     // Page actions
@@ -407,6 +426,12 @@ const pageStore = defineStore({
     getPageOrientation,
     getPageSize,
     setPageOnFocus,
+    setPageText,
+    getPageText,
+    // Writing actions
+    getWritingConfiguration,
+    setWritingMode,
+    setWritingDirection,
     // Shet actions
     getSheetSize,
     // Page item actions
