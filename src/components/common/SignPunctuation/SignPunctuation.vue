@@ -30,6 +30,7 @@ const writingMode = computed(() => {
 .sign-punctuation {
   &[writing-mode="vertical"] {
     margin-top: 0.1rem;
+    margin-bottom: 0.6rem;
     line-height: 0.5rem;
   }
 }
