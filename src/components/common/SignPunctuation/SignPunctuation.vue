@@ -2,8 +2,7 @@
 import SignWriting from "../SignWriting/SignWriting.vue";
 import type { SignPunctuationDetails } from "../../../stores/PageStore";
 import pageStore from "../../../stores/PageStore";
-import { computed, watch } from "vue";
-import { ref } from "vue";
+import { computed } from "vue";
 
 type SignPunctuationProps = {
   sign: SignPunctuationDetails;

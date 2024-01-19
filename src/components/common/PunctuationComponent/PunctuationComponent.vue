@@ -17,6 +17,8 @@ const punctuationClass = computed(() => {
   if (props.type.type === "long-space") {
     return "long-space";
   }
+
+  return new Error("Unknown punctuation type");
 });
 
 const writingMode = computed(() => {
