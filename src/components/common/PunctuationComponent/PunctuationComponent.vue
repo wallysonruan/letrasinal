@@ -35,11 +35,11 @@ const writingMode = computed(() => {
 .punctuation {
   &[writing-mode="vertical"] {
     &.space {
-      height: 2rem;
+      height: 1rem;
     }
 
     &.long-space {
-      height: 4rem;
+      height: 2rem;
     }
   }
 
