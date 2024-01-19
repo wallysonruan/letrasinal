@@ -5,9 +5,12 @@ import pageStore from "../../../stores/PageStore";
 const activate = computed(() => {
   return pageStore().pageOnFocus;
 });
+const writingMode = computed(() => {
+  return pageStore().getWritingConfiguration(1).writingMode;
+});
 </script>
 <template>
-  <div v-show="activate" class="caret"></div>
+  <div v-show="activate" class="caret" :writing-mode="writingMode"></div>
 </template>
 <style scoped lang="scss">
 .caret {
@@ -17,9 +20,6 @@ const activate = computed(() => {
     position: absolute;
     content: "";
     display: block;
-    height: 2px;
-    min-width: 2rem;
-    width: 100%;
     background-color: black;
     animation: pulse 1s infinite;
 
@@ -31,6 +31,18 @@ const activate = computed(() => {
         opacity: 0;
       }
     }
+  }
+
+  &[writing-mode="vertical"]::after {
+    height: 2px;
+    min-width: 3rem;
+    width: 100%;
+  }
+
+  &[writing-mode="horizontal"]::after {
+    width: 2px;
+    min-height: 3rem;
+    height: 100%;
   }
 }
 </style>

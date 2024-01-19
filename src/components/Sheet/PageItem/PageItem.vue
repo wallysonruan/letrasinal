@@ -4,6 +4,7 @@ import {
   type PunctuationDetails,
   type SignDetails,
   type NumberDetails,
+  type SignPunctuationDetails,
 } from "../../../stores/PageStore";
 import SignComponent from "../../common/SignComponent/SignComponent.vue";
 import SignPunctuation from "../../common/SignPunctuation/SignPunctuation.vue";
@@ -34,7 +35,7 @@ const props = defineProps<PageItemProps>();
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
     >
-      <SignPunctuation :sign="props.item.details as SignDetails" />
+      <SignPunctuation :sign="props.item.details as SignPunctuationDetails" />
     </SignColumn>
     <!---->
     <SignColumn

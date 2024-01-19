@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import SignToolBox from "./SignToolBox/SignToolBox.vue";
 import type { ColumnTypes, PageItemTypes } from "@/stores/PageStore";
+import pageStore from "@/stores/PageStore";
 
 type SignColumnProps = {
   itemId: string;
@@ -42,6 +43,10 @@ function columnStyle() {
       return "grid-column: 3;";
   }
 }
+
+const writingMode = computed(() => {
+  return pageStore().getWritingConfiguration(1).writingMode;
+});
 </script>
 <template>
   <div
@@ -50,6 +55,7 @@ function columnStyle() {
     @touchend="handlePressEnd"
     @mousedown="handlePressStart"
     @mouseup="handlePressEnd"
+    :writing-mode="writingMode"
   >
     <SignToolBox
       :active="showToolbox"
@@ -66,7 +72,10 @@ function columnStyle() {
 <style scoped lang="scss">
 .sign-column-container {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  &[writing-mode="vertical"] {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>

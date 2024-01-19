@@ -1,21 +1,54 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { PunctuationDetails } from "../../../stores/PageStore";
+import pageStore from "../../../stores/PageStore";
 
 type PunctuationComponentProps = {
   type: PunctuationDetails;
 };
 
 const props = defineProps<PunctuationComponentProps>();
-function height() {
+
+const punctuationClass = computed(() => {
   if (props.type.type === "space") {
-    return 1;
+    return "space";
   }
 
   if (props.type.type === "long-space") {
-    return 4;
+    return "long-space";
   }
-}
+});
+
+const writingMode = computed(() => {
+  return pageStore().getWritingConfiguration(1).writingMode;
+});
 </script>
 <template>
-  <div class="punctuation" :style="`height:${height()}rem;`"></div>
+  <div
+    :class="`punctuation ${punctuationClass}`"
+    :writing-mode="writingMode"
+  ></div>
 </template>
+<style scoped lang="scss">
+.punctuation {
+  &[writing-mode="vertical"] {
+    &.space {
+      height: 2rem;
+    }
+
+    &.long-space {
+      height: 4rem;
+    }
+  }
+
+  &[writing-mode="horizontal"] {
+    &.space {
+      width: 1rem;
+    }
+
+    &.long-space {
+      width: 2rem;
+    }
+  }
+}
+</style>

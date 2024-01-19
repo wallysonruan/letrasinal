@@ -4,13 +4,25 @@ import pageStore from "@/stores/PageStore";
 <template>
   <div>
     <v-card variant="flat">
-      <v-card-text> Orientação </v-card-text>
+      <v-card-text> Orientação da Página </v-card-text>
       <v-card-actions>
         <v-btn @click="pageStore().changePageOrientation(1, 'portrait')">
           Retrato
         </v-btn>
         <v-btn @click="pageStore().changePageOrientation(1, 'landscape')"
           >Paisagem</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+    <!--  -->
+    <v-card variant="flat">
+      <v-card-text> Orientação do Texto </v-card-text>
+      <v-card-actions>
+        <v-btn @click="pageStore().setWritingMode(1, 'vertical')">
+          Vertical
+        </v-btn>
+        <v-btn @click="pageStore().setWritingMode(1, 'horizontal')">
+          Horizontal</v-btn
         >
       </v-card-actions>
     </v-card>

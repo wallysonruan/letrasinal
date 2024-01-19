@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 type PageConfigurations = {
   pageId: number;
@@ -116,6 +116,15 @@ function getSheetSize(pageId: number) {
 
 export type ColumnTypes = "left" | "middle" | "right";
 
+export type SignPunctuationDetails = {
+  fsw: {
+    vertical: string;
+    horizontal: string;
+  };
+  words: string[];
+  column: ColumnTypes;
+};
+
 export type SignDetails = {
   fsw: string;
   words: string[];
@@ -165,7 +174,8 @@ export type PageItemType = {
     | TextDetails
     | ParagraphDetails
     | PunctuationDetails
-    | NumberDetails;
+    | NumberDetails
+    | SignPunctuationDetails;
 };
 
 function getPageText(pageId: number) {
@@ -196,6 +206,26 @@ function createSignPageItem(
     type: type,
     details: {
       fsw: fsw,
+      words: words,
+      column: "middle",
+    },
+  };
+}
+
+function createSignPunctuationPageItem(
+  type: PageItemTypes,
+  fswVertical: string,
+  fswHorizontal: string,
+  words: string[],
+): PageItemType {
+  return {
+    id: generateRandomId(),
+    type: type,
+    details: {
+      fsw: {
+        vertical: fswVertical,
+        horizontal: fswHorizontal,
+      },
       words: words,
       column: "middle",
     },
@@ -305,74 +335,102 @@ function replacePageItemById(id: string, newItem: PageItemType) {
   }
 }
 
-enum PunctuationFsw {
-  Comma = "S38700", // , S38700463x496 Source: Escrita de Sinais Sem Mistério, page 185.
-  Period = "S38800", // . S38800464x496  Source: Escrita de Sinais Sem Mistério, page 158.
-  QuestionMark = "S38900", // ? S38900464x493  Source: Escrita de Sinais Sem Mistério, page 245.
-  ExclamationMark = "S38814", // !  S38814463x495 Source: SignPuddle https://www.signbank.org/signpuddle2.0/canvas.php?ui=1&sgn=46&sid=19060
-  OpenParenthesis = "S38b00", // ( S38b00470x493 Source: Escrita de Sinais Sem Mistério, page 284.
-  CloseParenthesis = "S38b04", // ) S38b04470x493 Source: Escrita de Sinais Sem Mistério, page 284.
-  Colon = "S38a00", // : S38a00464x490  Source: Escrita de Sinais Sem Mistério, page 185.
-}
+const punctuationFsw = {
+  comma: {
+    vertical: "S38700", // , S38700463x496 Source: Escrita de Sinais Sem Mistério, page 185.
+    horizontal: "S38702", // ,
+  },
+  period: {
+    vertical: "S38800", // . S38800464x496  Source: Escrita de Sinais Sem Mistério, page 158.
+    horizontal: "S38802", // .
+  },
+  questionMark: {
+    vertical: "S38900", // ? S38900464x493  Source: Escrita de Sinais Sem Mistério, page 245.
+    horizontal: "S38902", // ?
+  },
+  exclamationMark: {
+    vertical: "S38814", // !  S38814463x495 Source: SignPuddle https://www.signbank.org/signpuddle2.0/canvas.php?ui=1&sgn=46&sid=19060
+    horizontal: "S38816", // !
+  },
+  openParenthesis: {
+    vertical: "S38b00", // ( S38b00470x493 Source: Escrita de Sinais Sem Mistério, page 284.
+    horizontal: "S38b02", // (
+  },
+  closeParenthesis: {
+    vertical: "S38b04", // ) S38b04470x493 Source: Escrita de Sinais Sem Mistério, page 284.
+    horizontal: "S38b06", // )
+  },
+  colon: {
+    vertical: "S38a00", // : S38a00464x490  Source: Escrita de Sinais Sem Mistério, page 185.
+    horizontal: "S38a02", // :
+  },
+};
 
 function addComma(itemId: string = "caret") {
-  const commaPageItem = createSignPageItem(
+  const commaPageItem = createSignPunctuationPageItem(
     "signPunctuation",
-    PunctuationFsw.Comma,
+    punctuationFsw.comma.vertical,
+    punctuationFsw.comma.horizontal,
     ["comma"],
   );
   addPageItem(commaPageItem, itemId);
 }
 
 function addPeriod(itemId: string = "caret") {
-  const periodPageItem = createSignPageItem(
+  const periodPageItem = createSignPunctuationPageItem(
     "signPunctuation",
-    PunctuationFsw.Period,
+    punctuationFsw.period.vertical,
+    punctuationFsw.period.horizontal,
     ["period"],
   );
   addPageItem(periodPageItem, itemId);
 }
 
 function addQuestionMark(itemId: string = "caret") {
-  const questionMarkPageItem = createSignPageItem(
+  const questionMarkPageItem = createSignPunctuationPageItem(
     "signPunctuation",
-    PunctuationFsw.QuestionMark,
+    punctuationFsw.questionMark.vertical,
+    punctuationFsw.questionMark.horizontal,
     ["question mark"],
   );
   addPageItem(questionMarkPageItem, itemId);
 }
 
 function addExclamationMark(itemId: string = "caret") {
-  const exclamationMarkPageItem = createSignPageItem(
+  const exclamationMarkPageItem = createSignPunctuationPageItem(
     "signPunctuation",
-    PunctuationFsw.ExclamationMark,
+    punctuationFsw.exclamationMark.vertical,
+    punctuationFsw.exclamationMark.horizontal,
     ["exclamation mark"],
   );
   addPageItem(exclamationMarkPageItem, itemId);
 }
 
 function addOpenParenthesis(itemId: string = "caret") {
-  const openParenthesisPageItem = createSignPageItem(
+  const openParenthesisPageItem = createSignPunctuationPageItem(
     "signPunctuation",
-    PunctuationFsw.OpenParenthesis,
+    punctuationFsw.openParenthesis.vertical,
+    punctuationFsw.openParenthesis.horizontal,
     ["open parenthesis"],
   );
   addPageItem(openParenthesisPageItem, itemId);
 }
 
 function addCloseParenthesis(itemId: string = "caret") {
-  const closeParenthesisPageItem = createSignPageItem(
+  const closeParenthesisPageItem = createSignPunctuationPageItem(
     "signPunctuation",
-    PunctuationFsw.CloseParenthesis,
+    punctuationFsw.closeParenthesis.vertical,
+    punctuationFsw.closeParenthesis.horizontal,
     ["close parenthesis"],
   );
   addPageItem(closeParenthesisPageItem, itemId);
 }
 
 function addColon(itemId: string = "caret") {
-  const colonPageItem = createSignPageItem(
+  const colonPageItem = createSignPunctuationPageItem(
     "signPunctuation",
-    PunctuationFsw.Colon,
+    punctuationFsw.colon.vertical,
+    punctuationFsw.colon.horizontal,
     ["colon"],
   );
   addPageItem(colonPageItem, itemId);

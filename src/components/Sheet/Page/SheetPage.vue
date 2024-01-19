@@ -23,9 +23,18 @@ const pageHeight = computed(() => {
 
 function handleKeyDown(event: Event) {
   const eventAsKeyboardEvent = event as KeyboardEvent;
+
+  const writingMode = computed(() => {
+    return pageStore().getWritingConfiguration(1).writingMode;
+  });
+
+  const isWritingModeVertical = writingMode.value === "vertical";
+
   if (
     (eventAsKeyboardEvent.key === "ArrowUp" ||
       eventAsKeyboardEvent.key === "ArrowDown" ||
+      eventAsKeyboardEvent.key === "ArrowLeft" ||
+      eventAsKeyboardEvent.key === "ArrowRight" ||
       eventAsKeyboardEvent.key === "Space" ||
       eventAsKeyboardEvent.key === "Backspace" ||
       eventAsKeyboardEvent.key === "Tab") &&
@@ -42,10 +51,24 @@ function handleKeyDown(event: Event) {
       pageStore().addLongSpace();
       break;
     case "ArrowUp":
-      pageStore().moveCaretUp();
+      if (isWritingModeVertical) {
+        pageStore().moveCaretUp();
+      }
       break;
     case "ArrowDown":
-      pageStore().moveCaretDown();
+      if (isWritingModeVertical) {
+        pageStore().moveCaretDown();
+      }
+      break;
+    case "ArrowLeft":
+      if (!isWritingModeVertical) {
+        pageStore().moveCaretUp();
+      }
+      break;
+    case "ArrowRight":
+      if (!isWritingModeVertical) {
+        pageStore().moveCaretDown();
+      }
       break;
     default:
       return;
@@ -121,7 +144,10 @@ function setFocusOnHiddenTextarea() {
     @touchstart="setFocusOnHiddenTextarea"
     @dblclick="pageStore().placeCaretAtTheEnd"
   >
-    <div class="page-content">
+    <div
+      class="page-content"
+      :writing-mode="pageStore().getWritingConfiguration(1).writingMode"
+    >
       <PageItem
         @click="pageStore().placeCaretBeforeItemById(word.id)"
         @touchstart="pageStore().placeCaretBeforeItemById(word.id)"
@@ -159,14 +185,22 @@ function setFocusOnHiddenTextarea() {
   .page-content {
     overflow: hidden;
     display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
-    column-gap: 1.5rem;
     align-content: baseline;
     height: inherit;
 
     &:hover {
       cursor: text;
+    }
+
+    &[writing-mode="vertical"] {
+      flex-direction: column;
+      column-gap: 1.5rem;
+    }
+
+    &[writing-mode="horizontal"] {
+      flex-direction: row;
+      row-gap: 1.5rem;
     }
   }
 }
