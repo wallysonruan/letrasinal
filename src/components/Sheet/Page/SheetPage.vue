@@ -37,6 +37,7 @@ function handleKeyDown(event: Event) {
       eventAsKeyboardEvent.key === "ArrowRight" ||
       eventAsKeyboardEvent.key === "Space" ||
       eventAsKeyboardEvent.key === "Backspace" ||
+      // eventAsKeyboardEvent.key === "Enter" ||
       eventAsKeyboardEvent.key === "Tab") &&
     pageStore().pageOnFocus
   ) {
@@ -50,6 +51,9 @@ function handleKeyDown(event: Event) {
     case "Tab":
       pageStore().addLongSpace();
       break;
+    // case "Enter":
+    //   pageStore().addBreak();
+    //   break;
     case "ArrowUp":
       if (isWritingModeVertical) {
         pageStore().moveCaretUp();

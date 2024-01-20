@@ -148,7 +148,7 @@ type ParagraphDetails = {
   text: string;
 };
 
-type PunctuationTypes = "space" | "long-space";
+type PunctuationTypes = "space" | "long-space" | "break";
 
 export type PunctuationDetails = {
   type: PunctuationTypes;
@@ -460,6 +460,18 @@ function addLongSpace(itemId: string = "caret") {
   addPageItem(spacePageItem, itemId);
 }
 
+function addBreak(itemId: string = "caret") {
+  const brakPageItem: PageItemType = {
+    id: generateRandomId(),
+    type: "punctuation",
+    details: {
+      type: "break",
+      column: "middle",
+    },
+  };
+  addPageItem(brakPageItem, itemId);
+}
+
 function addNumber(number: string, itemId: string = "caret") {
   const numberPageItem: PageItemType = {
     id: generateRandomId(),
@@ -513,6 +525,7 @@ const pageStore = defineStore({
     addColon,
     addSpace,
     addLongSpace,
+    addBreak,
     addNumber,
   },
 });
