@@ -109,7 +109,7 @@ function getPageSize(pageId: number) {
   }
 }
 
-function getSheetSize(pageId: number) {
+function getSheetSize(pageId: number): { width: number; height: number } {
   const pageSize = getPageSize(pageId);
   return sheetSizes.get(pageSize);
 }
@@ -148,7 +148,7 @@ type ParagraphDetails = {
   text: string;
 };
 
-type PunctuationTypes = "space" | "long-space" | "break";
+type PunctuationTypes = "space" | "long-space";
 
 export type PunctuationDetails = {
   type: PunctuationTypes;
@@ -162,6 +162,7 @@ export type PageItemTypes =
   | "text"
   | "paragraph"
   | "punctuation"
+  | "breakflow"
   | "caret"
   | "number";
 
@@ -460,14 +461,10 @@ function addLongSpace(itemId: string = "caret") {
   addPageItem(spacePageItem, itemId);
 }
 
-function addBreak(itemId: string = "caret") {
+function addBreakflow(itemId: string = "caret") {
   const brakPageItem: PageItemType = {
     id: generateRandomId(),
-    type: "punctuation",
-    details: {
-      type: "break",
-      column: "middle",
-    },
+    type: "breakflow",
   };
   addPageItem(brakPageItem, itemId);
 }
@@ -525,7 +522,7 @@ const pageStore = defineStore({
     addColon,
     addSpace,
     addLongSpace,
-    addBreak,
+    addBreakflow,
     addNumber,
   },
 });

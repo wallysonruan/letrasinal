@@ -37,7 +37,7 @@ function handleKeyDown(event: Event) {
       eventAsKeyboardEvent.key === "ArrowRight" ||
       eventAsKeyboardEvent.key === "Space" ||
       eventAsKeyboardEvent.key === "Backspace" ||
-      // eventAsKeyboardEvent.key === "Enter" ||
+      eventAsKeyboardEvent.key === "Enter" ||
       eventAsKeyboardEvent.key === "Tab") &&
     pageStore().pageOnFocus
   ) {
@@ -51,9 +51,9 @@ function handleKeyDown(event: Event) {
     case "Tab":
       pageStore().addLongSpace();
       break;
-    // case "Enter":
-    //   pageStore().addBreak();
-    //   break;
+    case "Enter":
+      pageStore().addBreakflow();
+      break;
     case "ArrowUp":
       if (isWritingModeVertical) {
         pageStore().moveCaretUp();
@@ -187,6 +187,7 @@ function setFocusOnHiddenTextarea() {
   }
 
   .page-content {
+    position: relative;
     overflow: hidden;
     display: flex;
     flex-wrap: wrap;

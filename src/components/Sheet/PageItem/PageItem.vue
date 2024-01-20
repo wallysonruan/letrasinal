@@ -9,6 +9,7 @@ import {
 import SignComponent from "../../common/SignComponent/SignComponent.vue";
 import SignPunctuation from "../../common/SignPunctuation/SignPunctuation.vue";
 import PunctuationComponent from "../../common/PunctuationComponent/PunctuationComponent.vue";
+import BreakflowComponent from "@/components/common/BreakflowComponent/BreakflowComponent.vue";
 import CaretComponent from "@/components/common/CaretComponent/CaretComponent.vue";
 import NumberComponent from "@/components/common/NumberComponent/NumberComponent.vue";
 import SignColumn from "@/components/common/SignColumn/SignColumn.vue";
@@ -38,14 +39,15 @@ const props = defineProps<PageItemProps>();
       <SignPunctuation :sign="props.item.details as SignPunctuationDetails" />
     </SignColumn>
     <!---->
-    <SignColumn
+    <PunctuationComponent
       v-else-if="props.item.type === 'punctuation'"
-      :item-id="props.item.id"
-      :column="(props.item.details as PunctuationDetails).column"
-      :page-item-type="props.item.type"
-    >
-      <PunctuationComponent :type="props.item.details as PunctuationDetails" />
-    </SignColumn>
+      :type="props.item.details as PunctuationDetails"
+    />
+    <!---->
+    <BreakflowComponent
+      v-else-if="props.item.type === 'breakflow'"
+      :id="props.item.id"
+    />
     <!---->
     <CaretComponent v-else-if="props.item.type === 'caret'" />
     <!---->
