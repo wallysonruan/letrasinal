@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import pageStore from "../../../stores/PageStore";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 type BreakFlowComponentProps = {
   id: string;
@@ -25,7 +25,7 @@ function getParentElement(element: HTMLElement | null): HTMLElement | null {
   return element?.parentElement as HTMLElement | null;
 }
 
-function setVerticalHeight(breakflow: HTMLElement, parent: HTMLElement) {
+function setVerticalHeight(parent: HTMLElement) {
   const parentOffsetTop = parent.offsetTop;
   const unoccupiedHeight =
     pageStore().getSheetSize(1).height - parentOffsetTop - 5;
@@ -36,9 +36,10 @@ function unsetVerticalHeight() {
   height.value = 0;
 }
 
-function setHorizontalWidth(breakflow: HTMLElement, parent: HTMLElement) {
+function setHorizontalWidth(parent: HTMLElement) {
   const parentOffsetLeft = parent.offsetLeft;
-  const unoccupiedWidth = pageStore().getSheetSize(1).width - parentOffsetLeft;
+  const unoccupiedWidth =
+    pageStore().getSheetSize(1).width - parentOffsetLeft - 5;
   width.value = unoccupiedWidth;
 }
 
@@ -46,22 +47,34 @@ function unsetHorizontalWidth() {
   width.value = 0;
 }
 
-onMounted(() => {
+function unsetAllDimensions() {
+  unsetVerticalHeight();
+  unsetHorizontalWidth();
+}
+
+function adjustBreakflowDimensions() {
+  unsetAllDimensions();
   const breakflow = getBreakflowElement(props.id);
   const parent = getParentElement(breakflow);
 
   if (breakflow && parent) {
     if (writingMode.value === "vertical") {
       unsetHorizontalWidth();
-      setVerticalHeight(breakflow, parent);
+      setVerticalHeight(parent);
     }
 
     if (writingMode.value === "horizontal") {
       unsetVerticalHeight();
-      setHorizontalWidth(breakflow, parent);
+      setHorizontalWidth(parent);
     }
   }
-});
+}
+
+const pageText = computed(() => pageStore().getPageText(1) ?? []);
+
+onMounted(adjustBreakflowDimensions);
+watch(writingMode, adjustBreakflowDimensions);
+watch(pageText, adjustBreakflowDimensions);
 </script>
 <template>
   <div

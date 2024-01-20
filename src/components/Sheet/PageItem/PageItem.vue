@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {
+import pageStore, {
   type PageItemType,
   type PunctuationDetails,
   type SignDetails,
@@ -13,14 +13,19 @@ import BreakflowComponent from "@/components/common/BreakflowComponent/Breakflow
 import CaretComponent from "@/components/common/CaretComponent/CaretComponent.vue";
 import NumberComponent from "@/components/common/NumberComponent/NumberComponent.vue";
 import SignColumn from "@/components/common/SignColumn/SignColumn.vue";
+import { computed } from "vue";
 
 type PageItemProps = {
   item: PageItemType;
 };
 const props = defineProps<PageItemProps>();
+
+const writingMode = computed(() => {
+  return pageStore().getWritingConfiguration(1).writingMode;
+});
 </script>
 <template>
-  <div class="page-item" :id="props.item.id">
+  <div class="page-item" :id="props.item.id" :writing-mode="writingMode">
     <SignColumn
       v-if="props.item.type === 'sign'"
       :item-id="props.item.id"
@@ -68,8 +73,11 @@ const props = defineProps<PageItemProps>();
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  max-width: 20rem;
   cursor: pointer;
+
+  &[writing-mode="vertical"] {
+    max-width: 20rem;
+  }
 }
 
 @media screen and (max-width: 600px) {
