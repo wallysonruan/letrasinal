@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
+import { computed } from "vue";
 import { ref } from "vue";
 
 import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
+import DrawerTextOptions from "./DrawerTextOptions/DrawerTextOptions.vue";
 import DrawerSignPuddleSearch from "./DrawerSignPuddleSearch/DrawerSignPuddleSearch.vue";
 import LogoItem from "@/components/common/Logo/LogoItem.vue";
+import browserWindowStore from "@/stores/BrowserWindowStore";
 
 const drawer = ref(true);
 const drawerExpandable = ref(true);
-const windowWidth = ref(window.innerWidth);
+const windowWidth = computed(() => {
+  return browserWindowStore().windowWidth;
+});
 const drawerLocation = computed(() => {
   if (windowWidth.value < 600) {
     return "bottom";
@@ -32,17 +36,8 @@ const chevronDirection = computed(() => {
   }
 });
 
-// add a listener to the window to watch the window width
-const updateWindowWidth = () => {
-  windowWidth.value = window.innerWidth;
-};
-
-onMounted(() => {
-  window.addEventListener("resize", updateWindowWidth);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", updateWindowWidth);
+const disablePageOptions = computed(() => {
+  return browserWindowStore().windowWidth < 600;
 });
 </script>
 <template>
@@ -72,10 +67,38 @@ onUnmounted(() => {
             v-bind="props"
             prepend-icon="mdi-file"
             title="Configurações da Página"
+            :disabled="disablePageOptions"
           ></v-list-item>
         </template>
         <div :style="closeAllOnDrawerClose">
           <DrawerPageOptions />
+        </div>
+      </v-list-group>
+
+      <v-divider></v-divider>
+
+      <v-list-group value="texto">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-hand"
+            title="Configurações de Texto"
+          ></v-list-item>
+        </template>
+
+        <div :style="closeAllOnDrawerClose">
+          <v-list-group value="writing-mode">
+            <template v-slot:activator="{ props }">
+              <v-list-item v-bind="props" title="Orientação do Texto">
+                <template v-slot:prepend>
+                  <v-icon>
+                    <!--  -->
+                  </v-icon>
+                </template>
+              </v-list-item>
+            </template>
+            <DrawerTextOptions />
+          </v-list-group>
         </div>
       </v-list-group>
 
