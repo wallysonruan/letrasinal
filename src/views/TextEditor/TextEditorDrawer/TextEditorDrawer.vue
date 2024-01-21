@@ -14,9 +14,9 @@ const windowWidth = computed(() => {
   return browserWindowStore().windowWidth;
 });
 const drawerLocation = computed(() => {
-  if (windowWidth.value < 600) {
-    return "bottom";
-  }
+  // if (windowWidth.value < 600) {
+  //   return "bottom";
+  // }
 
   return "left";
 });
@@ -44,7 +44,7 @@ const disablePageOptions = computed(() => {
     permanent
     @click="drawerExpandable = false"
     width="320"
-    :location="drawerLocation"
+    :location="drawerLocation as 'left' | 'right' | 'bottom'"
   >
     <v-list-item>
       <template v-slot:append>
