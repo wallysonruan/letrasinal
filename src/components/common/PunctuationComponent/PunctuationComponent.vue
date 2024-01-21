@@ -36,7 +36,6 @@ const writingMode = computed(() => {
 </template>
 <style scoped lang="scss">
 .punctuation {
-  background-color: red;
   position: relative;
 
   &[writing-mode="vertical"] {
