@@ -27,13 +27,10 @@ const closeAllOnDrawerClose = computed(() => {
 });
 
 const chevronDirection = computed(() => {
-  if (drawerLocation.value === "left") {
-    return drawerExpandable.value ? "mdi-chevron-right" : "mdi-chevron-left";
-  }
-
   if (drawerLocation.value === "bottom") {
     return drawerExpandable.value ? "mdi-chevron-up" : "mdi-chevron-down";
   }
+  return drawerExpandable.value ? "mdi-chevron-right" : "mdi-chevron-left";
 });
 
 const disablePageOptions = computed(() => {
