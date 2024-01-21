@@ -9,6 +9,10 @@ type BreakFlowComponentProps = {
 
 const props = defineProps<BreakFlowComponentProps>();
 
+const pageOrientation = computed(() => {
+  return pageStore().getPageOrientation(1);
+});
+
 const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(1).writingMode;
 });
@@ -28,10 +32,7 @@ function getParentElement(element: HTMLElement | null): HTMLElement | null {
 function setVerticalHeight(parent: HTMLElement) {
   const negativePaddingToPreventOverflow = 5; // Without this component may take an entire line only for itself.
   const parentOffsetTop = parent.offsetTop;
-  const unoccupiedHeight =
-    pageStore().getSheetSize(1).height -
-    parentOffsetTop -
-    negativePaddingToPreventOverflow;
+  const unoccupiedHeight = pageStore().getSheetSize(1).height - parentOffsetTop - negativePaddingToPreventOverflow;
   height.value = unoccupiedHeight;
 }
 
@@ -42,10 +43,14 @@ function unsetVerticalHeight() {
 function setHorizontalWidth(parent: HTMLElement) {
   const negativePaddingToPreventOverflow = 5; // Without this component may take an entire line only for itself.
   const parentOffsetLeft = parent.offsetLeft;
-  const unoccupiedWidth =
-    pageStore().getSheetSize(1).width -
-    parentOffsetLeft -
-    negativePaddingToPreventOverflow;
+  let unoccupiedWidth = 0;
+
+  if(pageOrientation.value === "landscape") {
+    unoccupiedWidth = pageStore().getSheetSize(1).height - parentOffsetLeft - negativePaddingToPreventOverflow;
+  } else {
+    unoccupiedWidth = pageStore().getSheetSize(1).width - parentOffsetLeft - negativePaddingToPreventOverflow;
+  }
+
   width.value = unoccupiedWidth;
 }
 
