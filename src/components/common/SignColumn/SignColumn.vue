@@ -73,9 +73,9 @@ const writingMode = computed(() => {
 .sign-column-container {
   position: relative;
 
-  &[writing-mode="vertical"] {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
+  // &[writing-mode="vertical"] {
+  //   // display: grid;
+  //   // grid-template-columns: repeat(3, 1fr);
+  // }
 }
 </style>

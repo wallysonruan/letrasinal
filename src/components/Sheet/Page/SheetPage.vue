@@ -193,6 +193,7 @@ function setFocusOnHiddenTextarea() {
     flex-wrap: wrap;
     align-content: baseline;
     height: inherit;
+    padding: 0 1rem;
 
     &:hover {
       cursor: text;
