@@ -88,7 +88,7 @@ const eightyPercentHeight = computed(() => {
 
       <v-divider></v-divider>
 
-      <v-list-group value="texto">
+      <v-list-group value="writing-mode">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -96,21 +96,7 @@ const eightyPercentHeight = computed(() => {
             title="Configurações de Texto"
           ></v-list-item>
         </template>
-
-        <div :style="closeAllOnDrawerClose">
-          <v-list-group value="writing-mode">
-            <template v-slot:activator="{ props }">
-              <v-list-item v-bind="props" title="Orientação do Texto">
-                <template v-slot:prepend>
-                  <v-icon>
-                    <!--  -->
-                  </v-icon>
-                </template>
-              </v-list-item>
-            </template>
-            <DrawerTextOptions />
-          </v-list-group>
-        </div>
+        <DrawerTextOptions />
       </v-list-group>
 
       <v-divider></v-divider>
