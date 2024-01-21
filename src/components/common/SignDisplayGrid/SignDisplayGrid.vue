@@ -19,9 +19,9 @@ watch(selected, (newValue) => {
 });
 </script>
 <template>
-  <ul class="search-results">
+  <ul class="sign-display-grid">
     <template v-for="(sign, index) in props.signs" :key="index">
-      <li class="result">
+      <li class="sign-display-grid-item">
         <SelectableItem :value="sign.id" v-model="selected">
           <SignWriting :fsw="(sign.details as SignDetails).fsw"></SignWriting>
         </SelectableItem>
@@ -30,12 +30,24 @@ watch(selected, (newValue) => {
   </ul>
 </template>
 <style scoped lang="scss">
-.search-results {
+.sign-display-grid {
   list-style-type: none;
   //
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 0.5rem;
   row-gap: 0.5rem;
+}
+@media screen and (max-width: 600px) {
+  .sign-display-grid {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+  }
+
+  .sign-display-grid-item {
+    min-width: 5rem;
+    max-width: max-content;
+  }
 }
 </style>

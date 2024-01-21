@@ -238,4 +238,13 @@ async function load({ done }) {
     justify-content: right;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .spuddle-search-container {
+    .search-list {
+      min-height: 5rem;
+      max-height: min-content;
+    }
+  }
+}
 </style>
