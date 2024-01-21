@@ -26,9 +26,12 @@ function getParentElement(element: HTMLElement | null): HTMLElement | null {
 }
 
 function setVerticalHeight(parent: HTMLElement) {
+  const negativePaddingToPreventOverflow = 5; // Without this component may take an entire line only for itself.
   const parentOffsetTop = parent.offsetTop;
   const unoccupiedHeight =
-    pageStore().getSheetSize(1).height - parentOffsetTop - 5;
+    pageStore().getSheetSize(1).height -
+    parentOffsetTop -
+    negativePaddingToPreventOverflow;
   height.value = unoccupiedHeight;
 }
 
@@ -37,9 +40,12 @@ function unsetVerticalHeight() {
 }
 
 function setHorizontalWidth(parent: HTMLElement) {
+  const negativePaddingToPreventOverflow = 5; // Without this component may take an entire line only for itself.
   const parentOffsetLeft = parent.offsetLeft;
   const unoccupiedWidth =
-    pageStore().getSheetSize(1).width - parentOffsetLeft - 5;
+    pageStore().getSheetSize(1).width -
+    parentOffsetLeft -
+    negativePaddingToPreventOverflow;
   width.value = unoccupiedWidth;
 }
 
