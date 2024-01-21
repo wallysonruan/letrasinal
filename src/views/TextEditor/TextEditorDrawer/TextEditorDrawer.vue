@@ -96,7 +96,9 @@ const eightyPercentHeight = computed(() => {
             title="Configurações de Texto"
           ></v-list-item>
         </template>
-        <DrawerTextOptions />
+        <div :style="closeAllOnDrawerClose">
+          <DrawerTextOptions />
+        </div>
       </v-list-group>
 
       <v-divider></v-divider>
