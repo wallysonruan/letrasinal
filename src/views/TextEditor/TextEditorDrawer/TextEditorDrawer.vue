@@ -10,13 +10,19 @@ import browserWindowStore from "@/stores/BrowserWindowStore";
 
 const drawer = ref(true);
 const drawerExpandable = ref(true);
-// const windowWidth = computed(() => {
-//   return browserWindowStore().windowWidth;
-// });
-const drawerLocation = computed<'left' | 'right' | 'bottom'>(() => {
-  // if (windowWidth.value < 600) {
-  //   return "bottom";
-  // }
+
+const windowWidth = computed(() => {
+  return browserWindowStore().getWindowWidth();
+});
+
+const isMobile = computed(() => {
+  return widthHeight.value < 700;
+});
+
+const drawerLocation = computed<"left" | "right" | "bottom">(() => {
+  if (windowWidth.value < 600) {
+    return "bottom";
+  }
 
   return "left";
 });
@@ -34,7 +40,15 @@ const chevronDirection = computed(() => {
 });
 
 const disablePageOptions = computed(() => {
-  return browserWindowStore().windowWidth < 600;
+  return windowWidth.value < 600;
+});
+
+const widthHeight = computed(() => {
+  return browserWindowStore().getWindowHeight();
+});
+
+const eightyPercentHeight = computed(() => {
+  return browserWindowStore().getWindowHeightPercentage(85);
 });
 </script>
 <template>
@@ -43,7 +57,7 @@ const disablePageOptions = computed(() => {
     :rail="drawerExpandable"
     permanent
     @click="drawerExpandable = false"
-    width="320"
+    :width="isMobile ? eightyPercentHeight : '320'"
     :location="drawerLocation"
   >
     <v-list-item>
@@ -157,4 +171,3 @@ const disablePageOptions = computed(() => {
     </v-list>
   </v-navigation-drawer>
 </template>
-<style scoped lang="scss"></style>
