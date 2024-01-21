@@ -14,17 +14,5 @@ import pageStore from "@/stores/PageStore";
         >
       </v-card-actions>
     </v-card>
-    <!--  -->
-    <v-card variant="flat">
-      <v-card-text> Orientação do Texto </v-card-text>
-      <v-card-actions>
-        <v-btn @click="pageStore().setWritingMode(1, 'vertical')">
-          Vertical
-        </v-btn>
-        <v-btn @click="pageStore().setWritingMode(1, 'horizontal')">
-          Horizontal</v-btn
-        >
-      </v-card-actions>
-    </v-card>
   </div>
 </template>
