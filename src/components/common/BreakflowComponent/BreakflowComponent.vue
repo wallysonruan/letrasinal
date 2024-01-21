@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import pageStore from "../../../stores/PageStore";
 import { onMounted, ref, watch } from "vue";
+import { nextTick } from "process";
 
 type BreakFlowComponentProps = {
   id: string;
@@ -32,7 +33,10 @@ function getParentElement(element: HTMLElement | null): HTMLElement | null {
 function setVerticalHeight(parent: HTMLElement) {
   const negativePaddingToPreventOverflow = 5; // Without this component may take an entire line only for itself.
   const parentOffsetTop = parent.offsetTop;
-  const unoccupiedHeight = pageStore().getSheetSize(1).height - parentOffsetTop - negativePaddingToPreventOverflow;
+  const unoccupiedHeight =
+    pageStore().getSheetSize(1).height -
+    parentOffsetTop -
+    negativePaddingToPreventOverflow;
   height.value = unoccupiedHeight;
 }
 
@@ -45,10 +49,16 @@ function setHorizontalWidth(parent: HTMLElement) {
   const parentOffsetLeft = parent.offsetLeft;
   let unoccupiedWidth = 0;
 
-  if(pageOrientation.value === "landscape") {
-    unoccupiedWidth = pageStore().getSheetSize(1).height - parentOffsetLeft - negativePaddingToPreventOverflow;
+  if (pageOrientation.value === "landscape") {
+    unoccupiedWidth =
+      pageStore().getSheetSize(1).height -
+      parentOffsetLeft -
+      negativePaddingToPreventOverflow;
   } else {
-    unoccupiedWidth = pageStore().getSheetSize(1).width - parentOffsetLeft - negativePaddingToPreventOverflow;
+    unoccupiedWidth =
+      pageStore().getSheetSize(1).width -
+      parentOffsetLeft -
+      negativePaddingToPreventOverflow;
   }
 
   width.value = unoccupiedWidth;
@@ -81,11 +91,25 @@ function adjustBreakflowDimensions() {
   }
 }
 
-const pageText = computed(() => pageStore().getPageText(1) ?? []);
+onMounted(() => {
+  // This is a hack to make sure that the breakflow component is rendered before we try to adjust its dimensions.
+  // For some reason the browser needs both the nextTick and the setTimeout to redimension the component properly.
+  nextTick(() => {
+    setTimeout(() => {
+      adjustBreakflowDimensions();
+    }, 7);
+  });
+});
 
-onMounted(adjustBreakflowDimensions);
-watch(writingMode, adjustBreakflowDimensions);
-watch(pageText, adjustBreakflowDimensions);
+watch(writingMode, () => {
+  // This is a hack to make sure that the breakflow component is rendered before we try to adjust its dimensions.
+  // For some reason the browser needs both the nextTick and the setTimeout to redimension the component properly.
+  nextTick(() => {
+    setTimeout(() => {
+      adjustBreakflowDimensions();
+    }, 7);
+  });
+});
 </script>
 <template>
   <div
