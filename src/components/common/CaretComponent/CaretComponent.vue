@@ -18,7 +18,9 @@ function getCaretParentElement(caret: HTMLElement | null): HTMLElement | null {
   return caret?.parentElement as HTMLElement | null;
 }
 
-function getPreviousSiblingOfElement(element: HTMLElement | null): HTMLElement | null {
+function getPreviousSiblingOfElement(
+  element: HTMLElement | null,
+): HTMLElement | null {
   return element?.previousElementSibling as HTMLElement | null;
 }
 
@@ -27,7 +29,10 @@ function doesElementContainBreakflow(element: HTMLElement | null): boolean {
   return childBreakflow?.classList.contains("breakflow") || false;
 }
 
-function adjustCaretDimensions(caret: HTMLElement | null, isBigger: boolean): void {
+function adjustCaretDimensions(
+  caret: HTMLElement | null,
+  isBigger: boolean,
+): void {
   if (!caret) {
     return;
   }
@@ -50,7 +55,9 @@ function handleCaretAdjustmentOnMount(): void {
     const caret = getCaretElement();
     const caretParent = getCaretParentElement(caret);
     const caretParentSiblingBefore = getPreviousSiblingOfElement(caretParent);
-    const isSiblingBeforeBreakflowParent = doesElementContainBreakflow(caretParentSiblingBefore);
+    const isSiblingBeforeBreakflowParent = doesElementContainBreakflow(
+      caretParentSiblingBefore,
+    );
 
     adjustCaretDimensions(caret, isSiblingBeforeBreakflowParent);
   }

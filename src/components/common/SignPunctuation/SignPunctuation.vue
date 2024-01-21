@@ -33,5 +33,11 @@ const writingMode = computed(() => {
     margin-bottom: 0.6rem;
     line-height: 0.5rem;
   }
+
+  &[writing-mode="horizontal"] {
+    margin-left: 0.6rem;
+    margin-right: 0.6rem;
+    line-height: 0.5rem;
+  }
 }
 </style>
