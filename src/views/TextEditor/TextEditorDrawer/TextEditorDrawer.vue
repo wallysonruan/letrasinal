@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { ref } from "vue";
 
 import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
@@ -7,28 +7,59 @@ import DrawerSignPuddleSearch from "./DrawerSignPuddleSearch/DrawerSignPuddleSea
 import LogoItem from "@/components/common/Logo/LogoItem.vue";
 
 const drawer = ref(true);
-const rail = ref(true);
-const closeAllOnDrawerClose = computed(() => {
-  return rail.value === true ? "display: none;" : "display: block;";
+const drawerExpandable = ref(true);
+const windowWidth = ref(window.innerWidth);
+const drawerLocation = computed(() => {
+  if (windowWidth.value < 600) {
+    return "bottom";
+  }
+
+  return "left";
 });
+
+const closeAllOnDrawerClose = computed(() => {
+  // if the drawer is not expandable, then we don't need to close anything
+  return drawerExpandable.value === true ? "display: none;" : "display: block;";
+});
+
 const chevronDirection = computed(() => {
-  return rail.value ? "mdi-chevron-right" : "mdi-chevron-left";
+  if (drawerLocation.value === "left") {
+    return drawerExpandable.value ? "mdi-chevron-right" : "mdi-chevron-left";
+  }
+
+  if (drawerLocation.value === "bottom") {
+    return drawerExpandable.value ? "mdi-chevron-up" : "mdi-chevron-down";
+  }
+});
+
+// add a listener to the window to watch the window width
+const updateWindowWidth = () => {
+  windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener("resize", updateWindowWidth);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", updateWindowWidth);
 });
 </script>
 <template>
   <v-navigation-drawer
     v-model="drawer"
-    :rail="rail"
+    :rail="drawerExpandable"
     permanent
-    @click="rail = false"
+    @click="drawerExpandable = false"
     width="320"
+    :location="drawerLocation"
   >
     <v-list-item>
       <template v-slot:append>
         <v-btn
           variant="text"
           :icon="chevronDirection"
-          @click.stop="rail = !rail"
+          @click.stop="drawerExpandable = !drawerExpandable"
         ></v-btn>
       </template>
       <LogoItem />
