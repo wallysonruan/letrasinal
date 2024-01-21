@@ -26,6 +26,8 @@ jobs:
         run: npm run lint
       - name: Run tests
         run: npm run test:unit
+      - name: Run type check
+        run: npm run type-check
   build:
     needs: tests-and-linter
     runs-on: ubuntu-latest
