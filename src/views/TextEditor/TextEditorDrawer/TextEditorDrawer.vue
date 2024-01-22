@@ -60,6 +60,7 @@ const eightyPercentHeight = computed(() => {
     :width="isMobile ? eightyPercentHeight : '320'"
     :location="drawerLocation"
   >
+  {{ eightyPercentHeight }}
     <v-list-item>
       <template v-slot:append>
         <v-btn
