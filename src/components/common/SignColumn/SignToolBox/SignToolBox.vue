@@ -128,5 +128,6 @@ function toggleToolbox() {
 .toolbox-container {
   position: absolute;
   width: max-content;
+  z-index: 1;
 }
 </style>
