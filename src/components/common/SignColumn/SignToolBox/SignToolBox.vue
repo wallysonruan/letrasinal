@@ -1,22 +1,66 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import pageStore from "../../../../stores/PageStore";
+import pageStore, { type ColumnTypes } from "../../../../stores/PageStore";
+import pageItemStore from "@/stores/PageItemStore";
 import type { StyleValue } from "vue";
-
-const formatting = ref<number[]>([]);
-const alignment = ref<number>(1);
 
 type SignToolBoxProps = {
   itemId: string;
   active: boolean;
+  column: ColumnTypes;
 };
 
 const props = defineProps<SignToolBoxProps>();
 const emit = defineEmits(["closeToolbox"]);
 
+const formatting = ref<number[]>([]);
+const pageItemColumn = ref<number>(0);
+
+function setPageItemColumn() {
+  switch (props.column) {
+    case "left":
+      pageItemColumn.value = 0;
+      break;
+    case "middle":
+      pageItemColumn.value = 1;
+      break;
+    case "right":
+      pageItemColumn.value = 2;
+      break;
+  }
+}
+
+setPageItemColumn();
+
 function dinamicallyPositionToolBox(): StyleValue {
+  const toolboxHeight = 55; // Size of toolbox + margin space, in pixels
+  const toolboxWidth = 310; // Size of toolbox + margin space, in pixels
+
+  const isNearTopBorder = pageItemStore().isPageItemNearTopBorder(
+    props.itemId,
+    toolboxHeight,
+  );
+
+  const isNearRightBorder = pageItemStore().isPageItemNearRightBorder(
+    props.itemId,
+    toolboxWidth,
+  );
+
+  if (isNearTopBorder && isNearRightBorder) {
+    return {
+      bottom: `-${toolboxHeight}px`,
+      left: `-${310}px`,
+    };
+  }
+
+  if (isNearTopBorder) {
+    return {
+      bottom: `-${toolboxHeight}px`,
+    };
+  }
+
   return {
-    top: "-55px",
+    top: `-${toolboxHeight}px`,
   };
 }
 
@@ -25,18 +69,12 @@ function toggleToolbox() {
 }
 </script>
 <template>
-  <div v-if="props.active" class="toolbox-container" :style="dinamicallyPositionToolBox()">
+  <div
+    v-if="props.active"
+    class="toolbox-container"
+    :style="dinamicallyPositionToolBox()"
+  >
     <div class="toolbox">
-      <v-btn
-        class="close-btn"
-        color="red"
-        density="compact"
-        icon
-        @click="toggleToolbox"
-      >
-        <v-icon icon="mdi-close"> </v-icon>
-      </v-btn>
-      <!--  -->
       <v-btn-toggle v-model="formatting" multiple variant="outlined" divided>
         <v-btn
           style="background-color: white"
@@ -52,8 +90,7 @@ function toggleToolbox() {
           <v-icon icon="mdi-plus"></v-icon>
         </v-btn>
       </v-btn-toggle>
-
-      <v-btn-toggle v-model="alignment" variant="outlined" divided>
+      <v-btn-toggle v-model="pageItemColumn" variant="outlined" divided>
         <v-btn
           style="background-color: white"
           @click="pageStore().changePageItemColumn(props.itemId, 'left')"
@@ -75,6 +112,15 @@ function toggleToolbox() {
           <v-icon icon="mdi-format-align-right"></v-icon>
         </v-btn>
       </v-btn-toggle>
+
+      <v-btn-toggle variant="outlined" divided>
+        <v-btn
+          style="background-color: #a91b0d; color: white"
+          @click="toggleToolbox"
+        >
+          <v-icon icon="mdi-close"> </v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </div>
   </div>
 </template>
@@ -82,11 +128,5 @@ function toggleToolbox() {
 .toolbox-container {
   position: absolute;
   width: max-content;
-
-  .close-btn {
-    position: absolute;
-    top: -33px;
-    right: 10px;
-  }
 }
 </style>
