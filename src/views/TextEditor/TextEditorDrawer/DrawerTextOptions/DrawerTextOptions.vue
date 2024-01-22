@@ -14,5 +14,13 @@ import pageStore from "@/stores/PageStore";
         >
       </v-card-actions>
     </v-card>
+    <!--  -->
+    <v-card variant="flat">
+      <v-card-text> Colunas </v-card-text>
+      <v-card-actions>
+        <v-btn @click="pageStore().toggleColumns(true)"> Mostrar </v-btn>
+        <v-btn @click="pageStore().toggleColumns(false)"> Esconder</v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>

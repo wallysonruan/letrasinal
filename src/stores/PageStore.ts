@@ -388,6 +388,7 @@ function changePageItemColumn(id: string, column: ColumnTypes) {
     (pages.value[0].text[index].details as SignDetails).column = column;
   }
 
+  toggleColumns(true);
   replacePageItemById(id, pages.value[0].text[index]);
 }
 
@@ -540,10 +541,20 @@ function addNumber(number: string, itemId: string = "caret") {
       column: "middle",
       style: {
         fontSize: 1,
-      }
+      },
     },
   };
   addPageItem(numberPageItem, itemId);
+}
+
+const showColumns = ref(false);
+
+function toggleColumns(show: boolean) {
+  showColumns.value = show;
+}
+
+function shouldShowColumns() {
+  return showColumns.value;
 }
 
 const pageStore = defineStore({
@@ -591,6 +602,8 @@ const pageStore = defineStore({
     addLongSpace,
     addBreakflow,
     addNumber,
+    shouldShowColumns,
+    toggleColumns,
   },
 });
 

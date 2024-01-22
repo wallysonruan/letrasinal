@@ -23,7 +23,7 @@ function setToolboxDisplay(mode: boolean) {
 function handlePressStart() {
   pressTimer = setTimeout(() => {
     setToolboxDisplay(true);
-  }, 500); // 500ms = 0.5 seconds
+  }, 300); // 300ms = 0.3 seconds
 }
 
 function handlePressEnd() {
@@ -52,6 +52,10 @@ function columnStyle() {
 const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(1).writingMode;
 });
+
+const showColumns = computed(() => {
+  return pageStore().shouldShowColumns();
+});
 </script>
 <template>
   <div
@@ -61,7 +65,7 @@ const writingMode = computed(() => {
     @mousedown="handlePressStart"
     @mouseup="handlePressEnd"
     :writing-mode="writingMode"
-    :active="showToolbox"
+    :columns="showColumns"
   >
     <SignToolBox
       :active="showToolbox"
@@ -80,8 +84,10 @@ const writingMode = computed(() => {
   position: relative;
 
   &[writing-mode="vertical"] {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    &[columns="true"] {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   &[active="true"] {
