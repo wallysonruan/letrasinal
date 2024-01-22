@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import pageStore from "../../../../stores/PageStore";
+import type { StyleValue } from "vue";
 
 const formatting = ref<number[]>([]);
 const alignment = ref<number>(1);
@@ -13,8 +14,10 @@ type SignToolBoxProps = {
 const props = defineProps<SignToolBoxProps>();
 const emit = defineEmits(["closeToolbox"]);
 
-function styleTop() {
-  return "top: -55px;";
+function dinamicallyPositionToolBox(): StyleValue {
+  return {
+    top: "-55px",
+  };
 }
 
 function toggleToolbox() {
@@ -22,7 +25,7 @@ function toggleToolbox() {
 }
 </script>
 <template>
-  <div v-if="props.active" class="toolbox-container" :style="styleTop()">
+  <div v-if="props.active" class="toolbox-container" :style="dinamicallyPositionToolBox()">
     <div class="toolbox">
       <v-btn
         class="close-btn"
