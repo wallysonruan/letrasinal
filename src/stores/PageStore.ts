@@ -225,6 +225,9 @@ function createSignPageItem(
       fsw: fsw,
       words: words,
       column: "middle",
+      style: {
+        fontSize: 1,
+      },
     },
   };
 }
@@ -245,6 +248,9 @@ function createSignPunctuationPageItem(
       },
       words: words,
       column: "middle",
+      style: {
+        fontSize: 1,
+      },
     },
   };
 }
@@ -532,6 +538,9 @@ function addNumber(number: string, itemId: string = "caret") {
     details: {
       number: number,
       column: "middle",
+      style: {
+        fontSize: 1,
+      }
     },
   };
   addPageItem(numberPageItem, itemId);
