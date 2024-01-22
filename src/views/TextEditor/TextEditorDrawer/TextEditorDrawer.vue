@@ -16,7 +16,7 @@ const windowWidth = computed(() => {
 });
 
 const isMobile = computed(() => {
-  return widthHeight.value < 700;
+  return windowWidth.value < 700;
 });
 
 const drawerLocation = computed<"left" | "right" | "bottom">(() => {
@@ -43,10 +43,6 @@ const disablePageOptions = computed(() => {
   return windowWidth.value < 600;
 });
 
-const widthHeight = computed(() => {
-  return browserWindowStore().getWindowHeight();
-});
-
 const eightyPercentHeight = computed(() => {
   return browserWindowStore().getWindowHeightPercentage(85);
 });
@@ -60,7 +56,6 @@ const eightyPercentHeight = computed(() => {
     :width="isMobile ? eightyPercentHeight : '320'"
     :location="drawerLocation"
   >
-  {{ eightyPercentHeight }}
     <v-list-item>
       <template v-slot:append>
         <v-btn
