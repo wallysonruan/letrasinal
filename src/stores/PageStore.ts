@@ -31,7 +31,20 @@ const pages = ref<PageConfigurations[]>([
       writingMode: defaultWritingMode,
       direction: defaultWritingDirection,
     },
-    text: [],
+    text: [
+      {
+        id: "1a70a",
+        type: "sign",
+        details: {
+          fsw: "M539x556S33b00482x483S21100507x503S18617491x530S22f07518x515",
+          words: ["Wallyson Ruan A. F."],
+          column: "middle",
+          style: {
+            fontSize: 1,
+          },
+        },
+      },
+    ],
   },
 ]);
 
@@ -123,12 +136,18 @@ export type SignPunctuationDetails = {
   };
   words: string[];
   column: ColumnTypes;
+  style?: {
+    fontSize?: number;
+  };
 };
 
 export type SignDetails = {
   fsw: string;
   words: string[];
   column: ColumnTypes;
+  style?: {
+    fontSize?: number;
+  };
 };
 
 type SignParagraphDetails = {
@@ -270,6 +289,38 @@ function movePageItemDown(id: string) {
     const item = pages.value[0].text[index];
     pages.value[0].text.splice(index, 1);
     pages.value[0].text.splice(index + 1, 0, item);
+  }
+}
+
+function getFontSize(textId: string): number | undefined {
+  const textItem = getPageText(1)?.find((t) => t.id === textId);
+  const style = (textItem?.details as SignDetails | SignPunctuationDetails)
+    .style;
+
+  return style?.fontSize;
+}
+
+function increaseFontSize(textId: string): void {
+  const fontSize = getFontSize(textId);
+  if (fontSize !== undefined) {
+    changeFontSize(textId, fontSize + 1);
+  }
+}
+
+function decreaseFontSize(textId: string): void {
+  const fontSize = getFontSize(textId);
+  if (fontSize !== undefined && fontSize > 1) {
+    changeFontSize(textId, fontSize - 1);
+  }
+}
+
+function changeFontSize(textId: string, newFontSize: number): void {
+  const textItem = getPageText(1)?.find((t) => t.id === textId);
+  const style = (textItem?.details as SignDetails | SignPunctuationDetails)
+    .style;
+
+  if (textItem && style) {
+    style.fontSize = newFontSize;
   }
 }
 
@@ -508,6 +559,8 @@ const pageStore = defineStore({
     changePageItemColumn,
     movePageItemUp,
     movePageItemDown,
+    increaseFontSize,
+    decreaseFontSize,
     moveCaretUp,
     moveCaretDown,
     placeCaretBeforeItemById,
