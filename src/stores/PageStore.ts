@@ -32,18 +32,18 @@ const pages = ref<PageConfigurations[]>([
       direction: defaultWritingDirection,
     },
     text: [
-      {
-        id: "1a70a",
-        type: "sign",
-        details: {
-          fsw: "M539x556S33b00482x483S21100507x503S18617491x530S22f07518x515",
-          words: ["Wallyson Ruan A. F."],
-          column: "middle",
-          style: {
-            fontSize: 1,
-          },
-        },
-      },
+      // {
+      //   id: "1a70a",
+      //   type: "sign",
+      //   details: {
+      //     fsw: "M539x556S33b00482x483S21100507x503S18617491x530S22f07518x515",
+      //     words: ["Wallyson Ruan A. F."],
+      //     column: "middle",
+      //     style: {
+      //       fontSize: 1,
+      //     },
+      //   },
+      // },
     ],
   },
 ]);
