@@ -23,7 +23,7 @@ function setToolboxDisplay(mode: boolean) {
 function handlePressStart() {
   pressTimer = setTimeout(() => {
     setToolboxDisplay(true);
-  }, 900); // 1500ms = 0.9 seconds
+  }, 500); // 500ms = 0.5 seconds
 }
 
 function handlePressEnd() {
