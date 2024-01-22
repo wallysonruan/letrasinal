@@ -80,14 +80,14 @@ function toggleToolbox() {
           style="background-color: white"
           @click="pageStore().decreaseFontSize(props.itemId)"
         >
-          <v-icon icon="mdi-minus"></v-icon>
+          <v-icon icon="fa-minus"></v-icon>
         </v-btn>
 
         <v-btn
           style="background-color: white"
           @click="pageStore().increaseFontSize(props.itemId)"
         >
-          <v-icon icon="mdi-plus"></v-icon>
+          <v-icon icon="fa-plus"></v-icon>
         </v-btn>
       </v-btn-toggle>
       <v-btn-toggle v-model="pageItemColumn" variant="outlined" divided>
@@ -95,21 +95,21 @@ function toggleToolbox() {
           style="background-color: white"
           @click="pageStore().changePageItemColumn(props.itemId, 'left')"
         >
-          <v-icon icon="mdi-format-align-left"></v-icon>
+          <v-icon icon="fa-align-left"></v-icon>
         </v-btn>
 
         <v-btn
           style="background-color: white"
           @click="pageStore().changePageItemColumn(props.itemId, 'middle')"
         >
-          <v-icon icon="mdi-format-align-center"></v-icon>
+          <v-icon icon="fa-align-center"></v-icon>
         </v-btn>
 
         <v-btn
           style="background-color: white"
           @click="pageStore().changePageItemColumn(props.itemId, 'right')"
         >
-          <v-icon icon="mdi-format-align-right"></v-icon>
+          <v-icon icon="fa-align-right"></v-icon>
         </v-btn>
       </v-btn-toggle>
 
@@ -118,7 +118,7 @@ function toggleToolbox() {
           style="background-color: #a91b0d; color: white"
           @click="toggleToolbox"
         >
-          <v-icon icon="mdi-close"> </v-icon>
+          <v-icon icon="fa-close"> </v-icon>
         </v-btn>
       </v-btn-toggle>
     </div>

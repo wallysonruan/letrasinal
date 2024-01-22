@@ -34,7 +34,7 @@ function checkRulesAndSearch() {
       clearable
       @keydown.enter="checkRulesAndSearch"
       @click:append-inner="checkRulesAndSearch"
-      append-inner-icon="mdi-magnify"
+      append-inner-icon="fa-search"
     />
   </div>
 </template>

@@ -34,9 +34,9 @@ const closeAllOnDrawerClose = computed(() => {
 
 const chevronDirection = computed(() => {
   if (drawerLocation.value === "bottom") {
-    return drawerExpandable.value ? "mdi-chevron-up" : "mdi-chevron-down";
+    return drawerExpandable.value ? "fa-chevron-up" : "fa-chevron-down";
   }
-  return drawerExpandable.value ? "mdi-chevron-right" : "mdi-chevron-left";
+  return drawerExpandable.value ? "fa-chevron-right" : "fa-chevron-left";
 });
 
 const disablePageOptions = computed(() => {
@@ -72,7 +72,7 @@ const eightyPercentHeight = computed(() => {
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-file"
+            prepend-icon="fa-file-text"
             title="Configurações da Página"
             :disabled="disablePageOptions"
           ></v-list-item>
@@ -88,7 +88,7 @@ const eightyPercentHeight = computed(() => {
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-hand"
+            prepend-icon="fa-hand"
             title="Configurações de Texto"
           ></v-list-item>
         </template>
@@ -103,7 +103,7 @@ const eightyPercentHeight = computed(() => {
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-hand"
+            prepend-icon="fa-sign-language"
             title="Adicionar Sinais"
           ></v-list-item>
         </template>
@@ -146,7 +146,7 @@ const eightyPercentHeight = computed(() => {
           <v-list-item
             disabled
             v-bind="props"
-            prepend-icon="mdi-printer"
+            prepend-icon="fa-print"
             title="Imprimir"
           ></v-list-item>
         </template>

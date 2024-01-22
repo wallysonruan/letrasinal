@@ -163,7 +163,7 @@ async function load({ done }) {
         ></SignDisplayGrid>
         <template v-slot:load-more="{ props }">
           <v-btn
-            icon="mdi-refresh"
+            icon="fa-refresh"
             variant="text"
             size="small"
             v-bind="props"
