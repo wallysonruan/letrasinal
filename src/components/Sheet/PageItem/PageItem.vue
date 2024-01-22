@@ -14,6 +14,8 @@ import CaretComponent from "@/components/common/CaretComponent/CaretComponent.vu
 import NumberComponent from "@/components/common/NumberComponent/NumberComponent.vue";
 import SignColumn from "@/components/common/SignColumn/SignColumn.vue";
 import { computed } from "vue";
+import { watch } from "vue";
+import { ref } from "vue";
 
 type PageItemProps = {
   item: PageItemType;
@@ -22,6 +24,26 @@ const props = defineProps<PageItemProps>();
 
 const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(1).writingMode;
+});
+
+const reRenderingNecessary = computed(() => {
+  const pageText = pageStore().getPageText(1);
+  const item = pageText?.find((item) => item.id === props.item.id);
+  const details = item?.details as SignDetails | SignPunctuationDetails;
+
+  if (details === undefined) {
+    return;
+  }
+
+  return details.style?.fontSize;
+});
+
+const key = ref<number>(0); // This is a hack to force re-rendering of the component
+
+watch(reRenderingNecessary, () => {
+  if (reRenderingNecessary.value !== undefined) {
+    key.value++;
+  }
 });
 </script>
 <template>
@@ -32,7 +54,7 @@ const writingMode = computed(() => {
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
     >
-      <SignComponent :sign="props.item.details as SignDetails" />
+      <SignComponent :sign="props.item.details as SignDetails" :key="key" />
     </SignColumn>
     <!---->
     <SignColumn
@@ -41,7 +63,10 @@ const writingMode = computed(() => {
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
     >
-      <SignPunctuation :sign="props.item.details as SignPunctuationDetails" />
+      <SignPunctuation
+        :sign="props.item.details as SignPunctuationDetails"
+        :key="key"
+      />
     </SignColumn>
     <!---->
     <PunctuationComponent

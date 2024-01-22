@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import pageStore, { type PageItemTypes } from "../../../../stores/PageStore";
+
+const formatting = ref<number[]>([]);
+const alignment = ref<number>(1);
 
 type SignToolBoxProps = {
   itemId: string;
@@ -13,11 +17,11 @@ const emit = defineEmits(["closeToolbox"]);
 function styleTop(type: PageItemTypes) {
   switch (type) {
     case "signPunctuation":
-      return "top: -170%;";
+      return "top: -70px;";
     case "number":
       return "top: -100%;";
     default:
-      return "top: -60%;";
+      return "top: -180%;";
   }
 }
 
@@ -26,56 +30,67 @@ function toggleToolbox() {
 }
 </script>
 <template>
-  <v-sheet
+  <div
     v-if="props.active"
     class="toolbox-container"
-    lines="one"
     :style="styleTop(props.pageItemType)"
   >
-    <div class="toolbox">
+    <div class="toolbox d-flex justify-space-between pa-4 pb-0">
       <v-btn
-        class="btn left"
-        variant="text"
+        class="close-btn"
+        color="red"
         density="compact"
-        block
-        @click="pageStore().changePageItemColumn(props.itemId, 'left')"
-        >E</v-btn
+        icon
+        @click="toggleToolbox"
       >
-      <v-btn
-        class="btn middle"
-        variant="text"
-        density="compact"
-        block
-        @click="pageStore().changePageItemColumn(props.itemId, 'middle')"
-        >M</v-btn
-      >
-      <v-btn
-        class="btn right"
-        variant="text"
-        density="compact"
-        block
-        @click="pageStore().changePageItemColumn(props.itemId, 'right')"
-        >D</v-btn
-      >
-      <div class="btn close-container">
+        <v-icon icon="mdi-close"> </v-icon>
+      </v-btn>
+      <!--  -->
+      <v-btn-toggle v-model="formatting" multiple variant="outlined" divided>
         <v-btn
-          class="btn close"
-          variant="text"
-          density="compact"
-          block
-          @click="toggleToolbox"
+          style="background-color: white"
+          @click="pageStore().decreaseFontSize(props.itemId)"
         >
-          X
+          <v-icon icon="mdi-minus"></v-icon>
         </v-btn>
-      </div>
+
+        <v-btn
+          style="background-color: white"
+          @click="pageStore().increaseFontSize(props.itemId)"
+        >
+          <v-icon icon="mdi-plus"></v-icon>
+        </v-btn>
+      </v-btn-toggle>
+
+      <v-btn-toggle v-model="alignment" variant="outlined" divided>
+        <v-btn
+          style="background-color: white"
+          @click="pageStore().changePageItemColumn(props.itemId, 'left')"
+        >
+          <v-icon icon="mdi-format-align-left"></v-icon>
+        </v-btn>
+
+        <v-btn
+          style="background-color: white"
+          @click="pageStore().changePageItemColumn(props.itemId, 'middle')"
+        >
+          <v-icon icon="mdi-format-align-center"></v-icon>
+        </v-btn>
+
+        <v-btn
+          style="background-color: white"
+          @click="pageStore().changePageItemColumn(props.itemId, 'right')"
+        >
+          <v-icon icon="mdi-format-align-right"></v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </div>
-  </v-sheet>
+  </div>
 </template>
 <style scoped lang="scss">
 .toolbox-container {
-  background-color: blue;
   position: absolute;
-  width: 100%;
+  width: max-content;
   max-height: 2rem;
   border-radius: 0.5rem;
 
@@ -83,33 +98,11 @@ function toggleToolbox() {
     position: relative;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-
-    .btn {
-      color: white;
-      &.left {
-        grid-column: 1;
-      }
-
-      &.middle {
-        grid-column: 2;
-      }
-
-      &.right {
-        grid-column: 3;
-      }
-
-      &.close-container {
-        position: absolute;
-        top: -25px;
-        right: 16px;
-        width: 1rem;
-        height: 1rem;
-
-        .close {
-          background-color: red;
-        }
-      }
-    }
+  }
+  .close-btn {
+    position: absolute;
+    top: -18px;
+    right: 10px;
   }
 }
 </style>

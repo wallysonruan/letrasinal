@@ -23,7 +23,7 @@ function setToolboxDisplay(mode: boolean) {
 function handlePressStart() {
   pressTimer = setTimeout(() => {
     setToolboxDisplay(true);
-  }, 1500); // 1500ms = 1.5 seconds
+  }, 900); // 1500ms = 0.9 seconds
 }
 
 function handlePressEnd() {
@@ -31,6 +31,11 @@ function handlePressEnd() {
     clearTimeout(pressTimer);
     pressTimer = null;
   }
+}
+
+function handleCloseToolBox() {
+  setToolboxDisplay(false);
+  pageStore().setPageOnFocus(true);
 }
 
 function columnStyle() {
@@ -56,12 +61,13 @@ const writingMode = computed(() => {
     @mousedown="handlePressStart"
     @mouseup="handlePressEnd"
     :writing-mode="writingMode"
+    :active="showToolbox"
   >
     <SignToolBox
       :active="showToolbox"
       :item-id="props.itemId"
       :page-item-type="props.pageItemType"
-      @closeToolbox="setToolboxDisplay(false)"
+      @closeToolbox="handleCloseToolBox"
     />
     <!--  -->
     <div class="sign-column-item" :style="columnStyle()">
@@ -73,9 +79,14 @@ const writingMode = computed(() => {
 .sign-column-container {
   position: relative;
 
-  // &[writing-mode="vertical"] {
-  //   // display: grid;
-  //   // grid-template-columns: repeat(3, 1fr);
-  // }
+  &[writing-mode="vertical"] {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &[active="true"] {
+    border: 1px solid blue;
+    border-radius: 3px;
+  }
 }
 </style>

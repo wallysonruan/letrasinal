@@ -10,6 +10,6 @@ const props = defineProps<SignComponentProps>();
 </script>
 <template>
   <div class="sign-component">
-    <SignWriting :fsw="props.sign.fsw" />
+    <SignWriting :fsw="props.sign.fsw" :font-size="sign.style?.fontSize" />
   </div>
 </template>
