@@ -48,10 +48,7 @@ const pages = ref<PageConfigurations[]>([
   },
 ]);
 
-pages.value[0].text.push({
-  id: "caret",
-  type: "caret",
-});
+addCaret();
 
 function changePageOrientation(
   pageId: number,
@@ -103,7 +100,7 @@ function setWritingDirection(
   }
 }
 
-const pageOnFocus = ref(false);
+const pageOnFocus = ref(true);
 
 function setPageOnFocus(value: boolean) {
   pageOnFocus.value = value;
@@ -322,6 +319,14 @@ function changeFontSize(textId: string, newFontSize: number): void {
   if (textItem && style) {
     style.fontSize = newFontSize;
   }
+}
+
+function addCaret() {
+  const caretPageItem: PageItemType = {
+    id: "caret",
+    type: "caret",
+  };
+  addPageItem(caretPageItem, "end");
 }
 
 function moveCaretUp() {
