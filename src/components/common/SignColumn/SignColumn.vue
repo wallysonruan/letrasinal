@@ -66,7 +66,6 @@ const writingMode = computed(() => {
     <SignToolBox
       :active="showToolbox"
       :item-id="props.itemId"
-      :page-item-type="props.pageItemType"
       @closeToolbox="handleCloseToolBox"
     />
     <!--  -->
