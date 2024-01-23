@@ -63,7 +63,30 @@ function handleCaretAdjustmentOnMount(): void {
   }
 }
 
-onMounted(handleCaretAdjustmentOnMount);
+function isElementInViewport(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
+function getCaretIntoView() {
+  const caret = getCaretElement();
+  if (!caret || isElementInViewport(caret)) {
+    return;
+  }
+
+  caret.scrollIntoView({ block: "center", inline: "nearest" });
+}
+
+onMounted(() => {
+  handleCaretAdjustmentOnMount();
+  getCaretIntoView();
+});
 </script>
 <template>
   <div v-show="activate" class="caret" :writing-mode="writingMode"></div>

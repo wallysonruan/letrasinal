@@ -136,7 +136,7 @@ function setFocusOnHiddenTextarea() {
   const textarea = pageContainer?.querySelector("textarea");
 
   if (textarea) {
-    textarea.focus();
+    textarea.focus({ preventScroll: true });
   }
 }
 </script>
