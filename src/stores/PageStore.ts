@@ -305,8 +305,12 @@ function getFontSize(textId: string): number | undefined {
 
 function increaseFontSize(textId: string): void {
   const fontSize = getFontSize(textId);
-  if (fontSize !== undefined) {
+  if (fontSize !== undefined && fontSize >= 1) {
     changeFontSize(textId, fontSize + 1);
+  }
+
+  if (fontSize !== undefined && fontSize === 0.7) {
+    changeFontSize(textId, 1);
   }
 }
 
@@ -314,6 +318,10 @@ function decreaseFontSize(textId: string): void {
   const fontSize = getFontSize(textId);
   if (fontSize !== undefined && fontSize > 1) {
     changeFontSize(textId, fontSize - 1);
+  }
+
+  if (fontSize && fontSize === 1) {
+    changeFontSize(textId, 0.7);
   }
 }
 
