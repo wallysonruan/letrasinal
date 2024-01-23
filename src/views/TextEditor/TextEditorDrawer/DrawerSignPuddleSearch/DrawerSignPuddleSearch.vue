@@ -240,11 +240,12 @@ async function load({ done }) {
 }
 
 @media screen and (max-width: 600px) {
-  .spuddle-search-container {
-    .search-list {
-      min-height: 5rem;
-      max-height: min-content;
-    }
-  }
+  // No need for a design for mobile devices - for now.
+  // .spuddle-search-container {
+  //   .search-list {
+  //     min-height: 5rem;
+  //     max-height: min-content;
+  //   }
+  // }
 }
 </style>

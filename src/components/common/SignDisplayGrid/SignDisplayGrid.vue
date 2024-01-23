@@ -39,15 +39,15 @@ watch(selected, (newValue) => {
   row-gap: 0.5rem;
 }
 @media screen and (max-width: 600px) {
-  .sign-display-grid {
-    display: flex;
-    flex-direction: row;
-    width: max-content;
-  }
+  // .sign-display-grid {
+  //   display: flex;
+  //   flex-direction: row;
+  //   width: max-content;
+  // }
 
-  .sign-display-grid-item {
-    min-width: 5rem;
-    max-width: max-content;
-  }
+  // .sign-display-grid-item {
+  //   min-width: 5rem;
+  //   max-width: max-content;
+  // }
 }
 </style>

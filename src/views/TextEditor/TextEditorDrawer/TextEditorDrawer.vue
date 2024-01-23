@@ -20,9 +20,11 @@ const isMobile = computed(() => {
 });
 
 const drawerLocation = computed<"left" | "right" | "bottom">(() => {
-  if (windowWidth.value < 600) {
-    return "bottom";
-  }
+  // Main user complained about the drawer being on the bottom of the screen.
+  // So, for now, we'll keep it on the left side of the screen.
+  // if (windowWidth.value < 600) {
+  //   return "bottom";
+  // }
 
   return "left";
 });
