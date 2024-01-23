@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import pageStore, { type ColumnTypes } from "../../../../stores/PageStore";
 import pageItemStore from "@/stores/PageItemStore";
 import type { StyleValue } from "vue";
@@ -67,6 +67,10 @@ function dinamicallyPositionToolBox(): StyleValue {
 function toggleToolbox() {
   emit("closeToolbox");
 }
+
+const pageItemFontSize = computed(() => {
+  return pageStore().getPageItemFontSize(props.itemId);
+});
 </script>
 <template>
   <div
@@ -79,6 +83,7 @@ function toggleToolbox() {
         <v-btn
           style="background-color: white"
           @click="pageStore().decreaseFontSize(props.itemId)"
+          :disabled="(pageItemFontSize ?? 1) <= 0.7"
         >
           <v-icon icon="fa-minus"></v-icon>
         </v-btn>

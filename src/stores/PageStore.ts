@@ -295,7 +295,7 @@ function movePageItemDown(id: string) {
   }
 }
 
-function getFontSize(textId: string): number | undefined {
+function getPageItemFontSize(textId: string): number | undefined {
   const textItem = getPageText(1)?.find((t) => t.id === textId);
   const style = (textItem?.details as SignDetails | SignPunctuationDetails)
     .style;
@@ -304,7 +304,7 @@ function getFontSize(textId: string): number | undefined {
 }
 
 function increaseFontSize(textId: string): void {
-  const fontSize = getFontSize(textId);
+  const fontSize = getPageItemFontSize(textId);
   if (fontSize !== undefined && fontSize >= 1) {
     changeFontSize(textId, fontSize + 1);
   }
@@ -315,7 +315,7 @@ function increaseFontSize(textId: string): void {
 }
 
 function decreaseFontSize(textId: string): void {
-  const fontSize = getFontSize(textId);
+  const fontSize = getPageItemFontSize(textId);
   if (fontSize !== undefined && fontSize > 1) {
     changeFontSize(textId, fontSize - 1);
   }
@@ -592,6 +592,7 @@ const pageStore = defineStore({
     changePageItemColumn,
     movePageItemUp,
     movePageItemDown,
+    getPageItemFontSize,
     increaseFontSize,
     decreaseFontSize,
     moveCaretUp,
