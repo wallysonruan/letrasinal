@@ -177,7 +177,7 @@ async function load({ done }) {
         <SignWriting
           v-if="signsFromSignPuddle.length === 0 && !isLoading"
           fsw="M546x532S34100481x483S17610530x495S17618451x494S36e00477x520S30a30488x491"
-          :font-size="3"
+          :font-size="2"
           color="rgb(200,200,200)"
           class="centralize"
         />
@@ -249,7 +249,7 @@ async function load({ done }) {
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
-    min-height: 20rem;
+    min-height: 7rem;
     max-height: 20rem;
     margin: 0%;
     margin-bottom: 1rem;
