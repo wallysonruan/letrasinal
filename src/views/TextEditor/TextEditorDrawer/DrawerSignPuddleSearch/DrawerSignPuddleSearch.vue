@@ -46,6 +46,14 @@ function filterOutSignsWithoutFsw(
   return results.filter((result) => result.sign.length > 0);
 }
 
+function filterOutSignsWithDifferentAuthor(
+  payload: SignPuddlePayload,
+  author: string,
+): SignPuddleResult[] {
+  const results = payload.results;
+  return results.filter((result) => result.source.includes(author));
+}
+
 const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
 
 function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
@@ -108,7 +116,15 @@ async function handleSearch(input: SignPuddleFormRequest) {
   signsFromSignPuddle.value = [];
   loadingOn();
   await getSignsByWord(input.word, input.match).then((res: unknown) => {
-    const payload = res as SignPuddlePayload;
+    let payload = res as SignPuddlePayload;
+
+    if (input.source.length > 0) {
+      payload.results = filterOutSignsWithDifferentAuthor(
+        payload,
+        input.source,
+      );
+    }
+
     signsFromSignPuddle.value.push(...filterOutSignsWithoutFsw(payload));
   });
   loadingOff();

@@ -87,7 +87,7 @@ function handleSearch() {
         hide-details
         class="mb-2"
         v-model="request.source"
-        disabled
+        :disabled="request.word.length < 1"
       />
       <!-- <label for="sourceMandatory">
         <input
