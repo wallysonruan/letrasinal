@@ -45,6 +45,10 @@ const emit = defineEmits<{
 function handleSearch() {
   emit("onSearch", request.value);
 }
+
+function disableIfWordIsEmpty(): boolean {
+  return !request.value.word || request.value.word.trim().length < 1;
+}
 </script>
 <template>
   <div class="search-container">
@@ -52,6 +56,7 @@ function handleSearch() {
       <v-text-field
         label="Palavra"
         variant="outlined"
+        clearable
         hide-details
         v-model="request.word"
       />
@@ -73,6 +78,7 @@ function handleSearch() {
       <v-text-field
         label="Texto"
         variant="outlined"
+        clearable
         hide-details
         class="mb-2"
         v-model="request.text"
@@ -81,10 +87,11 @@ function handleSearch() {
       <v-text-field
         label="Autor (a)"
         variant="outlined"
+        clearable
         hide-details
         class="mb-2"
         v-model="request.source"
-        :disabled="request.word.length < 1"
+        :disabled="disableIfWordIsEmpty()"
       />
       <label for="sourceMandatory">
         <input
@@ -100,7 +107,7 @@ function handleSearch() {
         color="primary"
         @click="handleSearch"
         class="mt-2 mb-2"
-        :disabled="request.word.length < 1"
+        :disabled="disableIfWordIsEmpty()"
         >Pesquisar</v-btn
       >
     </div>
