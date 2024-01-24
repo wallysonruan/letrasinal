@@ -45,10 +45,6 @@ const emit = defineEmits<{
 function handleSearch() {
   emit("onSearch", request.value);
 }
-
-function stringHasSpaceOnly(str: string) {
-  return str.trim().length === 0;
-}
 </script>
 <template>
   <div class="search-container">
