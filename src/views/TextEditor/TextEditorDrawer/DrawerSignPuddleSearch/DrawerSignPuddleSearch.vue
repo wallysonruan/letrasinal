@@ -172,7 +172,7 @@ async function load({ done }) {
 <template>
   <v-sheet class="mx-auto spuddle-search-container">
     <SignPuddleSearchForm @on-search="handleSearch" />
-    <div class="search-list-container">
+    <format @submit.prevent class="search-list-container">
       <div class="search-list-result">
         <SignWriting
           v-if="signsFromSignPuddle.length === 0 && !isLoading"
@@ -224,17 +224,18 @@ async function load({ done }) {
           </template>
         </v-infinite-scroll>
       </div>
-    </div>
-    <div class="buttons-container">
-      <v-btn
-        color="rgb(39, 103, 39, 1)"
-        width="50%"
-        @click="handleOk"
-        :disabled="selected.length < 1"
-      >
-        Adicionar
-      </v-btn>
-    </div>
+      <div class="buttons-container">
+        <v-btn
+          type="submit"
+          color="rgb(39, 103, 39, 1)"
+          width="50%"
+          @click="handleOk"
+          :disabled="selected.length < 1"
+        >
+          Adicionar
+        </v-btn>
+      </div>
+    </format>
   </v-sheet>
 </template>
 <style scoped lang="scss">

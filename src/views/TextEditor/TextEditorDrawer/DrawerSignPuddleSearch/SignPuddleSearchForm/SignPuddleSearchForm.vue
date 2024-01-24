@@ -52,7 +52,7 @@ function disableIfWordIsEmpty(): boolean {
 </script>
 <template>
   <div class="search-container">
-    <div class="search-container-bar">
+    <form @submit.prevent class="search-container-bar">
       <v-text-field
         label="Palavra"
         variant="outlined"
@@ -101,16 +101,17 @@ function disableIfWordIsEmpty(): boolean {
         />
         Mostrar apenas sinais que tenham autores definidos.
       </label>
-    </div>
-    <div class="search-actions">
-      <v-btn
-        color="primary"
-        @click="handleSearch"
-        class="mt-2 mb-2"
-        :disabled="disableIfWordIsEmpty()"
-        >Pesquisar</v-btn
-      >
-    </div>
+      <div class="search-actions">
+        <v-btn
+          type="submit"
+          color="primary"
+          @click="handleSearch"
+          class="mt-2 mb-2"
+          :disabled="disableIfWordIsEmpty()"
+          >Pesquisar</v-btn
+        >
+      </div>
+    </form>
   </div>
 </template>
 <style scoped lang="scss">
