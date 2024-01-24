@@ -6,7 +6,8 @@ import { computed } from "vue";
 import type { PageItemType } from "../../../../stores/PageStore";
 import pageStore from "../../../../stores/PageStore";
 import SignDisplayGrid from "../../../../components/common/SignDisplayGrid/SignDisplayGrid.vue";
-import SignPuddleSearchBar from "./SignPuddleSearchBar/SignPuddleSearchBar.vue";
+import SignPuddleSearchForm from "./SignPuddleSearchForm/SignPuddleSearchForm.vue";
+import type { SignPuddleFormRequest } from "./SignPuddleSearchForm/SignPuddleSearchForm.vue";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -46,13 +47,6 @@ function filterOutSignsWithoutFsw(
 }
 
 const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
-
-async function getSigns(input: string) {
-  await getSignsByWord(input).then((res: unknown) => {
-    const payload = res as SignPuddlePayload;
-    signsFromSignPuddle.value.push(...filterOutSignsWithoutFsw(payload));
-  });
-}
 
 function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
   let seen = new Set();
@@ -110,10 +104,13 @@ function loadingOff() {
   isLoading.value = false;
 }
 
-async function handleSearch(input: string) {
+async function handleSearch(input: SignPuddleFormRequest) {
   signsFromSignPuddle.value = [];
   loadingOn();
-  await getSigns(input);
+  await getSignsByWord(input.word, input.match).then((res: unknown) => {
+    const payload = res as SignPuddlePayload;
+    signsFromSignPuddle.value.push(...filterOutSignsWithoutFsw(payload));
+  });
   loadingOff();
 }
 
@@ -139,56 +136,58 @@ type load: ((options: {
 */
 // @ts-ignore
 async function load({ done }) {
-  // await getSigns();
+  // await getSignsByWord();
   done(InfiniteScrollLoadStatus.NO_MORE_CONTENT);
 }
 </script>
 <template>
   <v-sheet class="mx-auto spuddle-search-container">
-    <SignPuddleSearchBar :onSearch="handleSearch"></SignPuddleSearchBar>
-    <div class="search-list">
-      <v-progress-circular
-        indeterminate
-        v-if="isLoading"
-        class="loading-circular"
-      />
-      <v-infinite-scroll
-        v-if="signsFromSignPuddle.length > 0"
-        @load="load"
-        class="infinite-scroller"
-      >
-        <SignDisplayGrid
-          :signs="signPuddleResultAsPageItem"
-          @onSelect="getSelected"
-        ></SignDisplayGrid>
-        <template v-slot:load-more="{ props }">
-          <v-btn
-            icon="fa-refresh"
-            variant="text"
-            size="small"
-            v-bind="props"
-          ></v-btn>
-        </template>
-        <template v-slot:error="{ props }">
-          <v-alert type="error">
-            <div class="d-flex justify-space-between align-center">
-              Algo deu errado.
-              <v-btn
-                color="white"
-                variant="outlined"
-                size="small"
-                v-bind="props"
-              >
-                Tentar outra vez
-              </v-btn>
-            </div>
-          </v-alert>
-        </template>
-        <template v-slot:empty>
-          <!-- <v-alert type="warning">Não há mais sinais.</v-alert> -->
-          <!-- <v-alert type="info">Paginação não implementada.</v-alert> -->
-        </template>
-      </v-infinite-scroll>
+    <SignPuddleSearchForm @on-search="handleSearch" />
+    <div class="search-list-container">
+      <div class="search-list-result">
+        <v-progress-circular
+          indeterminate
+          v-if="isLoading"
+          class="loading-circular"
+        />
+        <v-infinite-scroll
+          v-if="signsFromSignPuddle.length > 0"
+          @load="load"
+          class="infinite-scroller"
+        >
+          <SignDisplayGrid
+            :signs="signPuddleResultAsPageItem"
+            @onSelect="getSelected"
+          ></SignDisplayGrid>
+          <template v-slot:load-more="{ props }">
+            <v-btn
+              icon="fa-refresh"
+              variant="text"
+              size="small"
+              v-bind="props"
+            ></v-btn>
+          </template>
+          <template v-slot:error="{ props }">
+            <v-alert type="error">
+              <div class="d-flex justify-space-between align-center">
+                Algo deu errado.
+                <v-btn
+                  color="white"
+                  variant="outlined"
+                  size="small"
+                  v-bind="props"
+                >
+                  Tentar outra vez
+                </v-btn>
+              </div>
+            </v-alert>
+          </template>
+          <template v-slot:empty>
+            <!-- <v-alert type="warning">Não há mais sinais.</v-alert> -->
+            <!-- <v-alert type="info">Paginação não implementada.</v-alert> -->
+          </template>
+        </v-infinite-scroll>
+      </div>
     </div>
     <div class="buttons-container">
       <v-btn
@@ -209,7 +208,7 @@ async function load({ done }) {
   max-width: 35rem;
   padding: 0.5rem 0;
 
-  .search-list {
+  .search-list-result {
     position: relative;
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -242,7 +241,7 @@ async function load({ done }) {
 @media screen and (max-width: 600px) {
   // No need for a design for mobile devices - for now.
   // .spuddle-search-container {
-  //   .search-list {
+  //   .search-list-result {
   //     min-height: 5rem;
   //     max-height: min-content;
   //   }
