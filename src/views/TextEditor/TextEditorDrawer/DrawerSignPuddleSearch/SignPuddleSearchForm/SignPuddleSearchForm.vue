@@ -52,7 +52,6 @@ function handleSearch() {
       <v-text-field
         label="Palavra"
         variant="outlined"
-        clearable
         hide-details
         v-model="request.word"
       />
@@ -74,7 +73,6 @@ function handleSearch() {
       <v-text-field
         label="Texto"
         variant="outlined"
-        clearable
         hide-details
         class="mb-2"
         v-model="request.text"
@@ -83,7 +81,6 @@ function handleSearch() {
       <v-text-field
         label="Autor (a)"
         variant="outlined"
-        clearable
         hide-details
         class="mb-2"
         v-model="request.source"

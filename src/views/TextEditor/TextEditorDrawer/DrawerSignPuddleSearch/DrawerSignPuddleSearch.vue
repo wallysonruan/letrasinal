@@ -176,7 +176,7 @@ async function load({ done }) {
       <div class="search-list-result">
         <SignWriting
           v-if="signsFromSignPuddle.length === 0 && !isLoading"
-          fsw="M546x532S34100481x483S17610530x495S17618451x494S36e00477x520S30a30488x491"
+          fsw="M543x532S34100481x483S17610527x495S17618453x495S36e00477x520S30a30488x491"
           :font-size="2"
           color="rgb(200,200,200)"
           class="centralize"
