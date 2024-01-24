@@ -54,6 +54,11 @@ function filterOutSignsWithDifferentAuthor(
   return results.filter((result) => result.source.includes(author));
 }
 
+function filterOutSignsWithoutAnyAuthor(payload: SignPuddlePayload) {
+  const results = payload.results;
+  return results.filter((result) => result.source.length > 0);
+}
+
 const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
 
 function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
@@ -115,18 +120,25 @@ function loadingOff() {
 async function handleSearch(input: SignPuddleFormRequest) {
   signsFromSignPuddle.value = [];
   loadingOn();
-  await getSignsByWord(input.word, input.match).then((res: unknown) => {
-    let payload = res as SignPuddlePayload;
 
-    if (input.source.length > 0) {
-      payload.results = filterOutSignsWithDifferentAuthor(
-        payload,
-        input.source,
-      );
-    }
+  if (input.word.length > 0) {
+    await getSignsByWord(input.word, input.match).then((res: unknown) => {
+      let payload = res as SignPuddlePayload;
 
-    signsFromSignPuddle.value.push(...filterOutSignsWithoutFsw(payload));
-  });
+      if (input.source.length > 0) {
+        payload.results = filterOutSignsWithDifferentAuthor(
+          payload,
+          input.source,
+        );
+      }
+
+      if (input.sourceOnly) {
+        payload.results = filterOutSignsWithoutAnyAuthor(payload);
+      }
+
+      signsFromSignPuddle.value.push(...filterOutSignsWithoutFsw(payload));
+    });
+  }
   loadingOff();
 }
 

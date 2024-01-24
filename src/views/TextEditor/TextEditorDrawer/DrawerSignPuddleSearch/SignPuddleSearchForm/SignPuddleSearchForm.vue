@@ -89,14 +89,14 @@ function handleSearch() {
         v-model="request.source"
         :disabled="request.word.length < 1"
       />
-      <!-- <label for="sourceMandatory">
+      <label for="sourceMandatory">
         <input
           id="sourceMandatory"
           type="checkbox"
           v-model="request.sourceOnly"
         />
         Mostrar apenas sinais que tenham autores definidos.
-      </label> -->
+      </label>
     </div>
     <div class="search-actions">
       <v-btn

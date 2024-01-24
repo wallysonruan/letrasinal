@@ -43,7 +43,7 @@ export async function getSignsByTerm(
 ) {
   const inputAsUrlParam = encodeURIComponent(term);
 
-  const url = `${SIGN_PUDDLE_SERVER}/puddle/sgn46/sign?term=${inputAsUrlParam}&${DEFAULT_FLAGS}`;
+  const url = `${SIGN_PUDDLE_SERVER}/puddle/sgn46/sign?term=${inputAsUrlParam}&${DEFAULT_FLAGS}&match=${match}`;
   return await get(url).then((res) => res);
 }
 
