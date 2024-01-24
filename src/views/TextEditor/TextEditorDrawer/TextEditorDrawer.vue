@@ -15,9 +15,9 @@ const windowWidth = computed(() => {
   return browserWindowStore().getWindowWidth();
 });
 
-const isMobile = computed(() => {
-  return windowWidth.value < 700;
-});
+// const isMobile = computed(() => {
+//   return windowWidth.value < 700;
+// });
 
 const drawerLocation = computed<"left" | "right" | "bottom">(() => {
   // Main user complained about the drawer being on the bottom of the screen.
@@ -45,9 +45,9 @@ const disablePageOptions = computed(() => {
   return windowWidth.value < 600;
 });
 
-const eightyPercentHeight = computed(() => {
-  return browserWindowStore().getWindowHeightPercentage(85);
-});
+// const eightyPercentHeight = computed(() => {
+//   return browserWindowStore().getWindowHeightPercentage(85);
+// });
 </script>
 <template>
   <v-navigation-drawer
@@ -55,9 +55,10 @@ const eightyPercentHeight = computed(() => {
     :rail="drawerExpandable"
     permanent
     @click="drawerExpandable = false"
-    :width="isMobile ? eightyPercentHeight : '320'"
+    width="320"
     :location="drawerLocation"
-  >
+    >
+    <!-- :width="isMobile ? eightyPercentHeight : '320'" -->
     <v-list-item>
       <template v-slot:append>
         <v-btn
