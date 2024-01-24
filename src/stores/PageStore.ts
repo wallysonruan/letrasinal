@@ -158,6 +158,9 @@ export type TextDetails = {
 export type NumberDetails = {
   number: string;
   column: ColumnTypes;
+  style?: {
+    fontSize?: number;
+  };
 };
 
 type ParagraphDetails = {
