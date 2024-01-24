@@ -4,6 +4,7 @@ import { isFswType, isValidFswString } from "@/utils/SignWritingUtilities";
 const props = defineProps<{
   fsw: string;
   fontSize?: number;
+  color?: string;
 }>();
 
 const isValidFsw = isValidFswString(props.fsw);
@@ -15,7 +16,7 @@ const isPunctuation = isFswType(props.fsw, "punctuation");
     <fsw-sign
       v-else
       :sign="props.fsw"
-      :style="`font-size: ${fontSize ?? 1}rem;`"
+      :style="`font-size: ${props.fontSize ?? 1}rem; color: ${props.color};`"
     />
   </div>
 </template>

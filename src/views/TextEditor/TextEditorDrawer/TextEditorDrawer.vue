@@ -57,7 +57,7 @@ const disablePageOptions = computed(() => {
     @click="drawerExpandable = false"
     width="320"
     :location="drawerLocation"
-    >
+  >
     <!-- :width="isMobile ? eightyPercentHeight : '320'" -->
     <v-list-item>
       <template v-slot:append>

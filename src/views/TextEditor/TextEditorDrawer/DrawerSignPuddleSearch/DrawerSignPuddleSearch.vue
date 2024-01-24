@@ -8,6 +8,7 @@ import pageStore from "../../../../stores/PageStore";
 import SignDisplayGrid from "../../../../components/common/SignDisplayGrid/SignDisplayGrid.vue";
 import SignPuddleSearchForm from "./SignPuddleSearchForm/SignPuddleSearchForm.vue";
 import type { SignPuddleFormRequest } from "./SignPuddleSearchForm/SignPuddleSearchForm.vue";
+import SignWriting from "@/components/common/SignWriting/SignWriting.vue";
 
 enum InfiniteScrollLoadStatus {
   CONTENT_ADDED_SUCCESSFULLY = "ok",
@@ -173,10 +174,17 @@ async function load({ done }) {
     <SignPuddleSearchForm @on-search="handleSearch" />
     <div class="search-list-container">
       <div class="search-list-result">
+        <SignWriting
+          v-if="signsFromSignPuddle.length === 0 && !isLoading"
+          fsw="M546x532S34100481x483S17610530x495S17618451x494S36e00477x520S30a30488x491"
+          :font-size="3"
+          color="rgb(200,200,200)"
+          class="centralize"
+        />
         <v-progress-circular
           indeterminate
           v-if="isLoading"
-          class="loading-circular"
+          class="centralize"
         />
         <v-infinite-scroll
           v-if="signsFromSignPuddle.length > 0"
@@ -248,7 +256,7 @@ async function load({ done }) {
     padding: 0 0.5rem;
     overflow: auto;
 
-    .loading-circular {
+    .centralize {
       position: absolute;
       top: 50%;
       left: 50%;
