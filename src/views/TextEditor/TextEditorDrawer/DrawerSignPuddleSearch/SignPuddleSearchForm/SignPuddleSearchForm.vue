@@ -8,7 +8,7 @@ export type SignPuddleFormRequest = {
 };
 </script>
 <script setup lang="ts">
-import { SignPuddleMatch } from "@/utils/client/client";
+import { SignPuddleMatch } from "@/api/SignPuddle";
 import { ref } from "vue";
 
 const matchOptions = [

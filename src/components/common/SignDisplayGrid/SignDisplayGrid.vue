@@ -6,7 +6,7 @@ import SelectableItem from "../SelectableItem/SelectableItem.vue";
 import SignWriting from "../SignWriting/SignWriting.vue";
 
 type SignDisplayGridProps = {
-  signs: PageItemType[];
+  signs: { id: string; sign: string }[];
 };
 
 const props = defineProps<SignDisplayGridProps>();
@@ -23,7 +23,7 @@ watch(selected, (newValue) => {
     <template v-for="(sign, index) in props.signs" :key="index">
       <li class="sign-display-grid-item">
         <SelectableItem :value="sign.id" v-model="selected">
-          <SignWriting :fsw="(sign.details as SignDetails).fsw"></SignWriting>
+          <SignWriting :fsw="sign.sign"></SignWriting>
         </SelectableItem>
       </li>
     </template>

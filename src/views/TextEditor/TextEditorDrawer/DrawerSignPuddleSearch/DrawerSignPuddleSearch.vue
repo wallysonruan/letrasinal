@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { getSignsByWord } from "../../../../utils/client/client";
+import type {
+  SignPuddleSignEndPointResult,
+  SignPuddleSearchEndPointResult,
+} from "@/api/SignPuddle";
+import {
+  getSignsByTerm,
+  SignPuddleMatch,
+  getSignsBySource,
+} from "@/api/SignPuddle";
 import { ref } from "vue";
-import { computed } from "vue";
 
 import type { PageItemType } from "../../../../stores/PageStore";
 import pageStore from "../../../../stores/PageStore";
@@ -10,59 +17,66 @@ import SignPuddleSearchForm from "./SignPuddleSearchForm/SignPuddleSearchForm.vu
 import type { SignPuddleFormRequest } from "./SignPuddleSearchForm/SignPuddleSearchForm.vue";
 import SignWriting from "@/components/common/SignWriting/SignWriting.vue";
 
-enum InfiniteScrollLoadStatus {
-  CONTENT_ADDED_SUCCESSFULLY = "ok",
-  LOADING = "loading",
-  NO_MORE_CONTENT = "empty",
-  ERROR = "error",
-}
-type SignPuddleResult = {
-  created_at: string;
-  detail: Array<string>;
-  id: string;
-  sign: string;
-  signtext: string;
-  source: string;
-  terms: Array<string>;
-  text: string;
-  updated_at: string;
-  user: string;
-};
+const signsFromApi = ref<Partial<SignPuddleSearchEndPointResult>[]>([]);
+const totalSigns = ref(0);
+async function getSignsFromApi(
+  kind: "term" | "source",
+  term: string,
+  match: SignPuddleMatch,
+) {
+  if (kind === "term") {
+    const payload = await getSignsByTerm(term, match);
+    totalSigns.value = payload.meta.totalResults;
+    signsFromApi.value.push(...payload.results);
+  }
 
-type SignPuddlePayload = {
-  meta: {
-    limit: number;
-    location: string;
-    offset: number;
-    searchTime: string;
-    totalResults: number;
-  };
-  results: SignPuddleResult[];
-};
-
-function filterOutSignsWithoutFsw(
-  payload: SignPuddlePayload,
-): SignPuddleResult[] {
-  const results = payload.results;
-  return results.filter((result) => result.sign.length > 0);
+  if (kind === "source") {
+    const payload = await getSignsBySource(term, match);
+    totalSigns.value = payload.meta.totalResults;
+    signsFromApi.value.push(...payload.results);
+  }
 }
 
-function filterOutSignsWithDifferentAuthor(
-  payload: SignPuddlePayload,
-  author: string,
-): SignPuddleResult[] {
-  const results = payload.results;
-  return results.filter((result) => result.source.includes(author));
+const signsToShow = ref<Partial<SignPuddleSearchEndPointResult>[]>([]);
+
+function filterSigns(
+  payload: Partial<SignPuddleSearchEndPointResult>[],
+  term: string,
+  source: string,
+  sourceOnly: boolean,
+) {
+  let results = payload;
+
+  if (results[0].sign) {
+    results = removeSignsWithDuplicateFswSign(results);
+  }
+
+  if (
+    (payload as SignPuddleSearchEndPointResult[])[0].source &&
+    source.length > 0
+  ) {
+    results = filterOutSignsWithDifferentAuthor(
+      results as SignPuddleSearchEndPointResult[],
+      source,
+    );
+  }
+
+  if ((payload as SignPuddleSearchEndPointResult[])[0].source && sourceOnly) {
+    results = filterOutSignsWithoutAnyAuthor(
+      results as SignPuddleSearchEndPointResult[],
+    );
+  }
+
+  if (results[0].sign) {
+    results = filterOutSignsWithSigntext(results);
+  }
+
+  signsToShow.value = results;
 }
 
-function filterOutSignsWithoutAnyAuthor(payload: SignPuddlePayload) {
-  const results = payload.results;
-  return results.filter((result) => result.source.length > 0);
-}
-
-const signsFromSignPuddle = ref<SignPuddleResult[]>([]);
-
-function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
+function removeSignsWithDuplicateFswSign(
+  signs: Partial<SignPuddleSearchEndPointResult>[],
+) {
   let seen = new Set();
   return signs.filter((sign) => {
     let duplicate = seen.has(sign.sign);
@@ -71,102 +85,66 @@ function removeSignsWithDuplicateFswSign(signs: Array<SignPuddleResult>) {
   });
 }
 
-function convertSignPuddleResultToPageItem(
-  result: SignPuddleResult,
-): PageItemType {
-  return pageStore().createSignPageItem("sign", result.sign, result.terms);
+function filterOutSignsWithDifferentAuthor(
+  results: SignPuddleSearchEndPointResult[],
+  author: string,
+): SignPuddleSearchEndPointResult[] {
+  return results.filter((result) => result.source.includes(author));
 }
 
-const signPuddleResultAsPageItem = computed(() => {
-  const filteredSigns: SignPuddleResult[] = removeSignsWithDuplicateFswSign(
-    signsFromSignPuddle.value,
-  );
-  let signs: PageItemType[] = [];
+function filterOutSignsWithoutAnyAuthor(
+  results: SignPuddleSearchEndPointResult[],
+): SignPuddleSearchEndPointResult[] {
+  return results.filter((result) => result.source.length > 0);
+}
 
-  filteredSigns.forEach((sign) => {
-    signs.push(convertSignPuddleResultToPageItem(sign));
-  });
-
-  return signs;
-});
-
-function removeAllResultsNodes() {
-  const list = document.querySelector(".list-results");
-  if (list == null) {
-    return;
-  }
-  list.innerHTML = "";
+function filterOutSignsWithSigntext(
+  signs: Partial<SignPuddleSearchEndPointResult>[],
+) {
+  return signs.filter((sign) => sign.sign!.length > 0);
 }
 
 const selected = ref<string[]>([]);
-
 function getSelected(selectedSigns: string[]) {
   selected.value = selectedSigns;
 }
 
-function clearSearchDialog() {
-  signsFromSignPuddle.value = [];
-  selected.value = [];
-  removeAllResultsNodes();
-}
-
 const isLoading = ref(false);
-function loadingOn() {
+
+async function handleSearch(input: SignPuddleFormRequest) {
+  signsFromApi.value = [];
   isLoading.value = true;
-}
-function loadingOff() {
+
+  await getSignsFromApi("term", input.word, input.match);
+  filterSigns(signsFromApi.value, input.word, input.source, input.sourceOnly);
+
   isLoading.value = false;
 }
 
-async function handleSearch(input: SignPuddleFormRequest) {
-  signsFromSignPuddle.value = [];
-  loadingOn();
+function convertSignPuddleResultToPageItem(
+  result: Partial<SignPuddleSearchEndPointResult>,
+): PageItemType {
+  let terms = [""];
 
-  if (input.word.length > 0) {
-    await getSignsByWord(input.word, input.match).then((res: unknown) => {
-      let payload = res as SignPuddlePayload;
-
-      if (input.source.length > 0) {
-        payload.results = filterOutSignsWithDifferentAuthor(
-          payload,
-          input.source,
-        );
-      }
-
-      if (input.sourceOnly) {
-        payload.results = filterOutSignsWithoutAnyAuthor(payload);
-      }
-
-      signsFromSignPuddle.value.push(...filterOutSignsWithoutFsw(payload));
-    });
+  if ((result as SignPuddleSearchEndPointResult).terms) {
+    terms = (result as SignPuddleSearchEndPointResult).terms;
   }
-  loadingOff();
+
+  return pageStore().createSignPageItem("sign", result.sign!, terms);
 }
 
 function handleOk() {
   selected.value.forEach((selection) => {
-    const pageItem = signPuddleResultAsPageItem.value.find(
-      (item) => item.id === selection,
+    const selectedItem = signsToShow.value.find(
+      (sign) => sign.id === selection,
     );
-    pageStore().addPageItem(pageItem!!);
+    const pageItem = convertSignPuddleResultToPageItem(selectedItem!);
+    pageStore().addPageItem(pageItem);
   });
 
-  clearSearchDialog();
-}
-
-/* 
-There's a typing error with this "done", unfortunatlly there's no way to type it correctly because I have no access to the required types.
-  Required types:
-
-type load: ((options: {
-    side: InfiniteScrollSide;
-    done: (status: InfiniteScrollStatus) => void;
-}) => any)
-*/
-// @ts-ignore
-async function load({ done }) {
-  // await getSignsByWord();
-  done(InfiniteScrollLoadStatus.NO_MORE_CONTENT);
+  selected.value = [];
+  signsToShow.value = [];
+  signsFromApi.value = [];
 }
 </script>
 <template>
@@ -175,7 +153,7 @@ async function load({ done }) {
     <format @submit.prevent class="search-list-container">
       <div class="search-list-result">
         <SignWriting
-          v-if="signsFromSignPuddle.length === 0 && !isLoading"
+          v-if="signsToShow.length === 0 && !isLoading"
           fsw="M543x532S34100481x483S17610527x495S17618453x495S36e00477x520S30a30488x491"
           :font-size="2"
           color="rgb(200,200,200)"
@@ -186,51 +164,19 @@ async function load({ done }) {
           v-if="isLoading"
           class="centralize"
         />
-        <v-infinite-scroll
-          v-if="signsFromSignPuddle.length > 0"
-          @load="load"
-          class="infinite-scroller"
-        >
-          <SignDisplayGrid
-            :signs="signPuddleResultAsPageItem"
-            @onSelect="getSelected"
-          ></SignDisplayGrid>
-          <template v-slot:load-more="{ props }">
-            <v-btn
-              icon="fa-refresh"
-              variant="text"
-              size="small"
-              v-bind="props"
-            ></v-btn>
-          </template>
-          <template v-slot:error="{ props }">
-            <v-alert type="error">
-              <div class="d-flex justify-space-between align-center">
-                Algo deu errado.
-                <v-btn
-                  color="white"
-                  variant="outlined"
-                  size="small"
-                  v-bind="props"
-                >
-                  Tentar outra vez
-                </v-btn>
-              </div>
-            </v-alert>
-          </template>
-          <template v-slot:empty>
-            <!-- <v-alert type="warning">Não há mais sinais.</v-alert> -->
-            <!-- <v-alert type="info">Paginação não implementada.</v-alert> -->
-          </template>
-        </v-infinite-scroll>
+        <SignDisplayGrid
+          v-if="signsToShow.length > 0"
+          :signs="signsToShow as SignPuddleSignEndPointResult[]"
+          @onSelect="getSelected"
+        ></SignDisplayGrid>
       </div>
       <div class="buttons-container">
         <v-btn
           type="submit"
           color="rgb(39, 103, 39, 1)"
           width="50%"
-          @click="handleOk"
           :disabled="selected.length < 1"
+          @click="handleOk"
         >
           Adicionar
         </v-btn>
