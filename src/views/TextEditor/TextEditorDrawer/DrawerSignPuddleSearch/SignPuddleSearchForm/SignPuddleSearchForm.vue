@@ -46,8 +46,12 @@ function handleSearch() {
   emit("onSearch", request.value);
 }
 
-function disableIfWordIsEmpty(): boolean {
-  return !request.value.word || request.value.word.trim().length < 1;
+function disableSearch(): boolean {
+  return (
+    request.value.word.trim().length === 0 &&
+    request.value.text.trim().length === 0 &&
+    request.value.source.trim().length === 0
+  );
 }
 </script>
 <template>
@@ -91,7 +95,6 @@ function disableIfWordIsEmpty(): boolean {
         hide-details
         class="mb-2"
         v-model="request.source"
-        :disabled="disableIfWordIsEmpty()"
       />
       <label for="sourceMandatory">
         <input
@@ -107,7 +110,7 @@ function disableIfWordIsEmpty(): boolean {
           color="primary"
           @click="handleSearch"
           class="mt-2 mb-2"
-          :disabled="disableIfWordIsEmpty()"
+          :disabled="disableSearch()"
           >Pesquisar</v-btn
         >
       </div>

@@ -115,7 +115,14 @@ async function handleSearch(input: SignPuddleFormRequest) {
   signsFromApi.value = [];
   isLoading.value = true;
 
-  await getSignsFromApi("term", input.word, input.match);
+  if (input.word.length > 0) {
+    await getSignsFromApi("term", input.word, input.match);
+  }
+
+  if (input.source.length > 0) {
+    await getSignsFromApi("source", input.source, input.match);
+  }
+
   filterSigns(signsFromApi.value, input.word, input.source, input.sourceOnly);
 
   isLoading.value = false;
