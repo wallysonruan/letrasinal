@@ -60,10 +60,10 @@ function disableSearch(): boolean {
       <v-text-field
         label="Palavra"
         variant="outlined"
-        clearable
         hide-details
         v-model="request.word"
-      />
+        />
+        <!-- clearable -->
       <v-chip-group
         mandatory
         filter
@@ -82,20 +82,19 @@ function disableSearch(): boolean {
       <v-text-field
         label="Texto"
         variant="outlined"
-        clearable
         hide-details
         class="mb-2"
         v-model="request.text"
-        disabled
-      />
+        />
+        <!-- clearable -->
       <v-text-field
         label="Autor (a)"
         variant="outlined"
-        clearable
         hide-details
         class="mb-2"
         v-model="request.source"
-      />
+        />
+        <!-- clearable -->
       <label for="sourceMandatory">
         <input
           id="sourceMandatory"

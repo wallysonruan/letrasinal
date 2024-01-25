@@ -6,6 +6,7 @@ import type {
 import {
   getSignsByTerm,
   SignPuddleMatch,
+  getSignsByText,
   getSignsBySource,
 } from "@/api/SignPuddle";
 import { ref } from "vue";
@@ -20,12 +21,18 @@ import SignWriting from "@/components/common/SignWriting/SignWriting.vue";
 const signsFromApi = ref<Partial<SignPuddleSearchEndPointResult>[]>([]);
 const totalSigns = ref(0);
 async function getSignsFromApi(
-  kind: "term" | "source",
+  kind: "term" | "text" | "source",
   term: string,
   match: SignPuddleMatch,
 ) {
   if (kind === "term") {
     const payload = await getSignsByTerm(term, match);
+    totalSigns.value = payload.meta.totalResults;
+    signsFromApi.value.push(...payload.results);
+  }
+
+  if (kind === "text") {
+    const payload = await getSignsByText(term, match);
     totalSigns.value = payload.meta.totalResults;
     signsFromApi.value.push(...payload.results);
   }
@@ -48,13 +55,20 @@ function filterSigns(
   let results = payload;
 
   if (results[0].sign) {
+    console.log("Removing duplicates");
     results = removeSignsWithDuplicateFswSign(results);
+  }
+
+  if (term.length > 0) {
+    console.log("Filtering by term");
+    results = results.filter((result) => result.terms!.includes(term));
   }
 
   if (
     (payload as SignPuddleSearchEndPointResult[])[0].source &&
     source.length > 0
   ) {
+    console.log("Filtering by source");
     results = filterOutSignsWithDifferentAuthor(
       results as SignPuddleSearchEndPointResult[],
       source,
@@ -62,16 +76,14 @@ function filterSigns(
   }
 
   if ((payload as SignPuddleSearchEndPointResult[])[0].source && sourceOnly) {
+    console.log("Filtering by source only");
     results = filterOutSignsWithoutAnyAuthor(
       results as SignPuddleSearchEndPointResult[],
     );
   }
 
-  if (results[0].sign) {
-    results = filterOutSignsWithSigntext(results);
-  }
-
   signsToShow.value = results;
+  console.log(results);
 }
 
 function removeSignsWithDuplicateFswSign(
@@ -121,6 +133,10 @@ async function handleSearch(input: SignPuddleFormRequest) {
 
   if (input.source.length > 0) {
     await getSignsFromApi("source", input.source, input.match);
+  }
+
+  if (input.text.length > 0) {
+    await getSignsFromApi("text", input.text, input.match);
   }
 
   filterSigns(signsFromApi.value, input.word, input.source, input.sourceOnly);
@@ -173,7 +189,7 @@ function handleOk() {
         />
         <SignDisplayGrid
           v-if="signsToShow.length > 0"
-          :signs="signsToShow as SignPuddleSignEndPointResult[]"
+          :signs="signsToShow as SignPuddleSearchEndPointResult[]"
           @onSelect="getSelected"
         ></SignDisplayGrid>
       </div>
