@@ -26,7 +26,6 @@ const pageText = computed(() => pageStore().getPageText(1) ?? []);
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: 100%;
   height: 100%;
 
@@ -36,6 +35,7 @@ const pageText = computed(() => pageStore().getPageText(1) ?? []);
     align-items: center;
     width: 100%;
     height: 100%;
+    overflow: scroll;
   }
 }
 

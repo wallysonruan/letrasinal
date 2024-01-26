@@ -62,8 +62,8 @@ function disableSearch(): boolean {
         variant="outlined"
         hide-details
         v-model="request.word"
-        />
-        <!-- clearable -->
+      />
+      <!-- clearable -->
       <v-chip-group
         mandatory
         filter
@@ -85,16 +85,16 @@ function disableSearch(): boolean {
         hide-details
         class="mb-2"
         v-model="request.text"
-        />
-        <!-- clearable -->
+      />
+      <!-- clearable -->
       <v-text-field
         label="Autor (a)"
         variant="outlined"
         hide-details
         class="mb-2"
         v-model="request.source"
-        />
-        <!-- clearable -->
+      />
+      <!-- clearable -->
       <label for="sourceMandatory">
         <input
           id="sourceMandatory"
