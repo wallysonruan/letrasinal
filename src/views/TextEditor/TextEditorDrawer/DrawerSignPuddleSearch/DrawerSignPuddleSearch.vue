@@ -172,6 +172,7 @@ function handleOk() {
 </script>
 <template>
   <v-sheet class="mx-auto spuddle-search-container">
+    <h2 class="drawer-signpuddle-search-title">SignPuddle</h2>
     <SignPuddleSearchForm @on-search="handleSearch" />
     <format @submit.prevent class="search-list-container">
       <div class="search-list-result">
@@ -213,6 +214,11 @@ function handleOk() {
   width: 90%;
   max-width: 35rem;
   padding: 0.5rem 0;
+
+  .drawer-signpuddle-search-title {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
 
   .search-list-result {
     position: relative;

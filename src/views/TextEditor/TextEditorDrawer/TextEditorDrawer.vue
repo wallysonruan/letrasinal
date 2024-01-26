@@ -41,13 +41,15 @@ const chevronDirection = computed(() => {
   return drawerExpandable.value ? "fa-chevron-right" : "fa-chevron-left";
 });
 
-const disablePageOptions = computed(() => {
-  return windowWidth.value < 600;
+const hidePageOptions = computed(() => {
+  return windowWidth.value < 700;
 });
 
 // const eightyPercentHeight = computed(() => {
 //   return browserWindowStore().getWindowHeightPercentage(85);
 // });
+
+const tab = ref("empty");
 </script>
 <template>
   <v-navigation-drawer
@@ -55,106 +57,107 @@ const disablePageOptions = computed(() => {
     :rail="drawerExpandable"
     permanent
     @click="drawerExpandable = false"
-    width="320"
+    width="300"
     :location="drawerLocation"
   >
-    <!-- :width="isMobile ? eightyPercentHeight : '320'" -->
-    <v-list-item>
-      <template v-slot:append>
-        <v-btn
-          variant="text"
-          :icon="chevronDirection"
-          @click.stop="drawerExpandable = !drawerExpandable"
-        ></v-btn>
-      </template>
-      <LogoItem />
-    </v-list-item>
+    <div class="drawer-header">
+      <LogoItem class="logo" v-if="!drawerExpandable" />
+      <v-btn
+        class="drawer-button"
+        :closed="drawerExpandable"
+        variant="text"
+        :icon="chevronDirection"
+        @click.stop="drawerExpandable = !drawerExpandable"
+      ></v-btn>
+    </div>
 
-    <v-list density="compact" nav>
-      <v-list-group value="pagina">
-        <template v-slot:activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            prepend-icon="fa-file-text"
-            title="Configurações da Página"
-            :disabled="disablePageOptions"
-          ></v-list-item>
-        </template>
-        <div :style="closeAllOnDrawerClose">
+    <div class="drawer-features">
+      <v-tabs
+        v-model="tab"
+        direction="vertical"
+        hide-slider
+        class="tab-container"
+      >
+        <!-- PAGE -->
+        <v-tab value="page" size="small" class="tab" :disabled="hidePageOptions">
+          <v-icon start icon="fa-file-text" />
+        </v-tab>
+        <!-- TEXT -->
+        <v-tab value="text" size="small" class="tab">
+          <v-icon start icon="fa-hand" />
+        </v-tab>
+
+        <!-- SIGNPUDDLE -->
+        <v-tab value="signpuddle" size="small" class="tab">
+          <v-icon>
+            <img
+              class="sp-btn"
+              width="25"
+              src="../../../assets/sign-puddle-icon.png"
+              alt="SignPuddle"
+            />
+          </v-icon>
+        </v-tab>
+      </v-tabs>
+
+      <v-window
+        v-model="tab"
+        class="window-container"
+        :style="closeAllOnDrawerClose"
+      >
+        <!-- PAGE -->
+        <v-window-item value="page" v-if="!hidePageOptions">
           <DrawerPageOptions />
-        </div>
-      </v-list-group>
-
-      <v-divider></v-divider>
-
-      <v-list-group value="writing-mode">
-        <template v-slot:activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            prepend-icon="fa-hand"
-            title="Configurações de Texto"
-          ></v-list-item>
-        </template>
-        <div :style="closeAllOnDrawerClose">
+        </v-window-item>
+        <!-- TEXT -->
+        <v-window-item value="text">
           <DrawerTextOptions />
-        </div>
-      </v-list-group>
-
-      <v-divider></v-divider>
-
-      <v-list-group value="sinal">
-        <template v-slot:activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            prepend-icon="fa-sign-language"
-            title="Adicionar Sinais"
-          ></v-list-item>
-        </template>
-
-        <div :style="closeAllOnDrawerClose">
-          <v-list-group value="signpuddle">
-            <template v-slot:activator="{ props }">
-              <v-list-item v-bind="props" title="SignPuddle">
-                <template v-slot:prepend>
-                  <v-icon>
-                    <img
-                      class="sp-btn"
-                      width="25"
-                      src="../../../assets/sign-puddle-icon.png"
-                      alt="SignPuddle"
-                    />
-                  </v-icon>
-                </template>
-              </v-list-item>
-            </template>
-            <DrawerSignPuddleSearch />
-          </v-list-group>
-
-          <v-list-group value="fsw">
-            <template v-slot:activator="{ props }">
-              <v-list-item v-bind="props" title="Formal SignWriting" disabled>
-                <template v-slot:prepend>
-                  <div :style="'margin-right: 1.5rem;'">FSW</div>
-                </template>
-              </v-list-item>
-            </template>
-          </v-list-group>
-        </div>
-      </v-list-group>
-
-      <v-divider></v-divider>
-
-      <v-list-group value="imprimir">
-        <template v-slot:activator="{ props }">
-          <v-list-item
-            disabled
-            v-bind="props"
-            prepend-icon="fa-print"
-            title="Imprimir"
-          ></v-list-item>
-        </template>
-        <div :style="closeAllOnDrawerClose"></div>
-      </v-list-group>
-    </v-list>
+        </v-window-item>
+        <!-- SIGNPUDDLE -->
+        <v-window-item value="signpuddle">
+          <DrawerSignPuddleSearch />
+        </v-window-item>
+      </v-window>
+    </div>
   </v-navigation-drawer>
 </template>
+<style scoped lang="scss">
+.drawer-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+
+  .logo {
+    margin-left: 1rem;
+  }
+
+  .drawer-button {
+    &[closed="true"] {
+      justify-self: center;
+    }
+
+    &[closed="false"] {
+      justify-self: end;
+    }
+  }
+}
+.drawer-features {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  .tab-container {
+    width: 3rem;
+
+    .tab {
+    }
+  }
+
+  .window-container {
+    width: 100%;
+    padding-left: 0.5rem;
+  }
+}
+</style>

@@ -3,6 +3,7 @@ import pageStore from "@/stores/PageStore";
 </script>
 <template>
   <div>
+    <h2 class="drawer-text-title">Configurações do Texto</h2>
     <v-card variant="flat">
       <v-card-text> Orientação do Texto </v-card-text>
       <v-card-actions>
@@ -24,3 +25,8 @@ import pageStore from "@/stores/PageStore";
     </v-card>
   </div>
 </template>
+<style scoped lang="scss">
+.drawer-text-title {
+  font-size: 1rem;
+}
+</style>
