@@ -176,7 +176,6 @@ function setFocusOnHiddenTextarea() {
   position: relative;
   background-color: white;
   border: 1px solid rgb(0, 0, 0, 0.2);
-  overflow: scroll;
 
   textarea {
     position: absolute;
@@ -188,7 +187,6 @@ function setFocusOnHiddenTextarea() {
 
   .page-content {
     position: relative;
-    overflow: scroll;
     display: flex;
     flex-wrap: wrap;
     align-content: baseline;
@@ -212,7 +210,11 @@ function setFocusOnHiddenTextarea() {
 }
 
 @media screen and (max-width: 600px) {
-  //
+  .page-container {
+    .page-content {
+      overflow: auto;
+    }
+  }
 }
 
 @media print {

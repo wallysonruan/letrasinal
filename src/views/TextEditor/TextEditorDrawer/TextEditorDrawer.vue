@@ -72,43 +72,34 @@ const tab = ref("empty");
     </div>
 
     <div class="drawer-features">
-      <v-tabs
-        v-model="tab"
-        direction="vertical"
-        hide-slider
-        class="tab-container"
-      >
+      <div class="tab-container">
         <!-- PAGE -->
-        <v-tab
-          value="page"
-          size="small"
-          class="tab"
-          :disabled="hidePageOptions"
-        >
-          <v-icon start icon="fa-file-text" />
-        </v-tab>
+        <button class="tab" @click="tab = 'page'" v-if="!hidePageOptions">
+          <v-icon icon="fa-file-text" />
+        </button>
         <!-- TEXT -->
-        <v-tab value="text" size="small" class="tab">
-          <v-icon start icon="fa-hand" />
-        </v-tab>
+        <button class="tab" @click="tab = 'text'">
+          <v-icon icon="fa-hand" />
+        </button>
 
         <!-- SIGNPUDDLE -->
-        <v-tab value="signpuddle" size="small" class="tab">
-          <v-icon>
+        <button class="tab" @click="tab = 'signpuddle'">
+          <i>
             <img
               class="sp-btn"
               width="25"
               src="../../../assets/sign-puddle-icon.png"
               alt="SignPuddle"
             />
-          </v-icon>
-        </v-tab>
-      </v-tabs>
+          </i>
+        </button>
+      </div>
 
       <v-window
         v-model="tab"
         class="window-container"
         :style="closeAllOnDrawerClose"
+        :closed="drawerExpandable"
       >
         <!-- PAGE -->
         <v-window-item value="page" v-if="!hidePageOptions">
@@ -126,6 +117,15 @@ const tab = ref("empty");
     </div>
   </v-navigation-drawer>
 </template>
+<style>
+.v-navigation-drawer__content::-webkit-scrollbar {
+  width: 0px;
+}
+.v-navigation-drawer__content::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px #424242;
+  background-color: #424242;
+}
+</style>
 <style scoped lang="scss">
 .drawer-header {
   display: grid;
@@ -152,18 +152,28 @@ const tab = ref("empty");
   display: flex;
   flex-direction: row;
   height: 100%;
+  padding: 0.5rem;
 
   .tab-container {
-    width: 3.5rem;
-    padding-left: 0.5rem;
+    width: 2rem;
+    height: max-content;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-row-gap: 1rem;
+    place-content: center;
 
-    // .tab {
-    // }
+    .tab {
+    }
   }
 
   .window-container {
     width: 100%;
+    height: 100%;
     padding-left: 0.5rem;
+
+    &[closed="false"] {
+      overflow: auto;
+    }
   }
 }
 </style>

@@ -226,10 +226,10 @@ function handleOk() {
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem;
     min-height: 7rem;
-    max-height: 20rem;
+    max-height: 10rem;
     margin: 0%;
     margin-bottom: 1rem;
-    padding: 0 0.5rem;
+    padding: 0.5rem 0.5rem;
     overflow: auto;
 
     .centralize {
@@ -247,6 +247,7 @@ function handleOk() {
   .buttons-container {
     display: flex;
     justify-content: right;
+    height: 7rem;
   }
 }
 
