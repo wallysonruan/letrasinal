@@ -79,7 +79,12 @@ const tab = ref("empty");
         class="tab-container"
       >
         <!-- PAGE -->
-        <v-tab value="page" size="small" class="tab" :disabled="hidePageOptions">
+        <v-tab
+          value="page"
+          size="small"
+          class="tab"
+          :disabled="hidePageOptions"
+        >
           <v-icon start icon="fa-file-text" />
         </v-tab>
         <!-- TEXT -->
@@ -149,10 +154,11 @@ const tab = ref("empty");
   height: 100%;
 
   .tab-container {
-    width: 3rem;
+    width: 3.5rem;
+    padding-left: 0.5rem;
 
-    .tab {
-    }
+    // .tab {
+    // }
   }
 
   .window-container {
