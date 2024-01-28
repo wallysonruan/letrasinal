@@ -76,17 +76,18 @@ function unsetAllDimensions() {
 function adjustBreakflowDimensions() {
   unsetAllDimensions();
   const breakflow = getBreakflowElement(props.id);
-  const parent = getParentElement(breakflow);
+  const parent = getParentElement(breakflow); // pageItem
+  const parentsParent = getParentElement(parent); // pageContent
 
-  if (breakflow && parent) {
+  if (breakflow && parent && parentsParent) {
     if (writingMode.value === "vertical") {
       unsetHorizontalWidth();
-      setVerticalHeight(parent);
+      setVerticalHeight(parentsParent);
     }
 
     if (writingMode.value === "horizontal") {
       unsetVerticalHeight();
-      setHorizontalWidth(parent);
+      setHorizontalWidth(parentsParent);
     }
   }
 }
