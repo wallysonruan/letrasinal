@@ -143,7 +143,6 @@ function setFocusOnHiddenTextarea() {
 <template>
   <div
     class="page-container"
-    :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
     @click="setFocusOnHiddenTextarea"
     @touchstart="setFocusOnHiddenTextarea"
     @dblclick="pageStore().placeCaretAtTheEnd"
@@ -151,6 +150,7 @@ function setFocusOnHiddenTextarea() {
     <div
       class="page-content"
       :writing-mode="pageStore().getWritingConfiguration(1).writingMode"
+      :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
     >
       <PageItem
         @click="pageStore().placeCaretBeforeItemById(word.id)"
@@ -174,8 +174,8 @@ function setFocusOnHiddenTextarea() {
 <style scoped lang="scss">
 .page-container {
   position: relative;
-  background-color: white;
-  border: 1px solid rgb(0, 0, 0, 0.2);
+  padding: 0 1rem;
+  overflow: scroll;
 
   textarea {
     position: absolute;
@@ -191,7 +191,9 @@ function setFocusOnHiddenTextarea() {
     flex-wrap: wrap;
     align-content: baseline;
     height: inherit;
-    padding: 0 1rem;
+    padding: 1rem 1rem;
+    background-color: white;
+    border: 1px solid rgb(0, 0, 0, 0.2);
 
     &:hover {
       cursor: text;
