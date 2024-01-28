@@ -74,16 +74,29 @@ const tab = ref("empty");
     <div class="drawer-features">
       <div class="tab-container">
         <!-- PAGE -->
-        <button class="tab" @click="tab = 'page'" v-if="!hidePageOptions">
+        <button
+          class="tab"
+          @click="tab = 'page'"
+          v-if="!hidePageOptions"
+          :active="!drawerExpandable && tab === 'page'"
+        >
           <v-icon icon="fa-file-text" />
         </button>
         <!-- TEXT -->
-        <button class="tab" @click="tab = 'text'">
+        <button
+          class="tab"
+          @click="tab = 'text'"
+          :active="!drawerExpandable && tab === 'text'"
+        >
           <v-icon icon="fa-hand" />
         </button>
 
         <!-- SIGNPUDDLE -->
-        <button class="tab" @click="tab = 'signpuddle'">
+        <button
+          class="tab"
+          @click="tab = 'signpuddle'"
+          :active="!drawerExpandable && tab === 'signpuddle'"
+        >
           <i>
             <img
               class="sp-btn"
@@ -152,10 +165,9 @@ const tab = ref("empty");
   display: flex;
   flex-direction: row;
   height: 100%;
-  padding: 0.5rem;
 
   .tab-container {
-    width: 2rem;
+    width: max-content;
     height: max-content;
     display: grid;
     grid-template-rows: repeat(3, 1fr);
@@ -163,6 +175,13 @@ const tab = ref("empty");
     place-content: center;
 
     .tab {
+      padding: 0.5rem 0;
+      width: 3rem;
+
+      &[active="true"] {
+        border-right: 1px black solid;
+        background-color: rgba(189, 185, 185, 0.801);
+      }
     }
   }
 
