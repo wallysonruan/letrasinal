@@ -13,12 +13,12 @@ import { ref } from "vue";
 
 const matchOptions = [
   {
-    title: "Início",
-    value: "start",
-  },
-  {
     title: "Qualquer lugar",
     value: "any",
+  },
+  {
+    title: "Início",
+    value: "start",
   },
   {
     title: "Final",

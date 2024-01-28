@@ -61,7 +61,11 @@ function filterSigns(
 
   if (term.length > 0) {
     console.log("Filtering by term");
-    results = results.filter((result) => result.terms!.includes(term));
+    results = results.filter((result) =>
+      result.terms!.some((termInArray) =>
+        termInArray.toLowerCase().includes(term.toLowerCase()),
+      ),
+    );
   }
 
   if (
@@ -211,8 +215,6 @@ function handleOk() {
 <style scoped lang="scss">
 .spuddle-search-container {
   min-width: 4rem;
-  width: 90%;
-  max-width: 35rem;
   padding: 0.5rem 0;
 
   .drawer-signpuddle-search-title {
