@@ -101,7 +101,7 @@ function disableSearch(): boolean {
           type="checkbox"
           v-model="request.sourceOnly"
         />
-        Mostrar apenas sinais que tenham autores definidos.
+        Mostrar apenas sinais que tenham autores registrados.
       </label>
       <div class="search-actions">
         <v-btn
