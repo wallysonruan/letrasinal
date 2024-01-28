@@ -55,12 +55,12 @@ function filterSigns(
   let results = payload;
 
   if (results[0].sign) {
-    console.log("Removing duplicates");
+    console.debug("[filterSigns] Removing duplicates");
     results = removeSignsWithDuplicateFswSign(results);
   }
 
   if (term.length > 0) {
-    console.log("Filtering by term");
+    console.debug("[filterSigns] Filtering by term");
     results = results.filter((result) =>
       result.terms!.some((termInArray) =>
         termInArray.toLowerCase().includes(term.toLowerCase()),
@@ -72,7 +72,7 @@ function filterSigns(
     (payload as SignPuddleSearchEndPointResult[])[0].source &&
     source.length > 0
   ) {
-    console.log("Filtering by source");
+    console.debug("[filterSigns] Filtering by source");
     results = filterOutSignsWithDifferentAuthor(
       results as SignPuddleSearchEndPointResult[],
       source,
@@ -80,14 +80,14 @@ function filterSigns(
   }
 
   if ((payload as SignPuddleSearchEndPointResult[])[0].source && sourceOnly) {
-    console.log("Filtering by source only");
+    console.debug("[filterSigns] Filtering by source only");
     results = filterOutSignsWithoutAnyAuthor(
       results as SignPuddleSearchEndPointResult[],
     );
   }
 
   signsToShow.value = results;
-  console.log(results);
+  console.debug(results);
 }
 
 function removeSignsWithDuplicateFswSign(

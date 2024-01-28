@@ -10,7 +10,7 @@ function isPageItemNearTopBorder(
   ) as HTMLElement;
 
   if (!pageItem) {
-    console.log("PageItem not found");
+    console.error("PageItem not found");
     return false;
   }
 
@@ -26,7 +26,7 @@ function isPageItemNearRightBorder(
   ) as HTMLElement;
 
   if (!pageItem) {
-    console.log("PageItem not found");
+    console.error("PageItem not found");
     return false;
   }
 
