@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PageItemType, SignDetails } from "@/stores/PageStore";
 import { ref, watch } from "vue";
 
 import SelectableItem from "../SelectableItem/SelectableItem.vue";
@@ -7,6 +6,7 @@ import SignWriting from "../SignWriting/SignWriting.vue";
 
 type SignDisplayGridProps = {
   signs: { id: string; sign: string }[];
+  isHorizontal?: boolean;
 };
 
 const props = defineProps<SignDisplayGridProps>();
@@ -19,7 +19,7 @@ watch(selected, (newValue) => {
 });
 </script>
 <template>
-  <ul class="sign-display-grid">
+  <ul :class="`sign-display-grid ${isHorizontal ? 'horizontal' : ''}`">
     <template v-for="(sign, index) in props.signs" :key="index">
       <li class="sign-display-grid-item">
         <SelectableItem :value="sign.id" v-model="selected">
@@ -37,6 +37,16 @@ watch(selected, (newValue) => {
   grid-template-columns: repeat(2, 1fr);
   column-gap: 0.5rem;
   row-gap: 0.5rem;
+
+  &.horizontal {
+    display: flex;
+    width: max-content;
+
+    .sign-display-grid-item {
+      min-width: 5rem;
+      max-width: max-content;
+    }
+  }
 }
 @media screen and (max-width: 600px) {
   // .sign-display-grid {
