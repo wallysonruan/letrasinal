@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
 import DrawerTextOptions from "./DrawerTextOptions/DrawerTextOptions.vue";
-import DrawerSignPuddleSearch from "./DrawerSignPuddleSearch/DrawerSignPuddleSearch.vue";
+import DrawerSignPuddle from "./DrawerSignPuddle/DrawerSignPuddle.vue";
 import LogoItem from "@/components/common/Logo/LogoItem.vue";
 import browserWindowStore from "@/stores/BrowserWindowStore";
 
@@ -124,7 +124,7 @@ const tab = ref("empty");
         </v-window-item>
         <!-- SIGNPUDDLE -->
         <v-window-item value="signpuddle">
-          <DrawerSignPuddleSearch />
+          <DrawerSignPuddle />
         </v-window-item>
       </v-window>
     </div>

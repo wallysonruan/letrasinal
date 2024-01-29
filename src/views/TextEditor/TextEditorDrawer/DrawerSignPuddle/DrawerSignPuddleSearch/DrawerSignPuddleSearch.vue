@@ -11,9 +11,9 @@ import {
 } from "@/api/SignPuddle";
 import { ref } from "vue";
 
-import type { PageItemType } from "../../../../stores/PageStore";
-import pageStore from "../../../../stores/PageStore";
-import SignDisplayGrid from "../../../../components/common/SignDisplayGrid/SignDisplayGrid.vue";
+import type { PageItemType } from "../../../../../stores/PageStore";
+import pageStore from "../../../../../stores/PageStore";
+import SignDisplayGrid from "../../../../../components/common/SignDisplayGrid/SignDisplayGrid.vue";
 import SignPuddleSearchForm from "./SignPuddleSearchForm/SignPuddleSearchForm.vue";
 import type { SignPuddleFormRequest } from "./SignPuddleSearchForm/SignPuddleSearchForm.vue";
 import SignWriting from "@/components/common/SignWriting/SignWriting.vue";
@@ -176,7 +176,6 @@ function handleOk() {
 </script>
 <template>
   <v-sheet class="mx-auto spuddle-search-container">
-    <h2 class="drawer-signpuddle-search-title">SignPuddle</h2>
     <SignPuddleSearchForm @on-search="handleSearch" />
     <format @submit.prevent class="search-list-container">
       <div class="search-list-result">
@@ -216,11 +215,6 @@ function handleOk() {
 .spuddle-search-container {
   min-width: 4rem;
   padding: 0.5rem 0;
-
-  .drawer-signpuddle-search-title {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
 
   .search-list-result {
     position: relative;
