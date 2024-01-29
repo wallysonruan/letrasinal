@@ -40,7 +40,7 @@ const pages = ref<PageConfigurations[]>([
       //     words: ["Wallyson Ruan A. F."],
       //     column: "middle",
       //     style: {
-      //       fontSize: 1,
+      //       fontSize: 0.7,
       //     },
       //   },
       // },
@@ -229,7 +229,7 @@ function createSignPageItem(
       words: words,
       column: "middle",
       style: {
-        fontSize: 1,
+        fontSize: 0.7,
       },
     },
   };
@@ -252,7 +252,7 @@ function createSignPunctuationPageItem(
       words: words,
       column: "middle",
       style: {
-        fontSize: 1,
+        fontSize: 0.7,
       },
     },
   };
@@ -551,7 +551,7 @@ function addNumber(number: string, itemId: string = "caret") {
       number: number,
       column: "middle",
       style: {
-        fontSize: 1,
+        fontSize: 0.7,
       },
     },
   };

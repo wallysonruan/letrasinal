@@ -19,12 +19,12 @@ const writingMode = computed(() => {
     <SignWriting
       v-if="writingMode === 'vertical'"
       :fsw="props.sign.fsw.vertical"
-      :font-size="sign.style?.fontSize"
+      :font-size="props.sign.style?.fontSize"
     ></SignWriting>
     <SignWriting
       v-if="writingMode === 'horizontal'"
       :fsw="props.sign.fsw.horizontal"
-      :font-size="sign.style?.fontSize"
+      :font-size="props.sign.style?.fontSize"
     ></SignWriting>
   </div>
 </template>
