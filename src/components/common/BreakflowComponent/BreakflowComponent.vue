@@ -31,11 +31,38 @@ function getParentElement(element: HTMLElement | null): HTMLElement | null {
 }
 
 function setVerticalHeight(parent: HTMLElement) {
-  const negativePaddingToPreventOverflow = 5; // Without this component may take an entire line only for itself.
-  const parentOffsetTop = parent.offsetTop;
+  const negativePaddingToPreventOverflow = 40; // Without this component may take an entire line only for itself.
+  // const parentOffsetTop = parent.offsetTop;
+
+  const breakflow = pageStore()
+    .getPageText(1)
+    ?.find((item) => item.id === props.id);
+  const breakflowIndex = pageStore()
+    .getPageText(1)
+    ?.indexOf(breakflow as any);
+
+  if (breakflowIndex === 0) {
+    height.value = pageStore().getSheetSize(1).height;
+    return;
+  }
+
+  const previousItem =
+    pageStore().getPageText(1)?.[(breakflowIndex as number) - 1];
+
+  if (previousItem?.type === "breakflow") {
+    height.value = pageStore().getSheetSize(1).height;
+    return;
+  }
+
+  const previousItemPageItem = document.querySelector(
+    `.page-item[id="${previousItem?.id}"]`,
+  ) as HTMLElement;
+  const previousItemPageItemOffsetTop = previousItemPageItem?.offsetTop;
+  console.log(previousItemPageItemOffsetTop);
+
   const unoccupiedHeight =
     pageStore().getSheetSize(1).height -
-    parentOffsetTop -
+    previousItemPageItemOffsetTop -
     negativePaddingToPreventOverflow;
   height.value = unoccupiedHeight;
 }
@@ -74,19 +101,19 @@ function unsetAllDimensions() {
 }
 
 function adjustBreakflowDimensions() {
-  unsetAllDimensions();
+  // unsetAllDimensions();
   const breakflow = getBreakflowElement(props.id);
   const parent = getParentElement(breakflow); // pageItem
   const parentsParent = getParentElement(parent); // pageContent
 
   if (breakflow && parent && parentsParent) {
     if (writingMode.value === "vertical") {
-      unsetHorizontalWidth();
+      // unsetHorizontalWidth();
       setVerticalHeight(parentsParent);
     }
 
     if (writingMode.value === "horizontal") {
-      unsetVerticalHeight();
+      // unsetVerticalHeight();
       setHorizontalWidth(parentsParent);
     }
   }
@@ -123,3 +150,8 @@ watch(writingMode, () => {
     }"
   ></div>
 </template>
+<style scoped lang="scss">
+.breakflow {
+  background-color: red;
+}
+</style>
