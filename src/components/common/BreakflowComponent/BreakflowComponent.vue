@@ -114,7 +114,7 @@ watch(writingMode, () => {
 </script>
 <template>
   <div
-    :class="'breakflow'"
+    class="breakflow"
     :id="props.id"
     :writing-mode="writingMode"
     :style="{
