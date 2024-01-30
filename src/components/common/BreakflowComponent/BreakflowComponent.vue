@@ -2,7 +2,6 @@
 import { computed } from "vue";
 import pageStore from "../../../stores/PageStore";
 import { onMounted, ref, watch } from "vue";
-import { nextTick } from "process";
 
 type BreakFlowComponentProps = {
   id: string;
@@ -18,125 +17,90 @@ const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(1).writingMode;
 });
 
-const height = ref<number>(100);
-const width = ref<number>(100);
+const DEFAULT_BREAKFLOW_HEIGHT = 50;
+const DEFAULT_BREAKFLOW_WIDTH = 50;
+const height = ref<number>(DEFAULT_BREAKFLOW_HEIGHT);
+const width = ref<number>(DEFAULT_BREAKFLOW_WIDTH);
 
-function getBreakflowElement(id: string): HTMLElement | null {
-  const breakflow = document.querySelector(`.breakflow[id="${id}"]`);
-  return breakflow as HTMLElement | null;
+function getPreviousItem() {
+  const previousItem = pageStore().getPageItemPreviousSibling(props.id);
+  return previousItem?.type === "breakflow" ? null : previousItem;
 }
 
-function getParentElement(element: HTMLElement | null): HTMLElement | null {
-  return element?.parentElement as HTMLElement | null;
-}
+/**
+ * @description This function gets the page item that is placed before the current breakflow and calculates the unoccupied space between it and the end of the page. Then it sets the height or width of the breakflow component to the unoccupied space.
+ *
+ *  E.g.:
+ *      Height of .page-content element
+ *   -  offsetTop of previous page item
+ *      clientHeight of previous page item
+ *   ----------------------------------------
+ *   =  unoccupied space to be taken by breakflow
+ */
+function setDimensions(
+  defaultDimension: number,
+  dimensionRef: { value: number },
+  getUnoccupiedSpace: (previousPageItem: HTMLElement) => number,
+) {
+  const previousItem = getPreviousItem();
 
-function setVerticalHeight(parent: HTMLElement) {
-  const negativePaddingToPreventOverflow = 40; // Without this component may take an entire line only for itself.
-  // const parentOffsetTop = parent.offsetTop;
-
-  const breakflow = pageStore()
-    .getPageText(1)
-    ?.find((item) => item.id === props.id);
-  const breakflowIndex = pageStore()
-    .getPageText(1)
-    ?.indexOf(breakflow as any);
-
-  if (breakflowIndex === 0) {
-    height.value = pageStore().getSheetSize(1).height;
-    return;
-  }
-
-  const previousItem =
-    pageStore().getPageText(1)?.[(breakflowIndex as number) - 1];
-
-  if (previousItem?.type === "breakflow") {
-    height.value = pageStore().getSheetSize(1).height;
+  if (!previousItem) {
+    dimensionRef.value = defaultDimension;
     return;
   }
 
   const previousItemPageItem = document.querySelector(
-    `.page-item[id="${previousItem?.id}"]`,
+    `.page-item[id="${previousItem.id}"]`,
   ) as HTMLElement;
-  const previousItemPageItemOffsetTop = previousItemPageItem?.offsetTop;
-  console.log(previousItemPageItemOffsetTop);
-
-  const unoccupiedHeight =
-    pageStore().getSheetSize(1).height -
-    previousItemPageItemOffsetTop -
-    negativePaddingToPreventOverflow;
-  height.value = unoccupiedHeight;
+  dimensionRef.value = getUnoccupiedSpace(previousItemPageItem) - 3;
 }
 
-function unsetVerticalHeight() {
-  height.value = 0;
+function setVerticalHeight() {
+  width.value = DEFAULT_BREAKFLOW_WIDTH;
+  const pageContenVisibletHeight = (
+    document.querySelector(".page-content") as HTMLElement
+  ).clientHeight;
+
+  setDimensions(pageContenVisibletHeight, height, (previousItemPageItem) => {
+    const unoccupiedHeight =
+      pageContenVisibletHeight -
+      ((previousItemPageItem?.offsetTop ?? 0) +
+        (previousItemPageItem?.clientHeight ?? 0));
+    return unoccupiedHeight;
+  });
 }
 
-function setHorizontalWidth(parent: HTMLElement) {
-  const negativePaddingToPreventOverflow = 5; // Without this component may take an entire line only for itself.
-  const parentOffsetLeft = parent.offsetLeft;
-  let unoccupiedWidth = 0;
+function setHorizontalWidth() {
+  height.value = DEFAULT_BREAKFLOW_HEIGHT;
+  const pageContenVisibletWidth = (
+    document.querySelector(".page-content") as HTMLElement
+  ).clientWidth;
 
-  if (pageOrientation.value === "landscape") {
-    unoccupiedWidth =
-      pageStore().getSheetSize(1).height -
-      parentOffsetLeft -
-      negativePaddingToPreventOverflow;
-  } else {
-    unoccupiedWidth =
-      pageStore().getSheetSize(1).width -
-      parentOffsetLeft -
-      negativePaddingToPreventOverflow;
-  }
-
-  width.value = unoccupiedWidth;
-}
-
-function unsetHorizontalWidth() {
-  width.value = 0;
-}
-
-function unsetAllDimensions() {
-  unsetVerticalHeight();
-  unsetHorizontalWidth();
+  setDimensions(pageContenVisibletWidth, width, (previousItemPageItem) => {
+    const unoccupiedWidth =
+      pageContenVisibletWidth -
+      ((previousItemPageItem?.offsetLeft ?? 0) +
+        (previousItemPageItem?.offsetWidth ?? 0));
+    return unoccupiedWidth;
+  });
 }
 
 function adjustBreakflowDimensions() {
-  // unsetAllDimensions();
-  const breakflow = getBreakflowElement(props.id);
-  const parent = getParentElement(breakflow); // pageItem
-  const parentsParent = getParentElement(parent); // pageContent
+  if (writingMode.value === "vertical") {
+    setVerticalHeight();
+  }
 
-  if (breakflow && parent && parentsParent) {
-    if (writingMode.value === "vertical") {
-      // unsetHorizontalWidth();
-      setVerticalHeight(parentsParent);
-    }
-
-    if (writingMode.value === "horizontal") {
-      // unsetVerticalHeight();
-      setHorizontalWidth(parentsParent);
-    }
+  if (writingMode.value === "horizontal") {
+    setHorizontalWidth();
   }
 }
 
 onMounted(() => {
-  // This is a hack to make sure that the breakflow component is rendered before we try to adjust its dimensions.
-  // For some reason the browser needs both the nextTick and the setTimeout to redimension the component properly.
-  nextTick(() => {
-    setTimeout(() => {
-      adjustBreakflowDimensions();
-    }, 7);
-  });
+  adjustBreakflowDimensions();
 });
 
-watch(writingMode, () => {
-  // This is a hack to make sure that the breakflow component is rendered before we try to adjust its dimensions.
-  // For some reason the browser needs both the nextTick and the setTimeout to redimension the component properly.
-  nextTick(() => {
-    setTimeout(() => {
-      adjustBreakflowDimensions();
-    }, 7);
-  });
+watch([writingMode, pageOrientation], () => {
+  adjustBreakflowDimensions();
 });
 </script>
 <template>
@@ -152,6 +116,7 @@ watch(writingMode, () => {
 </template>
 <style scoped lang="scss">
 .breakflow {
-  background-color: red;
+  background-color: rgb(208, 200, 200, 0.3);
+  border: 2px dashed rgb(163, 160, 160, 0.3);
 }
 </style>

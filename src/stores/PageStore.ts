@@ -338,6 +338,17 @@ function changeFontSize(textId: string, newFontSize: number): void {
   }
 }
 
+function getPageItemIndex(textId: string): number | undefined {
+  return getPageText(1)?.findIndex((item) => item.id === textId);
+}
+
+function getPageItemPreviousSibling(textId: string): PageItemType | undefined {
+  const index = getPageItemIndex(textId);
+  if (index !== undefined && index > 0) {
+    return getPageText(1)?.[index - 1];
+  }
+}
+
 function addCaret() {
   const caretPageItem: PageItemType = {
     id: "caret",
@@ -598,6 +609,8 @@ const pageStore = defineStore({
     getPageItemFontSize,
     increaseFontSize,
     decreaseFontSize,
+    getPageItemIndex,
+    getPageItemPreviousSibling,
     moveCaretUp,
     moveCaretDown,
     placeCaretBeforeItemById,

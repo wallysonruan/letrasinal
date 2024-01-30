@@ -142,37 +142,42 @@ function setFocusOnHiddenTextarea() {
 </script>
 <template>
   <div
-    class="page-container"
+    class="page"
     @click="setFocusOnHiddenTextarea"
     @touchstart="setFocusOnHiddenTextarea"
     @dblclick="pageStore().placeCaretAtTheEnd"
   >
     <div
-      class="page-content"
-      :writing-mode="pageStore().getWritingConfiguration(1).writingMode"
+      class="page-container"
       :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
     >
-      <PageItem
-        @click="pageStore().placeCaretBeforeItemById(word.id)"
-        @touchstart="pageStore().placeCaretBeforeItemById(word.id)"
-        :item="word"
-        v-for="(word, index) in props.text"
-        :key="index"
-      />
-    </div>
-    <textarea
-      class="hidden-textarea"
-      @keydown="handleKeyDown"
-      @input="handleInput"
-      @focus="pageStore().setPageOnFocus(true)"
-      @focusout="pageStore().setPageOnFocus(false)"
-    >
+      <div
+        class="page-content"
+        :writing-mode="pageStore().getWritingConfiguration(1).writingMode"
+      >
+        <PageItem
+          @click="pageStore().placeCaretBeforeItemById(word.id)"
+          @touchstart="pageStore().placeCaretBeforeItemById(word.id)"
+          :item="word"
+          v-for="(word, index) in props.text"
+          :key="index"
+        />
+      </div>
+      <textarea
+        class="hidden-textarea"
+        @keydown="handleKeyDown"
+        @input="handleInput"
+        @focus="pageStore().setPageOnFocus(true)"
+        @focusout="pageStore().setPageOnFocus(false)"
+      >
       <!-- Hidden. It's here just to get focus, toggle mobile virtual keyboard, and have its Events redirected to pagePage. -->
-    </textarea>
+    </textarea
+      >
+    </div>
   </div>
 </template>
 <style scoped lang="scss">
-.page-container {
+.page {
   position: relative;
   padding: 0 1rem;
   overflow: scroll;
@@ -185,15 +190,19 @@ function setFocusOnHiddenTextarea() {
     height: 0%;
   }
 
+  .page-container {
+    padding: 1rem 1rem;
+    background-color: white;
+    border: 1px solid rgb(0, 0, 0, 0.2);
+  }
+
   .page-content {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     align-content: baseline;
-    height: inherit;
-    padding: 1rem 1rem;
-    background-color: white;
-    border: 1px solid rgb(0, 0, 0, 0.2);
+    height: 100%;
+    width: 100%;
 
     &:hover {
       cursor: text;
