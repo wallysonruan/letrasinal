@@ -1,6 +1,11 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+const sheetConfigurations = ref({
+  showColumns: false,
+  showBreakflow: false,
+});
+
 type PageConfigurations = {
   pageId: number;
   size: string;
@@ -569,14 +574,20 @@ function addNumber(number: string, itemId: string = "caret") {
   addPageItem(numberPageItem, itemId);
 }
 
-const showColumns = ref(false);
-
-function toggleColumns(show: boolean) {
-  showColumns.value = show;
+function shouldShowColumns() {
+  return sheetConfigurations.value.showColumns;
 }
 
-function shouldShowColumns() {
-  return showColumns.value;
+function toggleColumns(show: boolean) {
+  sheetConfigurations.value.showColumns = show;
+}
+
+function shouldShowBreakflow() {
+  return sheetConfigurations.value.showBreakflow;
+}
+
+function toggleBreakflow(show: boolean) {
+  sheetConfigurations.value.showBreakflow = show;
 }
 
 const pageStore = defineStore({
@@ -629,6 +640,8 @@ const pageStore = defineStore({
     addNumber,
     shouldShowColumns,
     toggleColumns,
+    shouldShowBreakflow,
+    toggleBreakflow,
   },
 });
 

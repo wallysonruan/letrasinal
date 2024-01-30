@@ -17,6 +17,10 @@ const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(1).writingMode;
 });
 
+const showBreakflow = computed(() => {
+  return pageStore().shouldShowBreakflow();
+});
+
 const DEFAULT_BREAKFLOW_HEIGHT = 50;
 const DEFAULT_BREAKFLOW_WIDTH = 50;
 const height = ref<number>(DEFAULT_BREAKFLOW_HEIGHT);
@@ -112,11 +116,14 @@ watch([writingMode, pageOrientation], () => {
       height: height + 'px',
       width: width + 'px',
     }"
+    :show="showBreakflow"
   ></div>
 </template>
 <style scoped lang="scss">
 .breakflow {
-  background-color: rgb(208, 200, 200, 0.3);
-  border: 2px dashed rgb(163, 160, 160, 0.3);
+  &[show="true"] {
+    background-color: rgb(208, 200, 200, 0.3);
+    border: 2px dashed rgb(163, 160, 160, 0.3);
+  }
 }
 </style>

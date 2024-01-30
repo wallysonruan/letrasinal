@@ -23,6 +23,14 @@ import pageStore from "@/stores/PageStore";
         <v-btn @click="pageStore().toggleColumns(false)"> Esconder</v-btn>
       </v-card-actions>
     </v-card>
+    <!--  -->
+    <v-card variant="flat">
+      <v-card-text> Quebra de Fluxo </v-card-text>
+      <v-card-actions>
+        <v-btn @click="pageStore().toggleBreakflow(true)"> Mostrar </v-btn>
+        <v-btn @click="pageStore().toggleBreakflow(false)"> Esconder</v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 <style scoped lang="scss">
