@@ -22,6 +22,13 @@ function setToolboxDisplay(mode: boolean) {
 }
 
 function handlePressStart() {
+  if (
+    props.pageItemType === "caret" ||
+    props.pageItemType === "punctuation" ||
+    props.pageItemType === "breakflow"
+  ) {
+    return;
+  }
   pressTimer = setTimeout(() => {
     setToolboxDisplay(true);
   }, 300); // 300ms = 0.3 seconds
@@ -69,6 +76,7 @@ const showColumns = computed(() => {
     :columns="showColumns"
   >
     <SignToolBox
+      :pageId="props.pageId"
       :active="showToolbox"
       :item-id="props.itemId"
       :column="props.column"

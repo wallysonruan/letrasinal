@@ -18,6 +18,7 @@ function isPageItemNearTopBorder(
 }
 
 function isPageItemNearRightBorder(
+  pageId: number,
   pageItemId: string,
   spaceNeededBetweenPageItemAndRightBorder: number = 0,
 ) {
@@ -34,7 +35,7 @@ function isPageItemNearRightBorder(
     pageItem.offsetLeft + pageItem.offsetWidth;
 
   return (
-    pageStore().getSheetSize(1).width -
+    pageStore().getSheetSize(pageId).width -
       pageItemRightBorderDistanceFromParentLeftBorder <=
     spaceNeededBetweenPageItemAndRightBorder
   );

@@ -50,55 +50,44 @@ watch(reRenderingNecessary, () => {
 <template>
   <div class="page-item" :id="props.item.id" :writing-mode="writingMode">
     <SignColumn
-      v-if="props.item.type === 'sign'"
       :item-id="props.item.id"
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
       :page-id="props.pageId"
-      >
-      <SignComponent :sign="props.item.details as SignDetails" :key="key" />
-    </SignColumn>
-    <!---->
-    <SignColumn
-    v-else-if="props.item.type === 'signPunctuation'"
-      :item-id="props.item.id"
-      :column="(props.item.details as SignDetails).column"
-      :page-item-type="props.item.type"
-      :page-id="props.pageId"
-      >
+      :key="key"
+    >
+      <SignComponent
+        v-if="props.item.type === 'sign'"
+        :sign="props.item.details as SignDetails"
+      />
+      <!---->
       <SignPunctuation
-      :sign="props.item.details as SignPunctuationDetails"
-        :key="key"
+        v-else-if="props.item.type === 'signPunctuation'"
+        :sign="props.item.details as SignPunctuationDetails"
         :page-id="props.pageId"
-        />
-      </SignColumn>
+      />
       <!---->
       <PunctuationComponent
-      v-else-if="props.item.type === 'punctuation'"
-      :type="props.item.details as PunctuationDetails"
-      :page-id="props.pageId"
+        v-else-if="props.item.type === 'punctuation'"
+        :type="props.item.details as PunctuationDetails"
+        :page-id="props.pageId"
       />
       <!---->
       <BreakflowComponent
-      v-else-if="props.item.type === 'breakflow'"
-      :id="props.item.id"
-      :page-id="props.pageId"
+        v-else-if="props.item.type === 'breakflow'"
+        :id="props.item.id"
+        :page-id="props.pageId"
       />
       <!---->
       <CaretComponent
-      v-else-if="props.item.type === 'caret'"
-      :page-id="props.pageId"
+        v-else-if="props.item.type === 'caret'"
+        :page-id="props.pageId"
       />
-      <!---->
-      <SignColumn
-      v-else-if="props.item.type === 'number'"
-      :item-id="props.item.id"
-      :column="(props.item.details as NumberDetails).column"
-      :page-item-type="props.item.type"
-      :page-id="props.pageId"
-    >
-      <NumberComponent :number="props.item.details as NumberDetails" 
-      :page-id="props.pageId"
+      <!--  -->
+      <NumberComponent
+        v-else-if="props.item.type === 'number'"
+        :number="props.item.details as NumberDetails"
+        :page-id="props.pageId"
       />
     </SignColumn>
     <!---->

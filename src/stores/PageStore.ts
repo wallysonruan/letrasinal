@@ -121,7 +121,9 @@ function getWritingConfiguration(
 function setWritingMode(
   writingMode: PageConfigurations["writing"]["writingMode"],
 ) {
-  const index = pages.value.findIndex((page) => page.pageId === activePage.value);
+  const index = pages.value.findIndex(
+    (page) => page.pageId === activePage.value,
+  );
   if (index !== -1) {
     pages.value[index].writing.writingMode = writingMode;
   }
@@ -130,7 +132,9 @@ function setWritingMode(
 function setWritingDirection(
   direction: PageConfigurations["writing"]["direction"],
 ) {
-  const index = pages.value.findIndex((page) => page.pageId === activePage.value);
+  const index = pages.value.findIndex(
+    (page) => page.pageId === activePage.value,
+  );
   if (index !== -1) {
     pages.value[index].writing.direction = direction;
   }
@@ -208,6 +212,10 @@ export type PunctuationDetails = {
   column: ColumnTypes;
 };
 
+export type SimplePageItemDetails = {
+  column: ColumnTypes;
+};
+
 export type PageItemTypes =
   | "sign"
   | "signParagraph"
@@ -223,6 +231,7 @@ export type PageItemType = {
   id: string;
   type: PageItemTypes;
   details?:
+    | SimplePageItemDetails
     | SignDetails
     | SignParagraphDetails
     | TextDetails
@@ -400,6 +409,9 @@ function addCaret() {
   const caretPageItem: PageItemType = {
     id: "caret",
     type: "caret",
+    details: {
+      column: "middle",
+    },
   };
 
   // Caret should be added to all pages, but only displayed when page gets focus.
@@ -614,6 +626,9 @@ function addBreakflow(itemId: string = "caret") {
   const brakPageItem: PageItemType = {
     id: generateRandomId(),
     type: "breakflow",
+    details: {
+      column: "middle",
+    },
   };
   addPageItem(brakPageItem, itemId);
 }

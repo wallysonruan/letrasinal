@@ -5,6 +5,7 @@ import pageItemStore from "@/stores/PageItemStore";
 import type { StyleValue } from "vue";
 
 type SignToolBoxProps = {
+  pageId: number;
   itemId: string;
   active: boolean;
   column: ColumnTypes;
@@ -42,6 +43,7 @@ function dinamicallyPositionToolBox(): StyleValue {
   );
 
   const isNearRightBorder = pageItemStore().isPageItemNearRightBorder(
+    props.pageId,
     props.itemId,
     toolboxWidth,
   );
