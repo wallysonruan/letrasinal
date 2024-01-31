@@ -80,7 +80,10 @@ watch(reRenderingNecessary, () => {
       :id="props.item.id"
     />
     <!---->
-    <CaretComponent v-else-if="props.item.type === 'caret'" :pageId="props.pageId"/>
+    <CaretComponent
+      v-else-if="props.item.type === 'caret'"
+      :pageId="props.pageId"
+    />
     <!---->
     <SignColumn
       v-else-if="props.item.type === 'number'"
