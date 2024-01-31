@@ -28,7 +28,7 @@ const writingMode = computed(() => {
 });
 
 const reRenderingNecessary = computed(() => {
-  const pageText = pageStore().getPageText(1);
+  const pageText = pageStore().getPageText(props.pageId);
   const item = pageText?.find((item) => item.id === props.item.id);
   const details = item?.details as SignDetails | SignPunctuationDetails;
 
@@ -54,11 +54,11 @@ watch(reRenderingNecessary, () => {
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
       :page-id="props.pageId"
-      :key="key"
-    >
+      >
       <SignComponent
-        v-if="props.item.type === 'sign'"
-        :sign="props.item.details as SignDetails"
+      v-if="props.item.type === 'sign'"
+      :sign="props.item.details as SignDetails"
+      :key="key"
       />
       <!---->
       <SignPunctuation
