@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import pageStore from "@/stores/PageStore";
+import { computed, ref } from "vue";
+
+const showColumn = computed(() => pageStore().shouldShowColumns());
+const localShowColumns = ref<boolean>(showColumn.value);
 </script>
 <template>
   <div>
@@ -25,6 +29,7 @@ import pageStore from "@/stores/PageStore";
       </div>
       <div class="conf-action">
         <v-switch
+          v-model="localShowColumns"
           @update:model-value="pageStore().toggleColumns"
           hide-details
           id="show-columns"
