@@ -54,6 +54,7 @@ const pageHeight = computed(() => {
 .page {
   padding: 0 1rem;
   overflow: scroll;
+  width: 100%;
 
   .page-container {
     padding: 1rem 1rem;
