@@ -5,13 +5,14 @@ import pageStore from "../../../stores/PageStore";
 import { computed } from "vue";
 
 type SignPunctuationProps = {
+  pageId: number;
   sign: SignPunctuationDetails;
 };
 
 const props = defineProps<SignPunctuationProps>();
 
 const writingMode = computed(() => {
-  return pageStore().getWritingConfiguration(1).writingMode;
+  return pageStore().getWritingConfiguration(props.pageId).writingMode;
 });
 </script>
 <template>

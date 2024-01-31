@@ -4,6 +4,7 @@ import type { PunctuationDetails } from "../../../stores/PageStore";
 import pageStore from "../../../stores/PageStore";
 
 type PunctuationComponentProps = {
+  pageId: number;
   type: PunctuationDetails;
 };
 
@@ -25,7 +26,7 @@ const punctuationClass = computed(() => {
 });
 
 const writingMode = computed(() => {
-  return pageStore().getWritingConfiguration(1).writingMode;
+  return pageStore().getWritingConfiguration(props.pageId).writingMode;
 });
 
 const showPunctuation = computed(() => {

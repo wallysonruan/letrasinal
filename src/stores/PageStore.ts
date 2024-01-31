@@ -119,20 +119,18 @@ function getWritingConfiguration(
 }
 
 function setWritingMode(
-  pageId: number,
   writingMode: PageConfigurations["writing"]["writingMode"],
 ) {
-  const index = pages.value.findIndex((page) => page.pageId === pageId);
+  const index = pages.value.findIndex((page) => page.pageId === activePage.value);
   if (index !== -1) {
     pages.value[index].writing.writingMode = writingMode;
   }
 }
 
 function setWritingDirection(
-  pageId: number,
   direction: PageConfigurations["writing"]["direction"],
 ) {
-  const index = pages.value.findIndex((page) => page.pageId === pageId);
+  const index = pages.value.findIndex((page) => page.pageId === activePage.value);
   if (index !== -1) {
     pages.value[index].writing.direction = direction;
   }
@@ -348,7 +346,7 @@ function movePageItemDown(id: string) {
 }
 
 function getPageItemFontSize(textId: string): number | undefined {
-  const textItem = getPageText(1)?.find((t) => t.id === textId);
+  const textItem = getPageText(activePage.value)?.find((t) => t.id === textId);
   const style = (textItem?.details as SignDetails | SignPunctuationDetails)
     .style;
 
@@ -378,7 +376,7 @@ function decreaseFontSize(textId: string): void {
 }
 
 function changeFontSize(textId: string, newFontSize: number): void {
-  const textItem = getPageText(1)?.find((t) => t.id === textId);
+  const textItem = getPageText(activePage.value)?.find((t) => t.id === textId);
   const style = (textItem?.details as SignDetails | SignPunctuationDetails)
     .style;
 
@@ -388,13 +386,13 @@ function changeFontSize(textId: string, newFontSize: number): void {
 }
 
 function getPageItemIndex(textId: string): number | undefined {
-  return getPageText(1)?.findIndex((item) => item.id === textId);
+  return getPageText(activePage.value)?.findIndex((item) => item.id === textId);
 }
 
 function getPageItemPreviousSibling(textId: string): PageItemType | undefined {
   const index = getPageItemIndex(textId);
   if (index !== undefined && index > 0) {
-    return getPageText(1)?.[index - 1];
+    return getPageText(activePage.value)?.[index - 1];
   }
 }
 

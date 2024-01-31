@@ -13,7 +13,7 @@ const activate = computed(() => {
   return pageStore().pageOnFocus.id === props.pageId;
 });
 const writingMode = computed(() => {
-  return pageStore().getWritingConfiguration(1).writingMode;
+  return pageStore().getWritingConfiguration(props.pageId).writingMode;
 });
 
 function getCaretElement(): HTMLElement | null {

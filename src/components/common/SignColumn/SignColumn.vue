@@ -6,6 +6,7 @@ import type { ColumnTypes, PageItemTypes } from "@/stores/PageStore";
 import pageStore from "@/stores/PageStore";
 
 type SignColumnProps = {
+  pageId: number;
   itemId: string;
   column: ColumnTypes;
   pageItemType: PageItemTypes;
@@ -50,7 +51,7 @@ function columnStyle() {
 }
 
 const writingMode = computed(() => {
-  return pageStore().getWritingConfiguration(1).writingMode;
+  return pageStore().getWritingConfiguration(props.pageId).writingMode;
 });
 
 const showColumns = computed(() => {

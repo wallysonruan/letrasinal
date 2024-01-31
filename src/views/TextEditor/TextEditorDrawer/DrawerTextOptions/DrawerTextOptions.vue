@@ -7,10 +7,10 @@ import pageStore from "@/stores/PageStore";
     <v-card variant="flat">
       <v-card-text> Orientação do Texto </v-card-text>
       <v-card-actions>
-        <v-btn @click="pageStore().setWritingMode(1, 'vertical')">
+        <v-btn @click="pageStore().setWritingMode('vertical')">
           Vertical
         </v-btn>
-        <v-btn @click="pageStore().setWritingMode(1, 'horizontal')">
+        <v-btn @click="pageStore().setWritingMode('horizontal')">
           Horizontal</v-btn
         >
       </v-card-actions>

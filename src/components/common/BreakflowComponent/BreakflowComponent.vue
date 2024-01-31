@@ -4,17 +4,18 @@ import pageStore from "../../../stores/PageStore";
 import { onMounted, ref, watch } from "vue";
 
 type BreakFlowComponentProps = {
+  pageId: number;
   id: string;
 };
 
 const props = defineProps<BreakFlowComponentProps>();
 
 const pageOrientation = computed(() => {
-  return pageStore().getPageOrientation(1);
+  return pageStore().getPageOrientation(props.pageId);
 });
 
 const writingMode = computed(() => {
-  return pageStore().getWritingConfiguration(1).writingMode;
+  return pageStore().getWritingConfiguration(props.pageId).writingMode;
 });
 
 const showBreakflow = computed(() => {

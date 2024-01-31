@@ -24,7 +24,7 @@ type PageItemProps = {
 const props = defineProps<PageItemProps>();
 
 const writingMode = computed(() => {
-  return pageStore().getWritingConfiguration(1).writingMode;
+  return pageStore().getWritingConfiguration(props.pageId).writingMode;
 });
 
 const reRenderingNecessary = computed(() => {
@@ -54,44 +54,52 @@ watch(reRenderingNecessary, () => {
       :item-id="props.item.id"
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
-    >
+      :page-id="props.pageId"
+      >
       <SignComponent :sign="props.item.details as SignDetails" :key="key" />
     </SignColumn>
     <!---->
     <SignColumn
-      v-else-if="props.item.type === 'signPunctuation'"
+    v-else-if="props.item.type === 'signPunctuation'"
       :item-id="props.item.id"
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
-    >
+      :page-id="props.pageId"
+      >
       <SignPunctuation
-        :sign="props.item.details as SignPunctuationDetails"
+      :sign="props.item.details as SignPunctuationDetails"
         :key="key"
-      />
-    </SignColumn>
-    <!---->
-    <PunctuationComponent
+        :page-id="props.pageId"
+        />
+      </SignColumn>
+      <!---->
+      <PunctuationComponent
       v-else-if="props.item.type === 'punctuation'"
       :type="props.item.details as PunctuationDetails"
-    />
-    <!---->
-    <BreakflowComponent
+      :page-id="props.pageId"
+      />
+      <!---->
+      <BreakflowComponent
       v-else-if="props.item.type === 'breakflow'"
       :id="props.item.id"
-    />
-    <!---->
-    <CaretComponent
+      :page-id="props.pageId"
+      />
+      <!---->
+      <CaretComponent
       v-else-if="props.item.type === 'caret'"
-      :pageId="props.pageId"
-    />
-    <!---->
-    <SignColumn
+      :page-id="props.pageId"
+      />
+      <!---->
+      <SignColumn
       v-else-if="props.item.type === 'number'"
       :item-id="props.item.id"
       :column="(props.item.details as NumberDetails).column"
       :page-item-type="props.item.type"
+      :page-id="props.pageId"
     >
-      <NumberComponent :number="props.item.details as NumberDetails" />
+      <NumberComponent :number="props.item.details as NumberDetails" 
+      :page-id="props.pageId"
+      />
     </SignColumn>
     <!---->
   </div>
