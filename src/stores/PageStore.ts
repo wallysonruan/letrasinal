@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const sheetConfigurations = ref({
   showColumns: false,
@@ -89,16 +89,27 @@ const pages = ref<PageConfigurations[]>([
   //     direction: defaultWritingDirection,
   //   },
   //   text: [],
-  // }
+  // },
+  // {
+  //   pageId: 3,
+  //   size: "a4",
+  //   orientation: defaultPageOrientation,
+  //   writing: {
+  //     writingMode: defaultWritingMode,
+  //     direction: defaultWritingDirection,
+  //   },
+  //   text: [],
+  // },
 ]);
 
 addCaret();
 
-function changePageOrientation(
-  pageId: number,
-  orientation: PageConfigurations["orientation"],
-) {
-  const index = pages.value.findIndex((page) => page.pageId === pageId);
+const activePage = computed(() => sheetConfigurations.value.pageOnFocus.id);
+
+function changePageOrientation(orientation: PageConfigurations["orientation"]) {
+  const index = pages.value.findIndex(
+    (page) => page.pageId === activePage.value,
+  );
   if (index !== -1) {
     pages.value[index].orientation = orientation;
   }
@@ -144,8 +155,7 @@ function setWritingDirection(
   }
 }
 
-function setPageOnFocus(value: boolean, pageId: number = 1) {
-  sheetConfigurations.value.pageOnFocus.id = pageId;
+function setPageOnFocus(value: boolean) {
   sheetConfigurations.value.pageOnFocus.focus = value;
 }
 
@@ -304,7 +314,7 @@ function createSignPunctuationPageItem(
 function addPageItem(
   newItem: PageItemType,
   id: string = "caret",
-  pageId: number = 2,
+  pageId: number = sheetConfigurations.value.pageOnFocus.id,
 ) {
   if (id === "end") {
     getPageText(pageId)?.push(newItem); // Insert item at the end of the array
@@ -322,26 +332,31 @@ function addPageItem(
   }
 }
 
-function deletePageItemById(id: string) {
-  pages.value[0].text = pages.value[0].text.filter((item) => item.id !== id);
+function deletePageItemById(itemId: string, pageId = activePage.value) {
+  const page = getPageText(pageId)!;
+  const itemIndex = page.findIndex((item) => item.id === itemId);
+
+  if (itemIndex !== -1) {
+    page.splice(itemIndex, 1);
+  }
 }
 
 function movePageItemUp(id: string) {
-  const index = pages.value[0].text.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
   if (index !== -1 && index !== 0) {
-    const item = pages.value[0].text[index];
-    pages.value[0].text.splice(index, 1);
-    pages.value[0].text.splice(index - 1, 0, item);
+    const item = getPageText(activePage.value)![index];
+    getPageText(activePage.value)!.splice(index, 1);
+    getPageText(activePage.value)!.splice(index - 1, 0, item);
   }
 }
 
 function movePageItemDown(id: string) {
-  const index = pages.value[0].text.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
 
-  if (index !== -1 && index !== pages.value[0].text.length - 1) {
-    const item = pages.value[0].text[index];
-    pages.value[0].text.splice(index, 1);
-    pages.value[0].text.splice(index + 1, 0, item);
+  if (index !== -1 && index !== getPageText(activePage.value)!.length - 1) {
+    const item = getPageText(activePage.value)![index];
+    getPageText(activePage.value)!.splice(index, 1);
+    getPageText(activePage.value)!.splice(index + 1, 0, item);
   }
 }
 
@@ -417,58 +432,60 @@ function moveCaretDown() {
 }
 
 function deletePageItemBeforeCaret() {
-  const index = pages.value[0].text.findIndex((item) => item.id === "caret");
+  const index = getPageText(activePage.value)!.findIndex(
+    (item) => item.id === "caret",
+  );
   if (index !== -1 && index !== 0) {
-    pages.value[0].text.splice(index - 1, 1);
+    getPageText(activePage.value)!.splice(index - 1, 1);
   }
 }
 
 function placeCaretBeforeItemById(id: string) {
-  const caretIndex = pages.value[0].text.findIndex(
+  const caretIndex = getPageText(activePage.value)!.findIndex(
     (item) => item.id === "caret",
   );
-  let targetIndex = pages.value[0].text.findIndex((item) => item.id === id);
+  let targetIndex = getPageText(activePage.value)!.findIndex((item) => item.id === id);
 
   if (caretIndex !== -1 && targetIndex !== -1) {
-    const caretItem = pages.value[0].text[caretIndex];
+    const caretItem = getPageText(activePage.value)![caretIndex];
     // Remove the caret item from its current position
-    pages.value[0].text.splice(caretIndex, 1);
+    getPageText(activePage.value)!.splice(caretIndex, 1);
     // If the caret item was before the target item, decrement the target index
     if (caretIndex < targetIndex) {
       targetIndex--;
     }
     // Insert the caret item before the target item
-    pages.value[0].text.splice(targetIndex, 0, caretItem);
+    getPageText(activePage.value)!.splice(targetIndex, 0, caretItem);
   }
 }
 
 function placeCaretAtTheEnd() {
-  const caretIndex = pages.value[0].text.findIndex(
+  const caretIndex = getPageText(activePage.value)!.findIndex(
     (item) => item.id === "caret",
   );
   if (caretIndex !== -1) {
-    const caretItem = pages.value[0].text[caretIndex];
+    const caretItem = getPageText(activePage.value)![caretIndex];
     // Remove the caret item from its current position
-    pages.value[0].text.splice(caretIndex, 1);
+    getPageText(activePage.value)!.splice(caretIndex, 1);
     // Insert the caret item at the end
-    pages.value[0].text.push(caretItem);
+    getPageText(activePage.value)!.push(caretItem);
   }
 }
 
 function changePageItemColumn(id: string, column: ColumnTypes) {
-  const index = pages.value[0].text.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
   if (index !== -1) {
-    (pages.value[0].text[index].details as SignDetails).column = column;
+    (getPageText(activePage.value)![index].details as SignDetails).column = column;
   }
 
   toggleColumns(true);
-  replacePageItemById(id, pages.value[0].text[index]);
+  replacePageItemById(id, getPageText(activePage.value)![index]);
 }
 
 function replacePageItemById(id: string, newItem: PageItemType) {
-  const index = pages.value[0].text.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
   if (index !== -1) {
-    pages.value[0].text.splice(index, 1, newItem);
+    getPageText(activePage.value)!.splice(index, 1, newItem);
   }
 }
 

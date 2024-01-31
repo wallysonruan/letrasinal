@@ -7,10 +7,10 @@ import pageStore from "@/stores/PageStore";
     <v-card variant="flat">
       <v-card-text> Orientação da Página </v-card-text>
       <v-card-actions>
-        <v-btn @click="pageStore().changePageOrientation(1, 'portrait')">
+        <v-btn @click="pageStore().changePageOrientation('portrait')">
           Retrato
         </v-btn>
-        <v-btn @click="pageStore().changePageOrientation(1, 'landscape')"
+        <v-btn @click="pageStore().changePageOrientation('landscape')"
           >Paisagem</v-btn
         >
       </v-card-actions>
