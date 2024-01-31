@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type {
-  SignPuddleSignEndPointResult,
-  SignPuddleSearchEndPointResult,
-} from "@/api/SignPuddle";
+import type { SignPuddleSearchEndPointResult } from "@/api/SignPuddle";
 import {
   getSignsByTerm,
   SignPuddleMatch,
@@ -114,11 +111,11 @@ function filterOutSignsWithoutAnyAuthor(
   return results.filter((result) => result.source.length > 0);
 }
 
-function filterOutSignsWithSigntext(
-  signs: Partial<SignPuddleSearchEndPointResult>[],
-) {
-  return signs.filter((sign) => sign.sign!.length > 0);
-}
+// function filterOutSignsWithSigntext(
+//   signs: Partial<SignPuddleSearchEndPointResult>[],
+// ) {
+//   return signs.filter((sign) => sign.sign!.length > 0);
+// }
 
 const selected = ref<string[]>([]);
 function getSelected(selectedSigns: string[]) {
