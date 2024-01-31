@@ -182,10 +182,8 @@ function setFocusOnHiddenTextarea(pageId: number) {
 }
 
 textarea {
-  position: sticky;
-  width: 50%;
-
-  margin: auto;
+  position: fixed;
+  width: 0%;
 }
 
 @media print {
