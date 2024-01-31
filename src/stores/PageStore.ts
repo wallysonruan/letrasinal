@@ -144,7 +144,7 @@ function setWritingDirection(
   }
 }
 
-function setPageOnFocus(pageId: number, value: boolean) {
+function setPageOnFocus(value: boolean, pageId: number = 1) {
   sheetConfigurations.value.pageOnFocus.id = pageId;
   sheetConfigurations.value.pageOnFocus.focus = value;
 }
@@ -401,7 +401,11 @@ function addCaret() {
     id: "caret",
     type: "caret",
   };
-  addPageItem(caretPageItem, "end");
+
+  // Caret should be added to all pages, but only displayed when page gets focus.
+  pages.value.forEach((page) => {
+    addPageItem(caretPageItem, "end", page.pageId);
+  });
 }
 
 function moveCaretUp() {

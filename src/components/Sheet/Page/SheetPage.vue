@@ -163,6 +163,7 @@ function setFocusOnHiddenTextarea() {
           @click="pageStore().placeCaretBeforeItemById(word.id)"
           @touchstart="pageStore().placeCaretBeforeItemById(word.id)"
           :item="word"
+          :pageId="props.id"
           v-for="(word, index) in props.text"
           :key="index"
         />
@@ -171,8 +172,8 @@ function setFocusOnHiddenTextarea() {
         class="hidden-textarea"
         @keydown="handleKeyDown"
         @input="handleInput"
-        @focus="pageStore().setPageOnFocus(props.id, true)"
-        @focusout="pageStore().setPageOnFocus(props.id, false)"
+        @focus="pageStore().setPageOnFocus(true, props.id)"
+        @focusout="pageStore().setPageOnFocus(false, props.id)"
         aria-hidden="true"
         aria-disabled="true"
       >

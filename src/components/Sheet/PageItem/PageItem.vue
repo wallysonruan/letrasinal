@@ -18,6 +18,7 @@ import { watch } from "vue";
 import { ref } from "vue";
 
 type PageItemProps = {
+  pageId: number;
   item: PageItemType;
 };
 const props = defineProps<PageItemProps>();
@@ -79,7 +80,7 @@ watch(reRenderingNecessary, () => {
       :id="props.item.id"
     />
     <!---->
-    <CaretComponent v-else-if="props.item.type === 'caret'" />
+    <CaretComponent v-else-if="props.item.type === 'caret'" :pageId="props.pageId"/>
     <!---->
     <SignColumn
       v-else-if="props.item.type === 'number'"

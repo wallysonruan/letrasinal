@@ -3,8 +3,14 @@ import { computed } from "vue";
 import pageStore from "../../../stores/PageStore";
 import { onMounted } from "vue";
 
+type CaretProps = {
+  pageId: number;
+};
+
+const props = defineProps<CaretProps>();
+
 const activate = computed(() => {
-  return pageStore().pageOnFocus;
+  return pageStore().pageOnFocus.id === props.pageId;
 });
 const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(1).writingMode;
