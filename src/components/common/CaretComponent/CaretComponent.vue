@@ -10,7 +10,9 @@ type CaretProps = {
 const props = defineProps<CaretProps>();
 
 const activate = computed(() => {
-  return pageStore().pageOnFocus.id === props.pageId;
+  return (
+    pageStore().pageOnFocus.id === props.pageId && pageStore().pageOnFocus.focus
+  );
 });
 const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(props.pageId).writingMode;

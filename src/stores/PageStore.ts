@@ -7,7 +7,7 @@ const sheetConfigurations = ref({
   showSpaces: false,
   pageOnFocus: {
     id: 0,
-    focus: true,
+    focus: false,
   },
 });
 
@@ -484,7 +484,6 @@ function changePageItemColumn(id: string, column: ColumnTypes) {
       column;
   }
 
-  toggleColumns(true);
   replacePageItemById(id, getPageText(activePage.value)![index]);
 }
 

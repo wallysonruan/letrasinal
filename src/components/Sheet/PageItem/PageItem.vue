@@ -54,11 +54,11 @@ watch(reRenderingNecessary, () => {
       :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
       :page-id="props.pageId"
-      >
+    >
       <SignComponent
-      v-if="props.item.type === 'sign'"
-      :sign="props.item.details as SignDetails"
-      :key="key"
+        v-if="props.item.type === 'sign'"
+        :sign="props.item.details as SignDetails"
+        :key="key"
       />
       <!---->
       <SignPunctuation
