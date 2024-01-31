@@ -5,6 +5,10 @@ const sheetConfigurations = ref({
   showColumns: false,
   showBreakflow: false,
   showSpaces: false,
+  pageOnFocus: {
+    id: 1,
+    focus: true,
+  },
 });
 
 function shouldShowColumns() {
@@ -76,6 +80,16 @@ const pages = ref<PageConfigurations[]>([
       // },
     ],
   },
+  // {
+  //   pageId: 2,
+  //   size: "a4",
+  //   orientation: defaultPageOrientation,
+  //   writing: {
+  //     writingMode: defaultWritingMode,
+  //     direction: defaultWritingDirection,
+  //   },
+  //   text: [],
+  // }
 ]);
 
 addCaret();
@@ -130,10 +144,9 @@ function setWritingDirection(
   }
 }
 
-const pageOnFocus = ref(true);
-
-function setPageOnFocus(value: boolean) {
-  pageOnFocus.value = value;
+function setPageOnFocus(pageId: number, value: boolean) {
+  sheetConfigurations.value.pageOnFocus.id = pageId;
+  sheetConfigurations.value.pageOnFocus.focus = value;
 }
 
 const sheetSizes = new Map();
@@ -288,20 +301,24 @@ function createSignPunctuationPageItem(
   };
 }
 
-function addPageItem(newItem: PageItemType, id: string = "caret") {
+function addPageItem(
+  newItem: PageItemType,
+  id: string = "caret",
+  pageId: number = 2,
+) {
   if (id === "end") {
-    pages.value[0].text.push(newItem); // Insert item at the end of the array
+    getPageText(pageId)?.push(newItem); // Insert item at the end of the array
     return;
   }
 
   if (id === "start") {
-    pages.value[0].text.unshift(newItem); // Insert item at the beginning of the array
+    getPageText(pageId)?.unshift(newItem); // Insert item at the beginning of the array
     return;
   }
 
-  const index = pages.value[0].text.findIndex((item) => item.id === id);
+  const index = getPageText(pageId)?.findIndex((item) => item.id === id);
   if (index !== -1) {
-    pages.value[0].text.splice(index, 0, newItem); // Insert item before the item with the given id
+    getPageText(pageId)?.splice(index as number, 0, newItem); // Insert item before the item with the given id
   }
 }
 
@@ -603,7 +620,7 @@ const pageStore = defineStore({
   id: "pageStore",
   state: () => ({
     pages: pages,
-    pageOnFocus: pageOnFocus,
+    pageOnFocus: sheetConfigurations.value.pageOnFocus,
   }),
   actions: {
     // Page actions

@@ -5,27 +5,28 @@ import pageStore from "../../../stores/PageStore";
 import PageItem from "../PageItem/PageItem.vue";
 
 type PagepageProps = {
+  id: number;
   text: PageItemType[];
 };
 
 const props = defineProps<PagepageProps>();
 
 const pageWidth = computed(() => {
-  return pageStore().pages[0].orientation === "portrait"
-    ? pageStore().getSheetSize(1).width
-    : pageStore().getSheetSize(1).height;
+  return pageStore().getPageOrientation(props.id) === "portrait"
+    ? pageStore().getSheetSize(props.id).width
+    : pageStore().getSheetSize(props.id).height;
 });
 const pageHeight = computed(() => {
-  return pageStore().pages[0].orientation === "landscape"
-    ? pageStore().getSheetSize(1).width
-    : pageStore().getSheetSize(1).height;
+  return pageStore().getPageOrientation(props.id) === "landscape"
+    ? pageStore().getSheetSize(props.id).width
+    : pageStore().getSheetSize(props.id).height;
 });
 
 function handleKeyDown(event: Event) {
   const eventAsKeyboardEvent = event as KeyboardEvent;
 
   const writingMode = computed(() => {
-    return pageStore().getWritingConfiguration(1).writingMode;
+    return pageStore().getWritingConfiguration(props.id).writingMode;
   });
 
   const isWritingModeVertical = writingMode.value === "vertical";
@@ -39,7 +40,7 @@ function handleKeyDown(event: Event) {
       eventAsKeyboardEvent.key === "Backspace" ||
       eventAsKeyboardEvent.key === "Enter" ||
       eventAsKeyboardEvent.key === "Tab") &&
-    pageStore().pageOnFocus
+    pageStore().pageOnFocus.focus
   ) {
     event.preventDefault();
   }
@@ -92,7 +93,7 @@ function handleInput(event: Event) {
       input === "?" ||
       input === "(" ||
       input === ")") &&
-    pageStore().pageOnFocus
+    pageStore().pageOnFocus.focus
   ) {
     event.preventDefault();
   }
@@ -143,6 +144,7 @@ function setFocusOnHiddenTextarea() {
 <template>
   <div
     class="page"
+    :pageId="props.id"
     @click="setFocusOnHiddenTextarea"
     @touchstart="setFocusOnHiddenTextarea"
     @dblclick="pageStore().placeCaretAtTheEnd"
@@ -153,7 +155,9 @@ function setFocusOnHiddenTextarea() {
     >
       <div
         class="page-content"
-        :writing-mode="pageStore().getWritingConfiguration(1).writingMode"
+        :writing-mode="
+          pageStore().getWritingConfiguration(props.id).writingMode
+        "
       >
         <PageItem
           @click="pageStore().placeCaretBeforeItemById(word.id)"
@@ -167,8 +171,10 @@ function setFocusOnHiddenTextarea() {
         class="hidden-textarea"
         @keydown="handleKeyDown"
         @input="handleInput"
-        @focus="pageStore().setPageOnFocus(true)"
-        @focusout="pageStore().setPageOnFocus(false)"
+        @focus="pageStore().setPageOnFocus(props.id, true)"
+        @focusout="pageStore().setPageOnFocus(props.id, false)"
+        aria-hidden="true"
+        aria-disabled="true"
       >
       <!-- Hidden. It's here just to get focus, toggle mobile virtual keyboard, and have its Events redirected to pagePage. -->
     </textarea

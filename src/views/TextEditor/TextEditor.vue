@@ -5,7 +5,7 @@ import TextEditorDrawer from ".//TextEditorDrawer/TextEditorDrawer.vue";
 import pageStore from "@/stores/PageStore";
 import { computed } from "vue";
 
-const pageText = computed(() => pageStore().getPageText(1) ?? []);
+const pages = computed(() => pageStore().pages);
 </script>
 <template>
   <div class="text-editor-container">
@@ -13,8 +13,12 @@ const pageText = computed(() => pageStore().getPageText(1) ?? []);
       <TextEditorDrawer />
     </div>
     <div class="sheets-container">
-      <br />
-      <PageSheet :text="pageText" />
+      <PageSheet
+        v-for="(page, index) in pages"
+        :key="index"
+        :id="page.pageId"
+        :text="page.text"
+      />
     </div>
   </div>
 </template>
@@ -31,10 +35,13 @@ const pageText = computed(() => pageStore().getPageText(1) ?? []);
 
   .sheets-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
     width: 100%;
     height: 100%;
+    padding-top: 1rem;
   }
 }
 
