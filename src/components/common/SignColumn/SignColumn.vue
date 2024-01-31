@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-import SignToolBox from "./SignToolBox/SignToolBox.vue";
+// import SignToolBox from "./SignToolBox/SignToolBox.vue";
 import type { ColumnTypes, PageItemTypes } from "@/stores/PageStore";
 import pageStore from "@/stores/PageStore";
 
@@ -41,10 +41,10 @@ function handlePressEnd() {
   }
 }
 
-function handleCloseToolBox() {
-  setToolboxDisplay(false);
-  pageStore().setPageOnFocus(true);
-}
+// function handleCloseToolBox() {
+//   setToolboxDisplay(false);
+//   pageStore().setPageOnFocus(true);
+// }
 
 function columnStyle() {
   switch (props.column) {
@@ -75,13 +75,13 @@ const showColumns = computed(() => {
     :writing-mode="writingMode"
     :columns="showColumns"
   >
-    <SignToolBox
+    <!-- <SignToolBox
       :pageId="props.pageId"
       :active="showToolbox"
       :item-id="props.itemId"
       :column="props.column"
       @closeToolbox="handleCloseToolBox"
-    />
+    /> -->
     <!--  -->
     <div class="sign-column-item" :style="columnStyle()">
       <slot></slot>

@@ -331,6 +331,33 @@ function deletePageItemById(itemId: string, pageId = activePage.value) {
   }
 }
 
+/**
+ * @description Places the item with the given referenceItem id before the item with the given itemToBePlacedBefore id.
+ *
+ */
+function placePageItemBeforeItemById(
+  referenceItem: string,
+  itemToBePlacedBefore: string,
+) {
+  const page = getPageText(activePage.value)!;
+  const referenceItemIndex = page.findIndex(
+    (item) => item.id === referenceItem,
+  );
+  const itemToBeMovedIndex = page.findIndex(
+    (item) => item.id === itemToBePlacedBefore,
+  );
+
+  if (referenceItemIndex !== -1 && itemToBeMovedIndex !== -1) {
+    const item = page[itemToBeMovedIndex];
+    page.splice(itemToBeMovedIndex, 1);
+    if (itemToBeMovedIndex < referenceItemIndex) {
+      page.splice(referenceItemIndex - 1, 0, item);
+    } else {
+      page.splice(referenceItemIndex, 0, item);
+    }
+  }
+}
+
 function movePageItemUp(id: string) {
   const index = getPageText(activePage.value)!.findIndex(
     (item) => item.id === id,
@@ -679,6 +706,7 @@ const pageStore = defineStore({
     addPageItem,
     deletePageItemById,
     changePageItemColumn,
+    placePageItemBeforeItemById,
     movePageItemUp,
     movePageItemDown,
     getPageItemFontSize,

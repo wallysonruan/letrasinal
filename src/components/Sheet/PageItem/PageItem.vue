@@ -46,9 +46,41 @@ watch(reRenderingNecessary, () => {
     key.value++;
   }
 });
+
+function shouldBeDraggable(): boolean {
+  if (
+    props.item.type === "caret" ||
+    props.item.type === "punctuation" ||
+    props.item.type === "breakflow"
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function dragStart(event: DragEvent) {
+  event.dataTransfer?.setData("text/plain", props.item.id);
+}
+
+function dragDrop(event: DragEvent) {
+  event.preventDefault();
+
+  const pageItemBeingDragged = event.dataTransfer?.getData("text/plain");
+  pageStore().placePageItemBeforeItemById(props.item.id, pageItemBeingDragged!);
+}
 </script>
 <template>
-  <div class="page-item" :id="props.item.id" :writing-mode="writingMode">
+  <div
+    class="page-item"
+    :id="props.item.id"
+    :writing-mode="writingMode"
+    :draggable="shouldBeDraggable()"
+    @dragstart="dragStart"
+    @dragover.prevent
+    @dragenter.prevent
+    @drop="dragDrop"
+  >
     <SignColumn
       :item-id="props.item.id"
       :column="(props.item.details as SignDetails).column"
