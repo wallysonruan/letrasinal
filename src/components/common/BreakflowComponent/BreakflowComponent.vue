@@ -56,7 +56,7 @@ function setDimensions(
   const previousItemPageItem = document.querySelector(
     `.page-item[id="${previousItem.id}"]`,
   ) as HTMLElement;
-  dimensionRef.value = getUnoccupiedSpace(previousItemPageItem) - 3;
+  dimensionRef.value = getUnoccupiedSpace(previousItemPageItem) + 10;
 }
 
 function setVerticalHeight() {
@@ -68,7 +68,7 @@ function setVerticalHeight() {
   setDimensions(pageContenVisibletHeight, height, (previousItemPageItem) => {
     const unoccupiedHeight =
       pageContenVisibletHeight -
-      ((previousItemPageItem?.offsetTop ?? 0) +
+      ((previousItemPageItem?.offsetTop ?? 0) -
         (previousItemPageItem?.clientHeight ?? 0));
     return unoccupiedHeight;
   });
@@ -83,7 +83,7 @@ function setHorizontalWidth() {
   setDimensions(pageContenVisibletWidth, width, (previousItemPageItem) => {
     const unoccupiedWidth =
       pageContenVisibletWidth -
-      ((previousItemPageItem?.offsetLeft ?? 0) +
+      ((previousItemPageItem?.offsetLeft ?? 0) -
         (previousItemPageItem?.offsetWidth ?? 0));
     return unoccupiedWidth;
   });
