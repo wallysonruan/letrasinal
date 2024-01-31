@@ -6,14 +6,14 @@ import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
 import DrawerTextOptions from "./DrawerTextOptions/DrawerTextOptions.vue";
 import DrawerSignPuddle from "./DrawerSignPuddle/DrawerSignPuddle.vue";
 import LogoItem from "@/components/common/Logo/LogoItem.vue";
-import browserWindowStore from "@/stores/BrowserWindowStore";
+// import browserWindowStore from "@/stores/BrowserWindowStore";
 
 const drawer = ref(true);
 const drawerExpandable = ref(true);
 
-const windowWidth = computed(() => {
-  return browserWindowStore().getWindowWidth();
-});
+// const windowWidth = computed(() => {
+//   return browserWindowStore().getWindowWidth();
+// });
 
 // const isMobile = computed(() => {
 //   return windowWidth.value < 700;
@@ -39,10 +39,6 @@ const chevronDirection = computed(() => {
     return drawerExpandable.value ? "fa-chevron-up" : "fa-chevron-down";
   }
   return drawerExpandable.value ? "fa-chevron-right" : "fa-chevron-left";
-});
-
-const hidePageOptions = computed(() => {
-  return windowWidth.value < 700;
 });
 
 // const eightyPercentHeight = computed(() => {
@@ -77,7 +73,6 @@ const tab = ref("empty");
         <button
           class="tab"
           @click="tab = 'page'"
-          v-if="!hidePageOptions"
           :active="!drawerExpandable && tab === 'page'"
         >
           <v-icon icon="fa-file-text" />
@@ -115,7 +110,7 @@ const tab = ref("empty");
         :closed="drawerExpandable"
       >
         <!-- PAGE -->
-        <v-window-item value="page" v-if="!hidePageOptions">
+        <v-window-item value="page">
           <DrawerPageOptions />
         </v-window-item>
         <!-- TEXT -->
