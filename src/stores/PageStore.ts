@@ -6,7 +6,7 @@ const sheetConfigurations = ref({
   showBreakflow: false,
   showSpaces: false,
   pageOnFocus: {
-    id: 1,
+    id: 0,
     focus: true,
   },
 });
@@ -58,53 +58,36 @@ const defaultWritingConfiguration: PageConfigurations["writing"] = {
 
 const pages = ref<PageConfigurations[]>([
   {
-    pageId: 1,
+    pageId: 0,
     size: "a4",
     orientation: defaultPageOrientation,
     writing: {
       writingMode: defaultWritingMode,
       direction: defaultWritingDirection,
     },
-    text: [
-      // {
-      //   id: "1a70a",
-      //   type: "sign",
-      //   details: {
-      //     fsw: "M539x556S33b00482x483S21100507x503S18617491x530S22f07518x515",
-      //     words: ["Wallyson Ruan A. F."],
-      //     column: "middle",
-      //     style: {
-      //       fontSize: 0.7,
-      //     },
-      //   },
-      // },
-    ],
+    text: [],
   },
-  // {
-  //   pageId: 2,
-  //   size: "a4",
-  //   orientation: defaultPageOrientation,
-  //   writing: {
-  //     writingMode: defaultWritingMode,
-  //     direction: defaultWritingDirection,
-  //   },
-  //   text: [],
-  // },
-  // {
-  //   pageId: 3,
-  //   size: "a4",
-  //   orientation: defaultPageOrientation,
-  //   writing: {
-  //     writingMode: defaultWritingMode,
-  //     direction: defaultWritingDirection,
-  //   },
-  //   text: [],
-  // },
 ]);
 
 addCaret();
 
 const activePage = computed(() => sheetConfigurations.value.pageOnFocus.id);
+
+function createPage() {
+  const pageId = pages.value.length;
+  pages.value.push({
+    pageId: pageId,
+    size: "a4",
+    orientation: defaultPageOrientation,
+    writing: {
+      writingMode: defaultWritingMode,
+      direction: defaultWritingDirection,
+    },
+    text: [],
+  });
+
+  addCaret();
+}
 
 function changePageOrientation(orientation: PageConfigurations["orientation"]) {
   const index = pages.value.findIndex(
@@ -342,7 +325,9 @@ function deletePageItemById(itemId: string, pageId = activePage.value) {
 }
 
 function movePageItemUp(id: string) {
-  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex(
+    (item) => item.id === id,
+  );
   if (index !== -1 && index !== 0) {
     const item = getPageText(activePage.value)![index];
     getPageText(activePage.value)!.splice(index, 1);
@@ -351,7 +336,9 @@ function movePageItemUp(id: string) {
 }
 
 function movePageItemDown(id: string) {
-  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex(
+    (item) => item.id === id,
+  );
 
   if (index !== -1 && index !== getPageText(activePage.value)!.length - 1) {
     const item = getPageText(activePage.value)![index];
@@ -419,6 +406,10 @@ function addCaret() {
 
   // Caret should be added to all pages, but only displayed when page gets focus.
   pages.value.forEach((page) => {
+    const hasCaret = page.text.find((item) => item.id === "caret");
+    if (hasCaret) {
+      return;
+    }
     addPageItem(caretPageItem, "end", page.pageId);
   });
 }
@@ -444,7 +435,9 @@ function placeCaretBeforeItemById(id: string) {
   const caretIndex = getPageText(activePage.value)!.findIndex(
     (item) => item.id === "caret",
   );
-  let targetIndex = getPageText(activePage.value)!.findIndex((item) => item.id === id);
+  let targetIndex = getPageText(activePage.value)!.findIndex(
+    (item) => item.id === id,
+  );
 
   if (caretIndex !== -1 && targetIndex !== -1) {
     const caretItem = getPageText(activePage.value)![caretIndex];
@@ -473,9 +466,12 @@ function placeCaretAtTheEnd() {
 }
 
 function changePageItemColumn(id: string, column: ColumnTypes) {
-  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex(
+    (item) => item.id === id,
+  );
   if (index !== -1) {
-    (getPageText(activePage.value)![index].details as SignDetails).column = column;
+    (getPageText(activePage.value)![index].details as SignDetails).column =
+      column;
   }
 
   toggleColumns(true);
@@ -483,7 +479,9 @@ function changePageItemColumn(id: string, column: ColumnTypes) {
 }
 
 function replacePageItemById(id: string, newItem: PageItemType) {
-  const index = getPageText(activePage.value)!.findIndex((item) => item.id === id);
+  const index = getPageText(activePage.value)!.findIndex(
+    (item) => item.id === id,
+  );
   if (index !== -1) {
     getPageText(activePage.value)!.splice(index, 1, newItem);
   }
@@ -645,6 +643,7 @@ const pageStore = defineStore({
   }),
   actions: {
     // Page actions
+    createPage,
     changePageOrientation,
     getPageOrientation,
     getPageSize,

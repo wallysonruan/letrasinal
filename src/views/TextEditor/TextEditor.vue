@@ -154,6 +154,13 @@ function setFocusOnHiddenTextarea(pageId: number) {
       <!-- Hidden. It's here just to get focus, toggle mobile virtual keyboard, and have its Events redirected to pagePage. -->
     </textarea
       >
+      <div class="add-page">
+        <v-btn
+          density="comfortable"
+          icon="fa-plus"
+          @click="pageStore().createPage"
+        />
+      </div>
     </div>
   </div>
 </template>
