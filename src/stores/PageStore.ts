@@ -4,7 +4,32 @@ import { ref } from "vue";
 const sheetConfigurations = ref({
   showColumns: false,
   showBreakflow: false,
+  showSpaces: false,
 });
+
+function shouldShowColumns() {
+  return sheetConfigurations.value.showColumns;
+}
+
+function toggleColumns(show: boolean) {
+  sheetConfigurations.value.showColumns = show;
+}
+
+function shouldShowBreakflow() {
+  return sheetConfigurations.value.showBreakflow;
+}
+
+function toggleBreakflow(show: boolean) {
+  sheetConfigurations.value.showBreakflow = show;
+}
+
+function shouldShowSpaces() {
+  return sheetConfigurations.value.showSpaces;
+}
+
+function toggleSpaces(show: boolean) {
+  sheetConfigurations.value.showSpaces = show;
+}
 
 type PageConfigurations = {
   pageId: number;
@@ -574,22 +599,6 @@ function addNumber(number: string, itemId: string = "caret") {
   addPageItem(numberPageItem, itemId);
 }
 
-function shouldShowColumns() {
-  return sheetConfigurations.value.showColumns;
-}
-
-function toggleColumns(show: boolean) {
-  sheetConfigurations.value.showColumns = show;
-}
-
-function shouldShowBreakflow() {
-  return sheetConfigurations.value.showBreakflow;
-}
-
-function toggleBreakflow(show: boolean) {
-  sheetConfigurations.value.showBreakflow = show;
-}
-
 const pageStore = defineStore({
   id: "pageStore",
   state: () => ({
@@ -604,6 +613,12 @@ const pageStore = defineStore({
     setPageOnFocus,
     setPageText,
     getPageText,
+    shouldShowColumns,
+    toggleColumns,
+    shouldShowBreakflow,
+    toggleBreakflow,
+    shouldShowSpaces,
+    toggleSpaces,
     // Writing actions
     getWritingConfiguration,
     setWritingMode,
@@ -638,10 +653,6 @@ const pageStore = defineStore({
     addLongSpace,
     addBreakflow,
     addNumber,
-    shouldShowColumns,
-    toggleColumns,
-    shouldShowBreakflow,
-    toggleBreakflow,
   },
 });
 

@@ -47,6 +47,19 @@ import pageStore from "@/stores/PageStore";
         />
       </div>
     </section>
+    <!--  -->
+    <section class="conf">
+      <div class="conf-title">
+        <label for="show-spaces">Mostrar Espaços</label>
+      </div>
+      <div class="conf-action">
+        <v-switch
+          @update:model-value="pageStore().toggleSpaces"
+          hide-details
+          id="show-spaces"
+        />
+      </div>
+    </section>
   </div>
 </template>
 <style scoped lang="scss">
@@ -59,7 +72,11 @@ section {
   grid-template-columns: 4fr 1fr;
   grid-gap: 1rem;
   align-items: center;
-  margin-bottom: 1rem;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
   .conf-description {
     font-size: 0.7rem;
   }

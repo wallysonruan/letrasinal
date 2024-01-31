@@ -27,18 +27,32 @@ const punctuationClass = computed(() => {
 const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(1).writingMode;
 });
+
+const showPunctuation = computed(() => {
+  return pageStore().shouldShowSpaces();
+});
 </script>
 <template>
   <div
     :class="`punctuation ${punctuationClass}`"
     :writing-mode="writingMode"
+    :show="showPunctuation"
   ></div>
 </template>
 <style scoped lang="scss">
 .punctuation {
   position: relative;
 
+  &[show="true"] {
+    background-color: rgb(208, 200, 200, 0.3);
+    border: 2px dashed rgb(163, 160, 160, 0.3);
+  }
+
   &[writing-mode="vertical"] {
+    &[show="true"] {
+      min-width: 3rem;
+    }
+
     &.space {
       height: 1rem;
     }
@@ -49,6 +63,10 @@ const writingMode = computed(() => {
   }
 
   &[writing-mode="horizontal"] {
+    &[show="true"] {
+      min-height: 3rem;
+    }
+
     &.space {
       width: 1rem;
     }
