@@ -122,7 +122,9 @@ function setFocusOnHiddenTextarea(pageId: number) {
   pageStore().pageOnFocus.id = pageId;
 
   const pageContainer = document.querySelector(".text-editor-container");
-  const textarea = pageContainer?.querySelector("textarea");
+  const textarea = pageContainer?.querySelector(
+    ".hidden-textarea",
+  ) as HTMLTextAreaElement;
 
   if (textarea) {
     textarea.focus({ preventScroll: true });
@@ -144,6 +146,7 @@ function setFocusOnHiddenTextarea(pageId: number) {
         @touchstart="setFocusOnHiddenTextarea(page.pageId)"
       />
       <textarea
+        class="hidden-textarea"
         @keydown="handleKeyDown"
         @input="handleInput"
         @focus="pageStore().setPageOnFocus(true)"
