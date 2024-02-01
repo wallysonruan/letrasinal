@@ -52,9 +52,12 @@ const pageHeight = computed(() => {
 </template>
 <style scoped lang="scss">
 .page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   padding: 0 1rem;
   overflow: scroll;
-  width: 100%;
 
   .page-container {
     padding: 1rem 1rem;
@@ -86,6 +89,9 @@ const pageHeight = computed(() => {
 }
 
 @media screen and (max-width: 600px) {
+  .page {
+    display: block;
+  }
   .page-container {
     .page-content {
       overflow: auto;
