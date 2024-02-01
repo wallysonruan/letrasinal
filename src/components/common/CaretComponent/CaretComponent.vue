@@ -122,13 +122,13 @@ onMounted(() => {
 
   &[writing-mode="vertical"]::after {
     height: 2px;
-    min-width: 3rem;
+    min-width: 2rem;
     width: 100%;
   }
 
   &[writing-mode="horizontal"]::after {
     width: 2px;
-    min-height: 3rem;
+    min-height: 2rem;
     height: 100%;
   }
 }
