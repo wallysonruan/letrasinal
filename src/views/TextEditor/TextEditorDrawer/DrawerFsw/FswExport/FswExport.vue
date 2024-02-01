@@ -59,7 +59,11 @@ function handleExport() {
       <div class="no-fsw-to-show" v-show="!hasFswToBeShown">
         <p>Não há FSW para mostrar, escreva algo primeiro.</p>
       </div>
-      <div class="export-results" v-for="(fsw, index) in fswToBeExported">
+      <div
+        class="export-results"
+        v-for="(fsw, index) in fswToBeExported"
+        :key="index"
+      >
         <h3 class="export-results-title">Page #{{ index + 1 }}:</h3>
         <v-textarea readonly :value="fsw" variant="outlined" />
       </div>

@@ -71,11 +71,7 @@ watch(reRenderingNecessary, () => {
 // }
 </script>
 <template>
-  <div
-    class="page-item"
-    :id="props.item.id"
-    :writing-mode="writingMode"
-    >
+  <div class="page-item" :id="props.item.id" :writing-mode="writingMode">
     <!-- :draggable="shouldBeDraggable()"
     @dragstart="dragStart"
     @dragover.prevent
