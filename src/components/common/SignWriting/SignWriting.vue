@@ -12,8 +12,10 @@ const isPunctuation = isFswType(props.fsw, "punctuation");
 </script>
 <template>
   <div class="sign" v-if="isValidFsw">
-    <fsw-symbol v-if="isPunctuation" :symbol="props.fsw"
-    :style="`font-size: ${props.fontSize ?? 0.7}rem; color: ${props.color};`"
+    <fsw-symbol
+      v-if="isPunctuation"
+      :symbol="props.fsw"
+      :style="`font-size: ${props.fontSize ?? 0.7}rem; color: ${props.color};`"
     />
     <fsw-sign
       v-else
