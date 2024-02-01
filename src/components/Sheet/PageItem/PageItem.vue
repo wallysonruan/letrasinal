@@ -47,40 +47,40 @@ watch(reRenderingNecessary, () => {
   }
 });
 
-function shouldBeDraggable(): boolean {
-  if (
-    props.item.type === "caret" ||
-    props.item.type === "punctuation" ||
-    props.item.type === "breakflow"
-  ) {
-    return false;
-  }
+// function shouldBeDraggable(): boolean {
+//   if (
+//     props.item.type === "caret" ||
+//     props.item.type === "punctuation" ||
+//     props.item.type === "breakflow"
+//   ) {
+//     return false;
+//   }
 
-  return true;
-}
+//   return true;
+// }
 
-function dragStart(event: DragEvent) {
-  event.dataTransfer?.setData("text/plain", props.item.id);
-}
+// function dragStart(event: DragEvent) {
+//   event.dataTransfer?.setData("text/plain", props.item.id);
+// }
 
-function dragDrop(event: DragEvent) {
-  event.preventDefault();
+// function dragDrop(event: DragEvent) {
+//   event.preventDefault();
 
-  const pageItemBeingDragged = event.dataTransfer?.getData("text/plain");
-  pageStore().placePageItemBeforeItemById(props.item.id, pageItemBeingDragged!);
-}
+//   const pageItemBeingDragged = event.dataTransfer?.getData("text/plain");
+//   pageStore().placePageItemBeforeItemById(props.item.id, pageItemBeingDragged!);
+// }
 </script>
 <template>
   <div
     class="page-item"
     :id="props.item.id"
     :writing-mode="writingMode"
-    :draggable="shouldBeDraggable()"
+    >
+    <!-- :draggable="shouldBeDraggable()"
     @dragstart="dragStart"
     @dragover.prevent
     @dragenter.prevent
-    @drop="dragDrop"
-  >
+    @drop="dragDrop" -->
     <SignColumn
       :item-id="props.item.id"
       :column="(props.item.details as SignDetails).column"
@@ -90,13 +90,14 @@ function dragDrop(event: DragEvent) {
       <SignComponent
         v-if="props.item.type === 'sign'"
         :sign="props.item.details as SignDetails"
-        :key="key"
+        :key="`${key}-sign`"
       />
       <!---->
       <SignPunctuation
         v-else-if="props.item.type === 'signPunctuation'"
         :sign="props.item.details as SignPunctuationDetails"
         :page-id="props.pageId"
+        :key="`${key}-signpunctuation`"
       />
       <!---->
       <PunctuationComponent
