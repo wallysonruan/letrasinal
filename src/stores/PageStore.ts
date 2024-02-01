@@ -9,6 +9,7 @@ const sheetConfigurations = ref({
     id: 0,
     focus: false,
   },
+  totalPages: 1,
 });
 
 function shouldShowColumns() {
@@ -33,6 +34,10 @@ function shouldShowSpaces() {
 
 function toggleSpaces(show: boolean) {
   sheetConfigurations.value.showSpaces = show;
+}
+
+function getTotalPages() {
+  return sheetConfigurations.value.totalPages;
 }
 
 type PageConfigurations = {
@@ -86,6 +91,8 @@ function createPage() {
     text: [],
   });
 
+  sheetConfigurations.value.totalPages =
+    sheetConfigurations.value.totalPages + 1;
   addCaret();
 }
 
@@ -695,6 +702,7 @@ const pageStore = defineStore({
     toggleBreakflow,
     shouldShowSpaces,
     toggleSpaces,
+    getTotalPages,
     // Writing actions
     getWritingConfiguration,
     setWritingMode,

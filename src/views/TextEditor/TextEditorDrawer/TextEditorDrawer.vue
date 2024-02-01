@@ -5,6 +5,7 @@ import { ref } from "vue";
 import DrawerPageOptions from "./DrawerPageOptions/DrawerPageOptions.vue";
 import DrawerTextOptions from "./DrawerTextOptions/DrawerTextOptions.vue";
 import DrawerSignPuddle from "./DrawerSignPuddle/DrawerSignPuddle.vue";
+import DrawerFsw from "./DrawerFsw/DrawerFsw.vue";
 import LogoItem from "@/components/common/Logo/LogoItem.vue";
 // import browserWindowStore from "@/stores/BrowserWindowStore";
 
@@ -101,6 +102,15 @@ const tab = ref("empty");
             />
           </i>
         </button>
+
+        <!-- FSW -->
+        <button
+          class="tab"
+          @click="tab = 'fsw'"
+          :active="!drawerExpandable && tab === 'fsw'"
+        >
+          FSW
+        </button>
       </div>
 
       <v-window
@@ -120,6 +130,10 @@ const tab = ref("empty");
         <!-- SIGNPUDDLE -->
         <v-window-item value="signpuddle">
           <DrawerSignPuddle />
+        </v-window-item>
+        <!-- FSW -->
+        <v-window-item value="fsw">
+          <DrawerFsw />
         </v-window-item>
       </v-window>
     </div>
