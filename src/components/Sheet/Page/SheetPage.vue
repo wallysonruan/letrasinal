@@ -78,12 +78,12 @@ const pageHeight = computed(() => {
 
     &[writing-mode="vertical"] {
       flex-direction: column;
-      column-gap: 1.5rem;
+      // column-gap: 1.5rem;
     }
 
     &[writing-mode="horizontal"] {
       flex-direction: row;
-      row-gap: 1.5rem;
+      // row-gap: 1.5rem;
     }
   }
 }

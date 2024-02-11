@@ -2,7 +2,14 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 const sheetConfigurations = ref({
-  showColumns: false,
+  columns: {
+    activate: false,
+    show: {
+      left: false,
+      middle: false,
+      right: false,
+    },
+  },
   showBreakflow: false,
   showSpaces: false,
   pageOnFocus: {
@@ -12,12 +19,41 @@ const sheetConfigurations = ref({
   totalPages: 1,
 });
 
-function shouldShowColumns() {
-  return sheetConfigurations.value.showColumns;
+function shouldActivateColumns() {
+  return sheetConfigurations.value.columns.activate;
 }
 
-function toggleColumns(show: boolean) {
-  sheetConfigurations.value.showColumns = show;
+function toggleColumns(activate: boolean) {
+  sheetConfigurations.value.columns.activate = activate;
+}
+
+function shouldShowColumns() {
+  return sheetConfigurations.value.columns.show;
+}
+
+function toggleColumnsVisibility(
+  column: "left" | "middle" | "right",
+  show: boolean,
+) {
+  sheetConfigurations.value.columns.show[column] = show;
+}
+
+function toggleAllColumnsVisibility(show: boolean) {
+  sheetConfigurations.value.columns.show.left = show;
+  sheetConfigurations.value.columns.show.middle = show;
+  sheetConfigurations.value.columns.show.right = show;
+}
+
+function getColumnsVisibility(column: "left" | "middle" | "right" | "all") {
+  if (column === "all") {
+    return (
+      sheetConfigurations.value.columns.show.left &&
+      sheetConfigurations.value.columns.show.middle &&
+      sheetConfigurations.value.columns.show.right
+    );
+  }
+
+  return sheetConfigurations.value.columns.show[column];
 }
 
 function shouldShowBreakflow() {
@@ -696,8 +732,12 @@ const pageStore = defineStore({
     setPageOnFocus,
     setPageText,
     getPageText,
+    shouldActivateColumns,
     shouldShowColumns,
+    toggleColumnsVisibility,
+    toggleAllColumnsVisibility,
     toggleColumns,
+    getColumnsVisibility,
     shouldShowBreakflow,
     toggleBreakflow,
     shouldShowSpaces,

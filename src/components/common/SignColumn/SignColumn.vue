@@ -61,6 +61,10 @@ const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(props.pageId).writingMode;
 });
 
+const activateColumns = computed(() => {
+  return pageStore().shouldActivateColumns();
+});
+
 const showColumns = computed(() => {
   return pageStore().shouldShowColumns();
 });
@@ -73,7 +77,11 @@ const showColumns = computed(() => {
     @mousedown="handlePressStart"
     @mouseup="handlePressEnd"
     :writing-mode="writingMode"
-    :columns="showColumns"
+    :activate="activateColumns"
+    :active="showToolbox"
+    :right="showColumns.right"
+    :middle="showColumns.middle"
+    :left="showColumns.left"
   >
     <SignToolBox
       :pageId="props.pageId"
@@ -91,9 +99,29 @@ const showColumns = computed(() => {
 <style scoped lang="scss">
 .sign-column-container {
   position: relative;
+  padding: 0 0.5rem 0 0.5rem;
+
+  &[right="true"] {
+    border-right: 0.5px black solid;
+  }
+  &[left="true"] {
+    border-left: 0.5px black solid;
+  }
+
+  &[middle="true"] {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0%;
+      left: 50%;
+      height: 100%;
+      width: 0.5px;
+      border-right: 0.5px dashed black;
+    }
+  }
 
   &[writing-mode="vertical"] {
-    &[columns="true"] {
+    &[activate="true"] {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
     }
