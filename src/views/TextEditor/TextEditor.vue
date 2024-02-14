@@ -137,6 +137,29 @@ function setFocusOnHiddenTextarea(pageId: number) {
       <TextEditorDrawer />
     </div>
     <div class="sheets-container">
+      <v-alert
+        class="alert"
+        title="Comunicado: Atualizações do LetraSinal Suspensas Temporariamente"
+        type="info"
+        closable
+      >
+        <br />
+        <p>
+          O LetraSinal não receberá atualizações de funcionalidades ou
+          manutenções por um período indeterminado.
+        </p>
+        <br />
+        <p>
+          Afim de aprimorar a performance e a eficácia desta aplicação, Estamos
+          revisando a arquitetura atual e estudando a
+          <a
+            href="https://datatracker.ietf.org/doc/html/draft-slevinski-formal-signwriting#name-spatial-signbox"
+            >especificação FormalSignWriting (FSW)</a
+          >.
+        </p>
+        <br />
+        <p>Agradecemos a sua compreensão.</p>
+      </v-alert>
       <PageSheet
         v-for="(page, index) in pages"
         :key="index"
@@ -194,6 +217,11 @@ function setFocusOnHiddenTextarea(pageId: number) {
 textarea {
   position: fixed;
   width: 0%;
+}
+
+.alert {
+  position: sticky;
+  top: 0%;
 }
 
 @media print {
