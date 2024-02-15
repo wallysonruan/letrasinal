@@ -2,14 +2,18 @@
 import { computed, ref } from "vue";
 
 import SignToolBox from "./SignToolBox/SignToolBox.vue";
-import type { ColumnTypes, PageItemTypes } from "@/stores/PageStore";
+import type {
+  PageItemType,
+  PageItemTypes,
+  SignDetails,
+} from "@/stores/PageStore";
 import pageStore from "@/stores/PageStore";
 
 type SignColumnProps = {
   pageId: number;
   itemId: string;
-  column: ColumnTypes;
   pageItemType: PageItemTypes;
+  item: PageItemType;
 };
 
 const props = defineProps<SignColumnProps>();
@@ -47,15 +51,23 @@ function handleCloseToolBox() {
 }
 
 function columnStyle() {
-  switch (props.column) {
-    case "left":
-      return "grid-column: 1;";
-    case "middle":
-      return "grid-column: 2;";
-    case "right":
-      return "grid-column: 3;";
+  if ((props.item.details as SignDetails)?.fsw) {
+    switch ((props.item.details as SignDetails).fsw[0]) {
+      case "L":
+        return "grid-column: 1;";
+      case "M":
+        return "grid-column: 2;";
+      case "R":
+        return "grid-column: 3;";
+      default: // Middle
+        return "grid-column: 2;";
+    }
   }
 }
+
+const fswIfPresent = computed(() => {
+  return (props.item.details as SignDetails)?.fsw;
+});
 
 const writingMode = computed(() => {
   return pageStore().getWritingConfiguration(props.pageId).writingMode;
@@ -87,7 +99,7 @@ const showColumns = computed(() => {
       :pageId="props.pageId"
       :active="showToolbox"
       :item-id="props.itemId"
-      :column="props.column"
+      :fsw="fswIfPresent"
       @closeToolbox="handleCloseToolBox"
     />
     <!--  -->

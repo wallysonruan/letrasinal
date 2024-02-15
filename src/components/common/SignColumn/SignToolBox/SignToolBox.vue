@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import pageStore, { type ColumnTypes } from "../../../../stores/PageStore";
+import pageStore from "../../../../stores/PageStore";
 import pageItemStore from "@/stores/PageItemStore";
 import type { StyleValue } from "vue";
 
@@ -8,7 +8,7 @@ type SignToolBoxProps = {
   pageId: number;
   itemId: string;
   active: boolean;
-  column: ColumnTypes;
+  fsw: string | undefined;
 };
 
 const props = defineProps<SignToolBoxProps>();
@@ -18,16 +18,18 @@ const formatting = ref<number[]>([]);
 const pageItemColumn = ref<number>(0);
 
 function setPageItemColumn() {
-  switch (props.column) {
-    case "left":
-      pageItemColumn.value = 0;
-      break;
-    case "middle":
-      pageItemColumn.value = 1;
-      break;
-    case "right":
-      pageItemColumn.value = 2;
-      break;
+  if (props.fsw) {
+    switch (props.fsw[0]) {
+      case "L":
+        pageItemColumn.value = 0;
+        break;
+      case "M":
+        pageItemColumn.value = 1;
+        break;
+      case "R":
+        pageItemColumn.value = 2;
+        break;
+    }
   }
 }
 
@@ -100,21 +102,21 @@ const pageItemFontSize = computed(() => {
       <v-btn-toggle v-model="pageItemColumn" variant="outlined" divided>
         <v-btn
           style="background-color: white"
-          @click="pageStore().changePageItemColumn(props.itemId, 'left')"
+          @click="pageStore().changePageItemColumn(props.itemId, 'L')"
         >
           <v-icon icon="fa-align-left"></v-icon>
         </v-btn>
 
         <v-btn
           style="background-color: white"
-          @click="pageStore().changePageItemColumn(props.itemId, 'middle')"
+          @click="pageStore().changePageItemColumn(props.itemId, 'M')"
         >
           <v-icon icon="fa-align-center"></v-icon>
         </v-btn>
 
         <v-btn
           style="background-color: white"
-          @click="pageStore().changePageItemColumn(props.itemId, 'right')"
+          @click="pageStore().changePageItemColumn(props.itemId, 'R')"
         >
           <v-icon icon="fa-align-right"></v-icon>
         </v-btn>

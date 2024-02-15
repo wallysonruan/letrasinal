@@ -205,15 +205,12 @@ function getSheetSize(pageId: number): { width: number; height: number } {
   return sheetSizes.get(pageSize);
 }
 
-export type ColumnTypes = "left" | "middle" | "right";
-
 export type SignPunctuationDetails = {
   fsw: {
     vertical: string;
     horizontal: string;
   };
   words: string[];
-  column: ColumnTypes;
   style?: {
     fontSize?: number;
   };
@@ -222,7 +219,6 @@ export type SignPunctuationDetails = {
 export type SignDetails = {
   fsw: string;
   words: string[];
-  column: ColumnTypes;
   style?: {
     fontSize?: number;
   };
@@ -238,7 +234,6 @@ export type TextDetails = {
 
 export type NumberDetails = {
   number: string;
-  column: ColumnTypes;
   style?: {
     fontSize?: number;
   };
@@ -252,12 +247,9 @@ type PunctuationTypes = "space" | "long-space";
 
 export type PunctuationDetails = {
   type: PunctuationTypes;
-  column: ColumnTypes;
 };
 
-export type SimplePageItemDetails = {
-  column: ColumnTypes;
-};
+export type SimplePageItemDetails = {};
 
 export type PageItemTypes =
   | "sign"
@@ -545,16 +537,16 @@ function placeCaretAtTheEnd() {
   }
 }
 
-function changePageItemColumn(id: string, column: ColumnTypes) {
+function changePageItemColumn(id: string, column: "L" | "M" | "R") {
   const index = getPageText(activePage.value)!.findIndex(
     (item) => item.id === id,
   );
   if (index !== -1) {
-    (getPageText(activePage.value)![index].details as SignDetails).column =
-      column;
+    const pageText = getPageText(activePage.value)!;
+    const fsw = (pageText[index].details as SignDetails).fsw;
+    const newFsw = column + fsw.substring(1);
+    (pageText[index].details as SignDetails).fsw = newFsw;
   }
-
-  replacePageItemById(id, getPageText(activePage.value)![index]);
 }
 
 function replacePageItemById(id: string, newItem: PageItemType) {

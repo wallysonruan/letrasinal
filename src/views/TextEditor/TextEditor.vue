@@ -150,7 +150,7 @@ function setFocusOnHiddenTextarea(pageId: number) {
         </p>
         <br />
         <p>
-          Afim de aprimorar a performance e a eficácia desta aplicação, Estamos
+          Afim de aprimorar a performance e a eficácia desta aplicação, estamos
           revisando a arquitetura atual e estudando a
           <a
             href="https://datatracker.ietf.org/doc/html/draft-slevinski-formal-signwriting#name-spatial-signbox"

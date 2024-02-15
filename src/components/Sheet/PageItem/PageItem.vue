@@ -79,9 +79,9 @@ watch(reRenderingNecessary, () => {
     @drop="dragDrop" -->
     <SignColumn
       :item-id="props.item.id"
-      :column="(props.item.details as SignDetails).column"
       :page-item-type="props.item.type"
       :page-id="props.pageId"
+      :item="item"
     >
       <SignComponent
         v-if="props.item.type === 'sign'"
