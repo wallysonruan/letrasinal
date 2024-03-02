@@ -30,7 +30,7 @@ const pageHeight = computed(() => {
   >
     <div
       class="page-container"
-      :style="`width: ${pageWidth}px; height: ${pageHeight}px;`"
+      :style="`min-width: ${pageWidth}px; max-width: ${pageWidth}px; height: ${pageHeight}px;`"
     >
       <div
         class="page-content"
@@ -52,17 +52,16 @@ const pageHeight = computed(() => {
 </template>
 <style scoped lang="scss">
 .page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   padding: 0 1rem;
   overflow: scroll;
 
   .page-container {
+    margin: auto;
     padding: 1rem 1rem;
     background-color: white;
     border: 1px solid rgb(0, 0, 0, 0.2);
+    border-radius: 3px;
   }
 
   .page-content {
