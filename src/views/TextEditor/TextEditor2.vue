@@ -4,13 +4,22 @@ import TextEditorPage from "./Page/TextEditorPage.vue";
 import PageItem from "@/components/Sheet/PageItem/PageItem.vue";
 import type { PageItemType } from "@/stores/PageStore";
 
-const item: PageItemType = {
-  id: "string",
-  type: "sign",
-  details: {
-    fsw: "M539x556S33b00482x483S21100507x503S18617491x530S22f07518x515",
+const signs: PageItemType[] = [
+  {
+    id: "string",
+    type: "sign",
+    details: {
+      fsw: "M539x556S33b00482x483S21100507x503S18617491x530S22f07518x515",
+    },
   },
-};
+  {
+    id: "string",
+    type: "sign",
+    details: {
+      fsw: "M539x556S33b00482x483S21100507x503S18617491x530S22f07518x515",
+    },
+  },
+];
 </script>
 <template>
   <div class="TextEditor">
@@ -19,7 +28,9 @@ const item: PageItemType = {
       <div class="TextEditorPagesContainer">
         <div class="TextEditorPageContainer">
           <TextEditorPage>
-            <PageItem :page-id="1" :item="item" />
+            <div v-for="(sign, index) in signs" :key="index">
+              <PageItem :page-id="1" :item="sign" />
+            </div>
           </TextEditorPage>
         </div>
       </div>
