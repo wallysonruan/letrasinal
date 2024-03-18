@@ -13,6 +13,7 @@ import { computed } from "vue";
 import { watch } from "vue";
 import { ref } from "vue";
 import type { PageItem } from "@/utils/types";
+import { info, isType, parse } from "@sutton-signwriting/core/fsw";
 
 type PageItemProps = {
   pageId: number;
@@ -43,9 +44,40 @@ watch(reRenderingNecessary, () => {
     key.value++;
   }
 });
+
+const marginToCentralizeAccordingWithHeadPosition = computed(() => {
+  const columnWidth = 150;
+  const fswInfo = parse.sign(props.item.details.fsw);
+  const hasHead = fswInfo.spatials?.find((spatial) =>
+    isType(spatial.symbol, "head"),
+  );
+
+  if (hasHead === undefined) {
+    return undefined;
+  }
+
+  const smallestSpatial = fswInfo.spatials?.reduce((smallest, spatial) =>
+    spatial.coord[0] < smallest.coord[0] ? spatial : smallest,
+  );
+
+  const smallestIsHead = isType(smallestSpatial!.symbol, "head");
+
+  if (!smallestIsHead) {
+    return 0;
+  }
+
+  return columnWidth / 2 - 9.5;
+});
 </script>
 <template>
-  <div class="PageItem" :id="props.item.id" :writing-mode="writingMode">
+  <div
+    class="PageItem"
+    :id="props.item.id"
+    :writing-mode="writingMode"
+    :style="{
+      'margin-left': marginToCentralizeAccordingWithHeadPosition + 'px',
+    }"
+  >
     <SignComponent
       v-if="props.item.type === 'sign'"
       :sign="props.item.details"
